@@ -6,12 +6,11 @@
  * @version $Revision: 1.3 $
  * @date    $Date: 2010-06-15 09:48:34 $
  */
+#include "trfit_utils.h"
 #include <stdio.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_multifit_nlin.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
-#include <gsl/gsl_vector.h>
+#include <gsl/gsl_matrix.h>
 #include <gsl/gsl_sort_vector.h>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_statistics.h>
@@ -24,19 +23,17 @@
 #include "spce_pathlength.h"
 #include "lmmin.h"
 #include "lm_eval.h"
-#include "trfit_utils.h"
 
 #define MIN(x,y) (((x)<(y))?(x):(y))
 #define MAX(x,y) (((x)>(y))?(x):(y))
 
-int
-gauss_f(const gsl_vector * x, void *params, gsl_vector * f)
+int gauss_f(const gsl_vector * x, void *params, gsl_vector * f)
 {
   int ndata      = ((struct function_data *)params)->n;
   double *x_data = ((struct function_data *)params)->x;
   double *y_data = ((struct function_data *)params)->y;
   double *e_data = ((struct function_data *)params)->sig;
-  
+
   double a  = gsl_vector_get (x, 0);
   double b  = gsl_vector_get (x, 1);
   double c  = gsl_vector_get (x, 2);
@@ -62,7 +59,7 @@ gauss_f(const gsl_vector * x, void *params, gsl_vector * f)
 
 
 int
-gauss_df(const gsl_vector * x, void *params, 
+gauss_df(const gsl_vector * x, void *params,
 	 gsl_matrix * J)
 {
   int ndata      = ((struct function_data *)params)->n;
@@ -90,8 +87,8 @@ gauss_df(const gsl_vector * x, void *params,
 
       value = exp(-b*(xdiff)*(xdiff));
 
-      gsl_matrix_set (J, i, 0, value); 
-      gsl_matrix_set (J, i, 1, -a*(xdiff)*(xdiff)*value); 
+      gsl_matrix_set (J, i, 0, value);
+      gsl_matrix_set (J, i, 1, -a*(xdiff)*(xdiff)*value);
       gsl_matrix_set (J, i, 2, 1.0);
       gsl_matrix_set (J, i, 3,a*b*value*2*xdiff);
     }
@@ -126,6 +123,7 @@ gauss_fdf (const gsl_vector * x, void *params, gsl_vector *f, gsl_matrix *J)
  * Returns:
  * @return yf - the y-value of the reference point for the fitted trace
  */
+
 gsl_vector *
 fit_beamtrace(const aperture_conf  *conf, observation *obs,
 	      const int beamID, beam act_beam)
@@ -136,7 +134,7 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
   gsl_vector     *fit_result;
   trace_func     *tracefun;
 
-  px_point        xborder;  
+  px_point        xborder;
   px_point        tpoint;
 
   fit_data       *f_data;
@@ -152,14 +150,22 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
   int i;
   int index;
 
+  // This is the return result
+  fit_result = gsl_vector_alloc(5);
+  gsl_vector_set(fit_result, 0, 0);
+  gsl_vector_set(fit_result, 1, 0);
+  gsl_vector_set(fit_result, 2, 0);
+  gsl_vector_set(fit_result, 3, 0);
+  gsl_vector_set(fit_result, 4, 0);
+
   // define the beam and the trace function
   tracefun = act_beam.spec_trace;
   trace = (double *)(tracefun->data);
 
   // If this beam's ignore flag is set to 1 then do nothing
   if (act_beam.ignore == 1)
-    return;
-    
+    return fit_result;
+
   // determine the start and end point in x
   //xborder = get_fit_xrange(conf, obs, beamID, act_beam);
   xborder = get_fit_xrange(conf, obs, act_beam);
@@ -168,8 +174,6 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
   x = (double*)malloc((xborder.y-xborder.x+1)*sizeof(double));
   y = (double*)malloc((xborder.y-xborder.x+1)*sizeof(double));
   w = (double*)malloc((xborder.y-xborder.x+1)*sizeof(double));
-
-  fit_result = gsl_vector_alloc(5);
 
   // Loop over all columns
   index = 0;
@@ -182,8 +186,8 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
       tpoint.y = (int)floor(tracefun->func((double)i-act_beam.refpoint.x,
 					   tracefun->data)
 			    + act_beam.refpoint.y+0.5);
-      
-      
+
+
       // get the data to be fitted
       // in the current column
       f_data = get_fitdata(obs, N_COLUMNS_FIT, tpoint);
@@ -203,13 +207,13 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
 	  fit_params = fit_wuttke(f_data);
 	  /*	}
       else{
-	fit_params = fit_wuttke_talk(f_data);	
+	fit_params = fit_wuttke_talk(f_data);
 	}*/
       // check whether the fit was successful
       if (gsl_vector_get(fit_params, 4) == 1)
 	{
 	  // transfer the results of the fit
-	  // to this column in the vector 
+	  // to this column in the vector
 	  // which contains all fit results
 	  x[index] = (double)tpoint.x;
 	  y[index] = gsl_vector_get(fit_params, 3);
@@ -249,12 +253,12 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
   gsl_vector_set(fit_result, 3, sqrt(gsl_vector_get(lin_fit, 5)));
   gsl_vector_set(fit_result, 4, gsl_vector_get(lin_fit, 6));
 
-  
+
   fprintf(stdout, "\nFitting result XXX: xpos = %f , ypos = %f +- %f , slope = %f +- %f , chi^2 = %f, x_pivot = %f, y_abs = %f\n",
 	  act_beam.refpoint.x, gsl_vector_get(fit_result, 0), gsl_vector_get(fit_result, 1),
 	  gsl_vector_get(fit_result, 2), gsl_vector_get(fit_result, 3), gsl_vector_get(lin_fit, 6),
 	  gsl_vector_get(lin_fit, 0), gsl_vector_get(lin_fit, 1));
-  
+
 
   // copy the slope of the new trace solution
   // to the according position in the beam description
@@ -289,7 +293,7 @@ fit_beamtrace(const aperture_conf  *conf, observation *obs,
 double
 gagauss(const double x, const double *params)
 {
-  // just comute and return the result
+  // just compute and return the result
   return (params[0] * exp (-params[1] * (x-params[3])*(x-params[3])) + params[2]);
 }
 
@@ -312,7 +316,7 @@ comp_shift(const double x, const double *params, const double *fpars)
   // fpars[2] = 'tan_ang'
   // gpars[0] = 'shift'
 
-  // compute the shift for the 
+  // compute the shift for the
   // x-value
   dy = x * fpars[2] + params[0];
 
@@ -342,7 +346,7 @@ fit_wuttke(const fit_data *f_data)
 
   int m_dat = f_data->n_data;
   int n_p =  4;
-  
+
   double p[4];
 
   // auxiliary settings:
@@ -352,7 +356,7 @@ fit_wuttke(const fit_data *f_data)
   // allocate the parameter vector
   params = gsl_vector_alloc(5);
 
-  // give a first guess 
+  // give a first guess
   // for the gauss parameters
   p[0] = f_data->y_values[f_data->n_data / 2];
   p[1] = 1.0;
@@ -390,7 +394,7 @@ fit_wuttke_talk(const fit_data *f_data)
 
   int m_dat = f_data->n_data;
   int n_p =  4;
-  
+
   double p[4];
 
   // auxiliary settings:
@@ -400,7 +404,7 @@ fit_wuttke_talk(const fit_data *f_data)
   // allocate the parameter vector
   params = gsl_vector_alloc(5);
 
-  // give a first guess 
+  // give a first guess
   // for the gauss parameters
   p[0] = 1.0;
   p[1] = 1.0;
@@ -435,9 +439,9 @@ d_point
 find_grav_center(const fit_data *f_data)
 {
   d_point ret={0.0,0.0};
-  
+
   int i=0;
-  
+
   double sum    = 0.0;
   double w_sum    = 0.0;
   double weight = 0.0;
@@ -487,7 +491,7 @@ get_fit_xrange(const aperture_conf  *conf, const observation *obs,
     // to the image size
     ret.x = MAX(ret.x, 0);
     ret.y = MIN(ret.y, (int)obs->grism->size1);
-    
+
     // return the min and the max value
     return ret;
   }
@@ -521,7 +525,7 @@ fit_function(const fit_data *f_data)
   gsl_vector_set(x_init, 3,
 		 f_data->x_values[0]
 		 +(f_data->x_values[f_data->n_data-1]-f_data->x_values[0])/2.0);
-  
+
   f.f      = gauss_f;
   f.df     = gauss_df;
   f.fdf    = gauss_fdf;
@@ -535,27 +539,27 @@ fit_function(const fit_data *f_data)
 
   print_fit_state (iter, s);
 
-  
+
   do
     {
       iter++;
       status = gsl_multifit_fdfsolver_iterate (s);
-      
+
       printf ("status %i = %s\n", status, gsl_strerror (status));
-      
+
       print_fit_state (iter, s);
-      
+
 
       if (status != GSL_CONTINUE)
        	break;
-      
+
       status = gsl_multifit_test_delta (s->dx, s->x,
                                         1e-12, 1e-12);
       printf ("status  a = %s\n", gsl_strerror (status));
       fprintf(stdout, "stat: %i, GSL_CONT: %i\n", status, GSL_CONTINUE);
     }
   while (status == GSL_CONTINUE && iter < 500);
-  
+
   gsl_multifit_fdfsolver_free (s);
   return fit_params;
 }
@@ -605,7 +609,7 @@ get_fitdata(observation *obs, int np, px_point tr_point)
   tmp = gsl_vector_int_alloc(2*np+2);
   gsl_vector_int_set_all(tmp, -1);
 
-  // limit the starting ppoint of the search 
+  // limit the starting ppoint of the search
   // to values within the image dimension
   tr_point.y = MAX(0,tr_point.y);
   tr_point.y = MIN((int)obs->grism->size2,tr_point.y);
@@ -615,7 +619,7 @@ get_fitdata(observation *obs, int np, px_point tr_point)
   l_act = tr_point.y - 1;
   u_act = tr_point.y;
 
-  // as long as interpolation points are missing 
+  // as long as interpolation points are missing
   // and one direction, either up or down,
   // is 'open', continue searching
   while (np_act < 2*np && (l_space || u_space))
@@ -645,7 +649,7 @@ get_fitdata(observation *obs, int np, px_point tr_point)
 	      l_act--;
 	    }
 	}
-      
+
       // check whether the direction
       // upwards is still open
       if (u_space)
@@ -667,7 +671,7 @@ get_fitdata(observation *obs, int np, px_point tr_point)
 		  u_np++;
 		}
 	      u_act++;
-	    }	  
+	    }
 	}
     }
 
@@ -758,12 +762,12 @@ get_ipc_coldata(gsl_matrix *img_data, int np, px_point tr_point)
       // check whether we are still inside the image and
       // whether we have valid data
       if (y_act > -1 && !isnan(gsl_matrix_get(img_data, tr_point.x, y_act)))
-	{ 
+	{
 	  // store the data point and enhance the counter
 	  gsl_vector_set(tmp, np_act, gsl_matrix_get(img_data, tr_point.x, y_act));
 	  np_act++;
 	}
-	
+
       // go up
       y_act = tr_point.y + ii;
 
@@ -782,8 +786,8 @@ get_ipc_coldata(gsl_matrix *img_data, int np, px_point tr_point)
     {
       // allocate the return vector
       ipc_row = gsl_vector_alloc(np_act);
-      
-      // transfer the data to the 
+
+      // transfer the data to the
       // return vector
       for (ii=0; ii < np_act; ii++)
 	gsl_vector_set(ipc_row, ii, gsl_vector_get(tmp, ii));
@@ -837,14 +841,14 @@ void
 print_fit_data(fit_data *f_data)
 {
   int i;
-  
+
   for (i=0; i < f_data->n_data; i++)
     {
       fprintf(stdout, "%f %f %f\n", f_data->x_values[i],
 	      f_data->y_values[i], f_data->e_values[i]);
       //      fprintf(stderr, "x: %f, y: %f, err: %f\n", f_data->x_values[i],
       //	      f_data->y_values[i], f_data->e_values[i]);
-    }     
+    }
 }
 
 /*
@@ -873,13 +877,12 @@ free_fit_data(fit_data *f_data)
 void
 print_fit_state (size_t iter, gsl_multifit_fdfsolver * s)
 {
-  printf ("iter: %3u x = %e %e %e %e "
-          "|f(x)| = %g |dx| = %g\n\n",
-          iter,
-          gsl_vector_get (s->x, 0), 
+  printf ("iter: %3zu x = %e %e %e %e "
+          "|f(x)| = %g |dx| = %g\n\n", iter,
+          gsl_vector_get (s->x, 0),
           gsl_vector_get (s->x, 1),
-          gsl_vector_get (s->x, 2), 
-          gsl_vector_get (s->x, 3), 
+          gsl_vector_get (s->x, 2),
+          gsl_vector_get (s->x, 3),
           gsl_blas_dnrm2 (s->f),
           gsl_blas_dnrm2 (s->dx));
 }
@@ -913,14 +916,14 @@ comp_intrel_max(const fit_data *f_data)
   // fill in the data
   for (i=0; i < f_data->n_data; i++)
     gsl_vector_set(val_vector, i, f_data->y_values[i]);
-  
+
   // sort the values
   gsl_sort_vector(val_vector);
 
   // prevent division by zero
   if (gsl_vector_get(val_vector, 0))
     // compute the quantity second brightes pixel
-    // divided by brighest pixel 
+    // divided by brighest pixel
     rel12 = gsl_vector_get(val_vector, f_data->n_data-2) / gsl_vector_get(val_vector, f_data->n_data-1);
 
   // free the memory
@@ -949,11 +952,11 @@ bcksub_observation(observation *obs, observation *bck)
   int jj;
 
   // initialize the return
-  ret = gsl_matrix_alloc(obs->grism->size1, obs->grism->size2); 
+  ret = gsl_matrix_alloc(obs->grism->size1, obs->grism->size2);
 
   // set all values to NAN
   gsl_matrix_set_all(ret, GSL_NAN);
-  
+
   // go over all cols
   for (ii=0; ii < obs->grism->size1; ii++)
     // go over all rows
@@ -988,7 +991,7 @@ double *
 evaluate_ipc_fit(fit_data *f_data, double *gpars, double *fpars)
 {
   int index;
-  
+
   double yvalue;
 
   double *y_values;
@@ -1023,7 +1026,7 @@ write_ipc_fit(fit_data *f_data, double *y_values, const char *ipc_file, const do
   char Buffer[MAXCHAR];
 
   int index;
-  
+
   // open the file for the values
   fout = fopen (ipc_file, "w");
 
@@ -1031,17 +1034,17 @@ write_ipc_fit(fit_data *f_data, double *y_values, const char *ipc_file, const do
   sprintf (Buffer, "# norm of the residue vector: %e\n", qual);
   fputs (Buffer, fout);
   // write norm (= quality of fit) to comment line
-  sprintf (Buffer, "#\n", qual);
+  sprintf (Buffer, "#%e\n", qual);
   fputs (Buffer, fout);
-  sprintf (Buffer, "# Wanderer kommst Du nach Sparta\n", qual);
+  sprintf (Buffer, "# Wanderer kommst Du nach Sparta: %e\n", qual);
   fputs (Buffer, fout);
-  sprintf (Buffer, "# berichtige dorten\n", qual);
+  sprintf (Buffer, "# berichtige dorten: %e\n", qual);
   fputs (Buffer, fout);
-  sprintf (Buffer, "# Du habest uns hier liegen gesehen\n", qual);
+  sprintf (Buffer, "# Du habest uns hier liegen gesehen: %e\n", qual);
   fputs (Buffer, fout);
-  sprintf (Buffer, "# wie es die Geschichte befahl.\n", qual);
+  sprintf (Buffer, "# wie es die Geschichte befahl. %e\n", qual);
   fputs (Buffer, fout);
-  sprintf (Buffer, "#\n", qual);
+  sprintf (Buffer, "#%e\n", qual);
   fputs (Buffer, fout);
 
   // go over the data
@@ -1070,7 +1073,7 @@ write_ipc_fit(fit_data *f_data, double *y_values, const char *ipc_file, const do
  * Returns:
  * @return control.fnorm - goodness of the fit value
  */
-double 
+double
 fit_ipc_data(fit_data *f_data, double *gpars, int n_gpars,
 	     double *fpars, int n_fpars)
 {
@@ -1079,7 +1082,7 @@ fit_ipc_data(fit_data *f_data, double *gpars, int n_gpars,
   // auxiliary settings:
   lm_control_type control;
   lm_data_fpar_type data;
-  
+
 
   // initialize the fit
   lm_initialize_control( &control );
@@ -1090,7 +1093,7 @@ fit_ipc_data(fit_data *f_data, double *gpars, int n_gpars,
   data.user_y = f_data->y_values;
   data.fpars  = fpars;
 
-  // print the initial 
+  // print the initial
   // value
   fprintf(stdout, "input: %e, ", gpars[0]);
 
@@ -1126,7 +1129,7 @@ get_ipc_fdata(const aperture_conf  *conf,  observation *obs,
 {
   trace_func     *tracefun;
 
-  px_point        xborder;  
+  px_point        xborder;
   px_point        tpoint;
 
   gsl_vector      *ipc_data;
@@ -1144,19 +1147,19 @@ get_ipc_fdata(const aperture_conf  *conf,  observation *obs,
 
   // If this beam's ignore flag is set to 1 then do nothing
   if (act_beam.ignore == 1)
-    return;
-    
+    return fdata;
+
   // determine the start and end point in x
   xborder = get_fit_xrange(conf, obs, act_beam);
 
-  // an assertion to prevent 
+  // an assertion to prevent
   // catastrophic failures
   if  (xborder.x > xborder.y)
     return fdata;
   // introduced after making release 1 reduction
 
 
-  // allocate memory for the fitting structure 
+  // allocate memory for the fitting structure
   fdata = alloc_fit_data(xborder.y-xborder.x);
 
   // Loop over all columns
@@ -1186,7 +1189,7 @@ get_ipc_fdata(const aperture_conf  *conf,  observation *obs,
       // prevent division by zero
       if (ipc_data->size > 1 && gsl_vector_get(ipc_data, ipc_data->size-1))
 	{
-	  // compute the relation 
+	  // compute the relation
 	  rel12 = gsl_vector_get(ipc_data, ipc_data->size-2) / gsl_vector_get(ipc_data, ipc_data->size-1);
 
 	  fdata->x_values[index] = (double)i - act_beam.refpoint.x;
@@ -1206,7 +1209,7 @@ get_ipc_fdata(const aperture_conf  *conf,  observation *obs,
     f_final = strip_fitdata(fdata, index);
   else
     fprintf(stdout, "beam tooo short\n");
-   
+
   // release the original structure
   free_fit_data(fdata);
 
@@ -1233,7 +1236,7 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
 {
   trace_func     *tracefun;
 
-  px_point        xborder;  
+  px_point        xborder;
   px_point        tpoint;
 
   gsl_vector      *ipc_data;
@@ -1249,7 +1252,7 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
   double yyy;
 
   double *yfract=NULL;
-  double *yfinal;
+  double *yfinal = 0;
 
 
   // define the beam and the trace function
@@ -1257,12 +1260,12 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
 
   // If this beam's ignore flag is set to 1 then do nothing
   if (act_beam.ignore == 1)
-    return;
-    
+    return yfinal;
+
   // determine the start and end point in x
   xborder = get_fit_xrange(conf, obs, act_beam);
 
-  // allocate memory for the fitting structure 
+  // allocate memory for the fitting structure
   fdata = alloc_fit_data(xborder.y-xborder.x);
 
   // allocate memory
@@ -1297,7 +1300,7 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
       // prevent division by zero
       if (ipc_data->size > 1 && gsl_vector_get(ipc_data, ipc_data->size-1))
 	{
-	  // compute the relation 
+	  // compute the relation
 	  rel12 = gsl_vector_get(ipc_data, ipc_data->size-2) / gsl_vector_get(ipc_data, ipc_data->size-1);
 
 	  fdata->x_values[index] = (double)i - act_beam.refpoint.x;
@@ -1312,7 +1315,7 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
 
 
   yfinal = strip_wf_special(fdata, yfract, index);
-   
+
   // release the original structure
   free_fit_data(fdata);
   if (yfract)
@@ -1347,7 +1350,7 @@ strip_wf_special(fit_data *old_fdata, double *y_fract, int i_max)
   if (i_max < 1)
     // return NULL if not
     return y_new;
-  
+
   // count the number of
   // values with weight
   i_count=0;
@@ -1360,8 +1363,8 @@ strip_wf_special(fit_data *old_fdata, double *y_fract, int i_max)
   if (i_count < 1)
     // return NULL if not
     return y_new;
-	
-  // allocate a new structure 
+
+  // allocate a new structure
   y_new = (double *)malloc(i_count * sizeof(double));
 
   // set the counter
@@ -1371,13 +1374,13 @@ strip_wf_special(fit_data *old_fdata, double *y_fract, int i_max)
   // to the maximum index
   for (ii=0; ii < i_max; ii++)
     {
-      // check whether the 
+      // check whether the
       // data is valid
       if (old_fdata->e_values[ii])
 	{
 	  // transfer valid data
 	  y_new[i_count] = y_fract[ii];
-	  
+
 	  // enhance the counter
 	  i_count++;
 	}
@@ -1411,7 +1414,7 @@ strip_fitdata(fit_data *old_fdata, int i_max)
   if (i_max < 1)
     // return NULL if not
     return fdata;
-  
+
   // count the number of
   // values with weight
   i_count=0;
@@ -1424,8 +1427,8 @@ strip_fitdata(fit_data *old_fdata, int i_max)
   if (i_count < 1)
     // return NULL if not
     return fdata;
-	
-  // allocate a new structure 
+
+  // allocate a new structure
   fdata = alloc_fit_data(i_count);
 
   // set the counter
@@ -1435,7 +1438,7 @@ strip_fitdata(fit_data *old_fdata, int i_max)
   // to the maximum index
   for (ii=0; ii < i_max; ii++)
     {
-      // check whether the 
+      // check whether the
       // data is valid
       if (old_fdata->e_values[ii])
 	{
@@ -1443,7 +1446,7 @@ strip_fitdata(fit_data *old_fdata, int i_max)
 	  fdata->x_values[i_count] = old_fdata->x_values[ii];
 	  fdata->y_values[i_count] = old_fdata->y_values[ii];
 	  fdata->e_values[i_count] = old_fdata->e_values[ii];
-	  
+
 	  // enhance the counter
 	  i_count++;
 	}
@@ -1482,7 +1485,7 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
 
   trace_func *tracefun  = act_beam.spec_trace;
   double     *tracedata =  (double *)(tracefun->data);
-  
+
   double p[1];
   double f[3] = {0.6, 0.9, tracedata[2]};
 
@@ -1498,14 +1501,14 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
   // remember the shift
   ret.x = p[0];
 
-  // give infinity for 
+  // give infinity for
   // the goodness of the fit
   ret.y = 1.0e+20;
 
   // get the data for the fit
   f_data = get_ipc_fdata(conf, obs, data_matrix, act_beam);
 
-  // check whether 
+  // check whether
   // there is data
   if (f_data)
     {
@@ -1518,8 +1521,8 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
 
       // evaluate the fit; comute the sigma
       y_values = evaluate_ipc_fit(f_data, p, f);
-      sigma = calculate_sigma(f_data, y_values); 
-      
+      sigma = calculate_sigma(f_data, y_values);
+
 
       // start the iteration
       while (index < N_ITER_IPC)
@@ -1538,7 +1541,7 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
 	  // is still data
 	  if (!f_work)
 	    break;
-	  
+
 	  // check whether data was rejected
 	  // brek if 'yes' transfer the new number if 'no'
 	  if (f_work->n_data == nold_data)
@@ -1554,7 +1557,7 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
 	    free(y_values);
 	  y_values = evaluate_ipc_fit(f_data, p, f);
 	  sigma = calculate_sigma(f_data, y_values);
-	  
+
 	  // enhance
 	  // the kappa counter
 	  index++;
@@ -1604,7 +1607,7 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
  * Returns:
  * @return -
  */
-void 
+void
 reject_kappasigma(fit_data *f_data, double *y_values, double max_diff)
 {
   int index;
@@ -1627,7 +1630,7 @@ reject_kappasigma(fit_data *f_data, double *y_values, double max_diff)
  * Returns:
  * @return sigma - the standard deviation
  */
-double 
+double
 calculate_sigma(fit_data *f_data, double *y_values)
 {
   double *tmp;
@@ -1638,7 +1641,7 @@ calculate_sigma(fit_data *f_data, double *y_values)
 
   int n_data=0;
   int index;
-  
+
   // count the number of valid data points
   for (index=0; index < f_data->n_data; index++)
     if (f_data->e_values[index])
@@ -1662,7 +1665,7 @@ calculate_sigma(fit_data *f_data, double *y_values)
 
 	  // store the difference
 	  tmp[n_data] = diff;
-	  
+
 	  // add to the mean
 	  mean += diff;
 
@@ -1674,7 +1677,7 @@ calculate_sigma(fit_data *f_data, double *y_values)
   // comopute the mean
   mean /= (double)n_data;
 
-  // compute standard deviation 
+  // compute standard deviation
   sigma = gsl_stats_sd_m(tmp, 1, n_data, mean);
 
   // relese the memory
@@ -1683,4 +1686,3 @@ calculate_sigma(fit_data *f_data, double *y_values)
   // return the sigma
   return sigma;
 }
-

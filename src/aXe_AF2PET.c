@@ -139,7 +139,7 @@ main(int argc, char *argv[])
     bckmode = 1;
 
   /* Get or set up the input AF file name */
-  if (opt = get_online_option("in_AF", argc, argv))
+  if ( (opt = get_online_option("in_AF", argc, argv)) )
     {
       strcpy(aper_file, opt);
       strcpy(aper_file_path, opt);

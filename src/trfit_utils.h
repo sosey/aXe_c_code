@@ -8,9 +8,10 @@
  */
 #ifndef _TRFIT_UTILS_H
 #define _TRFIT_UTILS_H
+#include "aper_conf.h"
+#include <gsl/gsl_multifit_nlin.h>
 
 #define N_COLUMNS_FIT 6
-
 #define N_KAPPASIG_ITER 3
 #define N_KAPPASIG_SIG  3.0
 #define N_ITER_IPC  5
@@ -43,7 +44,7 @@ extern gsl_vector *
 fit_beamtrace(const aperture_conf  *conf, observation *obs,
 	      const int beamID, beam act_beam);
 
-extern double
+double
 gagauss(const double x, const double *params);
 
 extern gsl_vector *
@@ -98,7 +99,7 @@ evaluate_ipc_fit(fit_data *f_data, double *gpars, double *fpars);
 extern void
 write_ipc_fit(fit_data *f_data, double *y_values, const char *ipc_file, const double qual, double *yfract);
 
-extern double 
+extern double
 fit_ipc_data(fit_data *fdata, double *gpars, int n_gpars,
 	     double *fpars, int n_fpars);
 
@@ -124,9 +125,9 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
 		      gsl_matrix *data_matrix, beam act_beam,
 		      const char *ipc_file);
 
-extern void 
+extern void
 reject_kappasigma(fit_data *f_data, double *y_values, double max_diff);
 
-extern double 
+extern double
 calculate_sigma(fit_data *f_data, double *y_values);
 #endif

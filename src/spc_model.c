@@ -8,27 +8,22 @@
  * @version $Revision: 1.2 $
  * @date    $Date: 2009-06-18 09:50:07 $
  */
-
+#include "spc_model.h"
 #include <time.h>
 #include <math.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
 #include "inout_aper.h"
-#include "aXe_grism.h"
 #include "spce_sect.h"
 #include "spc_back.h"
 #include "spce_PET.h"
-#include "spc_wl_calib.h"
 #include "aXe_errors.h"
 #include "fringe_conf.h"
 #include "spc_resp.h"
 #include "spce_pathlength.h"
 #include "aper_conf.h"
 #include "specmodel_utils.h"
-#include "model_utils.h"
-#include "spc_fluxcube.h"
-#include "spc_model.h"
 
 #define MAX(x,y) (((x)>(y))?(x):(y))
 #define MIN(x,y) (((x)<(y))?(x):(y))
@@ -374,7 +369,7 @@ make_gauss_spectra2(object **oblist, dirobject **dirlist,
     	  frac = fmod(100.0*(nx - actdir->ix_min)/(actdir->ix_max - actdir->ix_min),10);
     	  if (frac < frac_prev)
     	  {
-            fprintf(stdout, " %i% ", (int)100.0*(nx - actdir->ix_min)/(actdir->ix_max - actdir->ix_min));
+            fprintf(stdout, " %i ", (int)100.0*(nx - actdir->ix_min)/(actdir->ix_max - actdir->ix_min));
             fflush(stdout);
     	  }
     	  frac_prev=frac;
@@ -1176,7 +1171,7 @@ fill_pixel_in_speed(const dirobject *actdir, const tracedata *acttrace,
       // double check whether we are inside the image
       if (ix < 0 || iy < 0 || ix > (actspec->model->size1-1) || iy > (actspec->model->size2-1))
         {
-          fprintf(stdout, "xval: %i, yval: %i, size1: %i, size2: %i\n",ix, iy, actspec->model->size1, actspec->model->size2);
+          fprintf(stdout, "xval: %i, yval: %i, size1: %zi, size2: %zi\n",ix, iy, actspec->model->size1, actspec->model->size2);
         }
       else
         {

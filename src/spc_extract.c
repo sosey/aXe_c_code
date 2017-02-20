@@ -8,7 +8,7 @@
  * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
  * @package spc_extract
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include <stdio.h>
@@ -41,31 +41,31 @@ transform_to_pathlen (const trace_func * const func, ap_pixel * const table)
   int i, len;
   ap_pixel *cur_p = table;
   gsl_vector *section_points;
-  
+
   while (cur_p->p_x != -1)
     cur_p++;
   len = cur_p - table;
   if (len==0) return -1; // exit now if the table is empty
-  
+
   section_points = gsl_vector_alloc (len);
   for (i = 0; i < len; i++)
     {
       gsl_vector_set (section_points, i, table[i].xs);
     }
-  
+
   if (abscissa_to_pathlength (func, section_points))
     {
       gsl_vector_free (section_points);
       return -1;
     }
-  
+
   for (i = 0; i < len; i++)
     {
       table[i].xi = gsl_vector_get (section_points, i);
     }
-  
+
   gsl_vector_free (section_points);
-  
+
   return 0;
 }
 
@@ -73,7 +73,7 @@ transform_to_pathlen (const trace_func * const func, ap_pixel * const table)
 
 /**
    creates an ap_pixel.
-   
+
    @param x x coordinate of pixel relative to beam's reference point
    @param y y coordinate of pixel relative to beam's reference point
    @param px absolute x coordinate of the pixel
@@ -83,7 +83,7 @@ transform_to_pathlen (const trace_func * const func, ap_pixel * const table)
    @param cur_ap a pointer to the next free aperture pixel
    @return a pointer to the next free aperture pixel after the new pixels
     have been added.
-    
+
 */
 static ap_pixel *
 handle_one_pixel (const double x, const double y, const int px, const int py,
@@ -94,7 +94,7 @@ handle_one_pixel (const double x, const double y, const int px, const int py,
   double sect_y;
   double tmp;
   double phi_trace;
-	 
+
   if (find_section_point (sf, x, y, &res))
     {
       return cur_ap;	/* FIXME: Issue warning here */
@@ -107,7 +107,7 @@ handle_one_pixel (const double x, const double y, const int px, const int py,
   cur_ap->ys = tracefun->func (cur_ap->xs, tracefun->data);
   sect_y = tracefun->func (res, tracefun->data);
   tmp = tracefun->func (x, tracefun->data);
-  
+
   cur_ap->contam = -1.0;
   cur_ap->model = 0.0;
   cur_ap->p_x = px;
@@ -141,7 +141,7 @@ static int
 sanitycheck (object * const ob)
 {
   int i;
-  
+
   for (i = 0; i < ob->nbeams; i++)
     {
       while (ob->beams[i].orient < 0)
@@ -164,7 +164,7 @@ sanitycheck (object * const ob)
    source coordinates, the distance to the spectrum trace, the path
    length along the trace, and the intensity.  The end of the table
    is marked with an ap_pixel->x==-1.  This routine can do subsampling,
-   whereby each pixel is divided into n_sub*n_sub smaller pixels.  
+   whereby each pixel is divided into n_sub*n_sub smaller pixels.
    If n_sub==1, a special (faster) handling is enabled.
 
    @param ob the object struct to examine
@@ -190,7 +190,7 @@ make_spc_table (object * const ob, const int beamorder,
   bb_y = curbeam->bbox[0].y;
   bb_w = curbeam->bbox[1].x - curbeam->bbox[0].x + 1;
   bb_h = curbeam->bbox[1].y - curbeam->bbox[0].y + 1;
-  
+
   if (sanitycheck (ob))
     {
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -200,10 +200,10 @@ make_spc_table (object * const ob, const int beamorder,
 
   if (fill_is_in_descriptor (&iid, curbeam->corners))
     return NULL;
-  
+
   if (fill_in_sectionfun (&sf, curbeam->orient, curbeam))
     return NULL;
-  
+
   if (!(table =
 	malloc ((bb_w * bb_h + 1) * sizeof (ap_pixel))))
     return NULL;
@@ -234,7 +234,7 @@ make_spc_table (object * const ob, const int beamorder,
 	      continue;
 	    }
 
-	  
+
 	  // check whether the trace description has
 	  // an order higher than linear
 	  if (curbeam->spec_trace->type > 1)
@@ -316,18 +316,18 @@ make_gps_table (object * const ob, const int beamorder,
 		   "Input data failed sanity check");
       return NULL;
     }
-  
+
   if (fill_is_in_descriptor (&iid, curbeam->corners))
     return NULL;
-  
+
   if (fill_in_sectionfun (&sf, curbeam->orient, curbeam))
     return NULL;
-  
+
   if (!
       (table =
        malloc (2 * sizeof (ap_pixel))))
     return NULL;
-  
+
   /* We have a little coordinate confusion here.  There are three
      systems:
      (a) the absolute one, rooted in (0,0) of the image.
@@ -353,7 +353,7 @@ make_gps_table (object * const ob, const int beamorder,
   cur_ap->p_x = -1;
   cur_ap->p_y = -1;
   cur_ap->count = -1;
-  
+
   free_sectionfun (&sf);
 
   transform_to_pathlen (curbeam->spec_trace, table);
@@ -369,7 +369,7 @@ print_ap_pixel_table (const ap_pixel * ap_p)
   printf ("# x y pathlen distance lambda count error\n");
   while (ap_p->p_x != -1)
     {
-      printf ("%d %d %f %f %f %f %f %f %f %d\n", ap_p->p_x, ap_p->p_y,
+      printf ("%d %d %f %f %f %f %f %f %f %ld\n", ap_p->p_x, ap_p->p_y,
 	      ap_p->x, ap_p->y, ap_p->xi, ap_p->dist, ap_p->lambda,
 	      ap_p->count, ap_p->error, ap_p->dq);
       ap_p++;
@@ -389,7 +389,7 @@ tracedist_criteria(const double x, const double y, sectionfun * const sf,
 
   find_section_point (sf, x, y, &x_sect);
   y_sect = tracefun->func (x_sect, tracefun->data);
- 
+
   dist =  sqrt((y_sect-y)*(y_sect-y)+(x_sect-x)*(x_sect-x));
 
   if (dist < width)

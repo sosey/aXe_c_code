@@ -5,12 +5,13 @@
  * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
  * @package disp_conf
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _DISP_CONF_H
-
 #define _DISP_CONF_H
+#include <gsl/gsl_vector.h>
+#include "axe_grism.h"
 
 
 /**
@@ -24,7 +25,7 @@ typedef struct
   gsl_vector *pol; /* A vector containing the 2D polynomial coefficients */
   int for_grism;   /* If true, pol is of form sum(a_i x^i, i=0..order)
                       otherwise, it is of form sum(a_i 1/x^i, i=0..order) */
-  d_point cpoint;  /* The detector location at which this structure 
+  d_point cpoint;  /* The detector location at which this structure
                       was computed */
   int ID;          /* The ID of the beam for which this coefficient
                       is defined */
@@ -38,7 +39,7 @@ typedef struct
 
   int ID;
   int for_grism;
-  
+
   int n_order;
   gsl_vector **all_coeffs;
 }
@@ -50,37 +51,37 @@ get_beam_mmag_extract (char *filename, int beamID);
 extern float
 get_beam_mmag_mark (char *filename, int beamID);
 
-extern int 
+extern int
 get_beam_disp_norder (char *filename, int beamID);
 
 extern gsl_vector *
 get_beam_disp_order (char *filename, const int for_grism,
                                  int beamID, int order);
 
-extern float 
+extern float
 get_disp_coeff_at_pos (char *filename, const int for_grism, int beamID,
                              int order, d_point p);
 
 extern gsl_vector *
 get_disp_coeffs_at_pos (char *filename, const int for_grism,
                                     int beamID, d_point p);
-extern void 
+extern void
 free_dispstruct(dispstruct *p);
 
 extern dispstruct *
 get_dispersion_at_pos (char *filename, int beamID, d_point p);
 
-extern void 
+extern void
 dispstruct_fprintf (FILE * file, dispstruct * disp);
 
 extern dispstruct *
 get_dispstruct_at_pos (char *filename, const int for_grism,
                                    int beamID, d_point p);
 
-extern int 
+extern int
 check_for_grism (char *filename, int beamID);
 
-extern int 
+extern int
 check_disp_coeff (char *filename,const int for_grism,int beamID,int order);
 
 extern gsl_vector *

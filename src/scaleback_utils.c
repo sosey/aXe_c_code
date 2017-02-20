@@ -125,7 +125,7 @@ make_scale_back(char grism_image[], const char grism_mask[], char conf_file[],
   fprintf(stdout,"Loading DATA from: %s...", scale_image);
   sc_img = FITSimage_to_gsl(scale_image, 1, 1);
   fprintf(stdout,". Done.\n");
-  
+
   // load the grism image
   fprintf(stdout,"Loading DATA from: %s...", grism_image);
   gr_img = FITSimage_to_gsl(grism_image, conf->science_numext, 1);
@@ -154,7 +154,7 @@ make_scale_back(char grism_image[], const char grism_mask[], char conf_file[],
   // get the number of pixels
   npixels.x = sc_img->size1;
   npixels.y = sc_img->size2;
-  
+
   // report the number of pixels
   //fprintf(stdout,"Loading DATA from: %i pix\n", npixels.x * npixels.y);
 
@@ -177,7 +177,7 @@ make_scale_back(char grism_image[], const char grism_mask[], char conf_file[],
 
   // report the result of the fit onto the screen
   fprintf(stdout, "\nScale result image %s : c0 = %f +- %f", grism_image, gsl_vector_get(bck_vals, 0), gsl_vector_get(bck_vals, 1));
-  fprintf(stdout, "\nInitial fill factor: %.1f\%, final: %.1f\%", 100.0 * gsl_vector_get(bck_vals, 2) / ((float)npixels.x * (float)npixels.y), 100.0 *gsl_vector_get(bck_vals, 3) / ((float)npixels.x * (float)npixels.y));
+  fprintf(stdout, "\nInitial fill factor: %.1f%%, final: %.1f%%", 100.0 * gsl_vector_get(bck_vals, 2) / ((float)npixels.x * (float)npixels.y), 100.0 *gsl_vector_get(bck_vals, 3) / ((float)npixels.x * (float)npixels.y));
   fprintf(stdout, "\nNumber of iterations: % 2i\n\n", (int)gsl_vector_get(bck_vals, 4));
 
   if (scale_to_master)
@@ -191,7 +191,7 @@ make_scale_back(char grism_image[], const char grism_mask[], char conf_file[],
   cards = fit_to_FITScards(bck_vals, npixels);
   put_FITS_cards(bck_image, 1, cards);
   fprintf(stdout,". Done.\n");
-  
+
   // release memory
   free_fitbck_data(fbck_data);
   free_FITScards(cards);
@@ -265,10 +265,10 @@ compute_scale_grism(gsl_matrix *gr_img, gsl_matrix *gr_dqval, gsl_matrix *gr_mas
 
     int ii, jj;
     double scale=0.0;
-	
+
     // get the scale
     scale = gsl_vector_get(bck_vals, 0);
-	
+
     // allocate the space for the background image
     bck_img = gsl_matrix_alloc(gr_img->size1, gr_img->size2);
 
@@ -507,7 +507,7 @@ make_ksig_scalefit(fitbck_data *fbck_data)
     // make a non-weighted linear fit
     get_bck_scale(fbck_data->x_values, fbck_data->y_values, fbck_data->e_values,
         fbck_data->n_data, bck_vals);
-	  
+
     // make a clipping iteration
     clipped = clipp_scale_data(fbck_data, bck_vals, N_BCKSCALE_KAPPA);
 
@@ -555,14 +555,14 @@ get_bck_scale(const double *xs, double *ys, double *ws,
   double median;
   double stdev;
 
-  // allocate space for temporary vectors 
+  // allocate space for temporary vectors
   tmp = (double *) malloc (n_elem * sizeof (double));
 
   // initialize the array
   for (i = 0; i < n_elem; i++)
     tmp[i] = 0.0;
-  
-  // fill the temporary vectors 
+
+  // fill the temporary vectors
   // with scale values and weights
   m = 0;
   for (i = 0; i < n_elem; i++)
@@ -581,11 +581,11 @@ get_bck_scale(const double *xs, double *ys, double *ws,
   for (i = 1; i < m; i++)
     if (tmp[i] < tmp[i-1])
       fprintf(stdout, "Wrong: %f <--> %f\n", tmp[i],tmp[i-1]);
-  
+
   // take the home made median
   median = tmp[(int)m/2];
-  
-  // get the standard deviation 
+
+  // get the standard deviation
   stdev = comp_stdev_from_array(tmp, m, median);
 
   // put the results in the vector
@@ -593,7 +593,7 @@ get_bck_scale(const double *xs, double *ys, double *ws,
   gsl_vector_set(bck_vals, 1, stdev);
   gsl_vector_set(bck_vals, 2, (double)n_elem);
   gsl_vector_set(bck_vals, 3, (double)m);
-  
+
   // release memory
   free(tmp);
 }
@@ -625,7 +625,7 @@ clipp_scale_data(fitbck_data *fbck_data, const gsl_vector *bck_vals,
 
     // get the mean value
     mean = gsl_vector_get(bck_vals, 0);
-	
+
     // compute the maximum allowed deviation
     absdev = kappa * gsl_vector_get(bck_vals, 1);
 

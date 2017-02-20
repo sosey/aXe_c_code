@@ -370,11 +370,11 @@ main(int argc, char *argv[])
 				     conf->optkey1,conf->optval1,extver);
     if (wht_ext < 0){
       wht_ext = gsl_to_FITSimage (wobs->grism, grism_image_path, 0, hdu_name);
-      fprintf(stdout, "aXe_DRZ2PET: Weights written to %s\n", grism_image_path, wht_ext);
+      fprintf(stdout, "aXe_DRZ2PET: Weights written to %s %i\n", grism_image_path, wht_ext);
     }
     else{
       wht_ext = gsl_to_FITSimageHDU (wobs->grism, grism_image_path, 0, hdu_name, wht_ext);
-      fprintf(stdout, "aXe_DRZ2PET: Weights replaced in %s\n", grism_image_path, wht_ext);
+      fprintf(stdout, "aXe_DRZ2PET: Weights replaced in %s %i\n", grism_image_path, wht_ext);
     }
 
     // free the memory

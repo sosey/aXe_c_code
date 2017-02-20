@@ -138,9 +138,9 @@ main (int argc, char *argv[])
     }
 
   fprintf (stdout, "aXe_SEX2GOL: Starting...\n");
-  if (opt = get_online_option ("no_direct_image", argc, argv))
+  if ( (opt = get_online_option ("no_direct_image", argc, argv)) )
     nodirim = 1;
-  if (opt = get_online_option ("distortion", argc, argv))
+  if ( (opt = get_online_option ("distortion", argc, argv)) )
     distortion = 1;
 
   if (nodirim){

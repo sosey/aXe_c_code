@@ -6,15 +6,11 @@
  * @version $Revision: 1.3 $
  * @date    $Date: 2010-06-15 09:48:34 $
  */
-#include <fitsio.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-#include <gsl/gsl_interp.h>
+#include "specmodel_utils.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spc_wl_calib.h"
 #include "aXe_errors.h"
-#include "specmodel_utils.h"
 #include "model_utils.h"
 
 
@@ -37,7 +33,7 @@ load_object_models(const char object_models_file[])
   int n_extent=0;
 
   // give feedback to the user
-  fprintf (stdout, "aXe_PETCONT: Loading object models...", object_models_file);
+  fprintf (stdout, "aXe_PETCONT: Loading object models: %s", object_models_file);
 
   // allocate space for the direct emission structure
   objmodels = (object_models *)malloc(sizeof(object_models));
@@ -73,7 +69,7 @@ load_object_models(const char object_models_file[])
  * @return obj_list - the list of direct emission models
  */
 dirim_emission **
-load_diremission_list(const char object_models_file[], const n_models)
+load_diremission_list(const char object_models_file[], const int n_models)
 {
   int i=0;
 
@@ -87,7 +83,7 @@ load_diremission_list(const char object_models_file[], const n_models)
     {
       // load one model
       // the 'i + 2' is necessary due to the
-      // different counting in cfitsio 
+      // different counting in cfitsio
       obj_list[i] =  load_diremission(object_models_file, i+2);
     }
 
@@ -200,7 +196,7 @@ void
 print_object_models(const object_models *objmodels)
 {
   int i;
-  
+
   // go over each model
   for (i=0; i < objmodels->n_models; i++)
     {
@@ -235,7 +231,7 @@ print_dirim_emission(const dirim_emission *diremission)
  * in [0, n_model-1]
  *
  * Parameters:
- * @param objmodels - the object model structure 
+ * @param objmodels - the object model structure
  * @param objspec   - the 'index' of the desired direct emission model
  *
  * Returns:
@@ -284,7 +280,7 @@ has_aperture_dirim(const object_models *objmodels, const object *actobject)
       if (actobject->beams[0].modimage > 0) //&& actobject->beams[0].modimage <= objmodels->n_models)
 	// report an existing direct emission
 	has_dirim = 1;
-  
+
   // return the result
   return has_dirim;
 }
@@ -326,7 +322,7 @@ get_diremission_value(const dirim_emission *diremission,
   if (x_abs < 0.0 || y_abs < 0.0
       || x_abs >= (float)(diremission->dim_x-1) || y_abs >= (float)(diremission->dim_y-1))
     // assign 0.0
-    {  
+    {
       //fprintf(stderr, "FIX %i,%i  % e,% e ", (int)x_abs, (int)y_abs, x_abs, y_abs);
       value = 0.0;
       //fprintf(stdout, "NI \n",  x_abs, y_abs);
@@ -346,7 +342,7 @@ get_diremission_value(const dirim_emission *diremission,
  * The function computes and returns the bilinear interpolated value
  * of a given matrix at a given coordinate position. The algorithm
  * was taken from the numerical recipes.
- * 
+ *
  * Parameters:
  * @param modimage - the direct emission model
  * @param x        - the x-position
@@ -363,11 +359,11 @@ bilin_interp_matrix(const gsl_matrix *modimage, const double x, const double y)
 
   double v1, v2, v3, v4;
   double t, u;
-  
+
   double value;
 
   // get the indices of the 'lower'
-  // pixel corner 
+  // pixel corner
   x_lower = (int) x;
   y_lower = (int) y;
 
@@ -385,7 +381,7 @@ bilin_interp_matrix(const gsl_matrix *modimage, const double x, const double y)
       v2 = gsl_matrix_get(modimage, x_lower+1, y_lower  );
       v3 = gsl_matrix_get(modimage, x_lower+1, y_lower+1);
       v4 = gsl_matrix_get(modimage, x_lower  , y_lower+1);
-      
+
       // compute the pixel offset
       // from the lower corner
       t = x - (float)x_lower;
@@ -419,7 +415,7 @@ load_spectral_models(const char spectral_models_file[])
   spectral_models *smodels;
 
   // give feedback to the user
-  fprintf (stdout, "aXe_PETCONT: Loading spectral models...", spectral_models_file);
+  fprintf (stdout, "aXe_PETCONT: Loading spectral models: %s", spectral_models_file);
 
   // allocate space for the spectral models structure
   smodels = (spectral_models *)malloc(sizeof(spectral_models));
@@ -450,7 +446,7 @@ load_spectral_models(const char spectral_models_file[])
  * Returns:
  * @return -
  */
-void 
+void
 print_spectral_models(const spectral_models *smodels)
 {
   int i=0;
@@ -501,7 +497,7 @@ load_SED_list(const char spectral_models_file[], const int n_models)
 		   "aXe_PETCONT: " "Could not open file: %s",
 		   spectral_models_file);
     }
-  
+
   // go over all extensions
   for (i=0; i < n_models; i++)
     {
@@ -531,7 +527,7 @@ load_SED_list(const char spectral_models_file[], const int n_models)
  * @param  s_models             - pointer to the fits file extension
  *
  * Returns:
- * @return sed - the energy distribution created 
+ * @return sed - the energy distribution created
  */
 energy_distrib *
 load_SED_from_fitsext(const char spectral_models_file[], fitsfile *s_models)
@@ -541,7 +537,7 @@ load_SED_from_fitsext(const char spectral_models_file[], fitsfile *s_models)
   long nrows=0;
   int colnum1;
   int colnum2;
-  
+
   energy_distrib *sed;
   double *sed_wavs;
   double *sed_flux;
@@ -561,7 +557,7 @@ load_SED_from_fitsext(const char spectral_models_file[], fitsfile *s_models)
 
   // allocate memory for the data
   sed_wavs = (double *) malloc(nrows*sizeof(double));
-  if (!sed_wavs) { 
+  if (!sed_wavs) {
     aXe_message (aXe_M_ERROR, __FILE__, __LINE__,
 		 "Memory allocation failed");
   }
@@ -603,7 +599,7 @@ load_SED_from_fitsext(const char spectral_models_file[], fitsfile *s_models)
   		   "Could not determine column %s in "
   		   " table %s", "FLUX", spectral_models_file);
     }
-  // read the flux column 
+  // read the flux column
   fits_read_col (s_models, TDOUBLE, colnum2, 1, 1, nrows, NULL, sed_flux,
                     &anynul, &f_status);
   if (f_status)
@@ -675,15 +671,15 @@ get_num_extensions(const char spectral_models_file[])
       // count up
       n_ext++;
     }
-  
+
   // close the fits file
   fits_close_file (s_models, &f_status);
 
   // the zeroth extension
   // does nnot count!!
   n_models = n_ext - 1;
-  
-  // return the 
+
+  // return the
   return n_models;
 }
 
@@ -711,11 +707,11 @@ free_spectral_models(spectral_models *smodels)
       free_enerdist(smodels->SEDlist[i]);
       smodels->SEDlist[i] = NULL;
     }
-  
+
   // free the SED list
   free(smodels->SEDlist);
   smodels->SEDlist = NULL;
-  
+
   // free the structure
   free(smodels);
   smodels = NULL;
@@ -733,7 +729,7 @@ free_spectral_models(spectral_models *smodels)
  * @param  modspec         - the index of the desired SED
  *
  * Returns:
- * @return - 
+ * @return -
  */
 energy_distrib *
 get_model_sed(const spectral_models *spec_mod, const int modspec)

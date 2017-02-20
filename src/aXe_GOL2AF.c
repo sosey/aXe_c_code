@@ -232,13 +232,15 @@ main (int argc, char *argv[])
   // set the flag for using slitless geometry,
   // to say extraction parameters optimized for
   // slitless geometry
-  if ((opt = get_online_option ("slitless_geom",argc,argv)))
-      if (!atof(opt))
+  if ((opt = get_online_option ("slitless_geom",argc,argv))){
+      if (!atof(opt)) {
         //slitless_geom = 0;
         auto_reorient = 0;
-  else
+      }
+  } else {
     //slitless_geom = 1;
     auto_reorient = 1;
+  }
 
   /* Set the option to disbale tilted extraction */
   if ((opt = get_online_option ("orient", argc, argv)))

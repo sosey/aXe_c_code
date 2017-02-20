@@ -32,6 +32,12 @@
 #define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
 #define AXE_SIMDATA_PATH "AXE_SIMDATA_PATH"
 
+extern int
+compute_dirimage_model(char *, char *, char *,
+                       char *, char *, char *,
+                       const double , const double , const double ,
+                       observation *, char *);
+
 int
 main (int argc, char *argv[])
 {
@@ -67,7 +73,7 @@ main (int argc, char *argv[])
 
   FITScards      *cards;
 
-  if ((argc < 3) || (opt = get_online_option ("help", argc, argv)))
+  if ( ((argc < 3) || (opt = get_online_option ("help", argc, argv))) )
     {
       fprintf (stdout,
 	       "ST-ECF European Coordinating Facility\n"
@@ -115,7 +121,7 @@ main (int argc, char *argv[])
 
   // check whether a name for the spectral
   // models file is given
-  if ((opt = get_online_option ("model_spectra", argc, argv)))
+  if ( (opt = get_online_option ("model_spectra", argc, argv)) )
     {
       // get and set up the filename
       strcpy (specmod_file, opt);
@@ -129,7 +135,7 @@ main (int argc, char *argv[])
       strcpy (specmod_file_path, "");
     }
 
-  if (opt = get_online_option ("model_images", argc, argv))
+  if ( (opt = get_online_option ("model_images", argc, argv)) )
     {
       // get and set up the name for the image templates
       strcpy (objmod_file, opt);
@@ -150,13 +156,13 @@ main (int argc, char *argv[])
   build_path (AXE_OUTPUT_PATH, map_file, map_file_path);
 
   // determine the extend of the gaussian emission model
-  if ((opt = get_online_option ("model_scale", argc, argv)))
+  if ( (opt = get_online_option ("model_scale", argc, argv)) )
     model_scale = atof(opt);
   else
     model_scale = 3.0;
 
   // determine the telescope area
-  if ((opt = get_online_option ("tel_area", argc, argv)))
+  if ( (opt = get_online_option ("tel_area", argc, argv)) )
     tel_area = atof(opt);
   else
     // set the default HST collecting area
@@ -171,9 +177,9 @@ main (int argc, char *argv[])
 	   map_file_path);
   fprintf (stdout, "aXe_DIRIMAGE: Computing gaussian contamination\n");
   fprintf (stdout, "aXe_DIRIMAGE: Scale factor for the direct image model %f\n", model_scale);
-  if (strlen(specmod_file_path) > 0)
+  if ( (strlen(specmod_file_path) > 0) )
     fprintf (stdout, "aXe_DIRIMAGE: Using spectral models in table: %s\n", specmod_file_path);
-  if (strlen(objmod_file_path) > 0)
+  if ( (strlen(objmod_file_path) > 0) )
     fprintf (stdout, "aXe_DIRIMAGE: Using direct emission objects in image:: %s\n", specmod_file_path);
 
 

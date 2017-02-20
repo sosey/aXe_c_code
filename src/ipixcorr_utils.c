@@ -516,7 +516,7 @@ intpix_corr_beam(beam actbeam, char conf_file_path[], interpolator *ipcorr,
 	  SPC->obj_spec->spec[index].flux   = SPC->obj_spec->spec[index].flux / cfactor;
 	  SPC->obj_spec->spec[index].ferror = SPC->obj_spec->spec[index].ferror / cfactor;
 
-	  /* this is the wqrong version!!
+	  this is the wqrong version!!
 	  SPC->fgr_spec->spec[index].count  = SPC->fgr_spec->spec[index].count * cfactor;
 	  SPC->fgr_spec->spec[index].error  = SPC->fgr_spec->spec[index].error * cfactor;
 	  SPC->fgr_spec->spec[index].flux   = SPC->fgr_spec->spec[index].flux * cfactor;

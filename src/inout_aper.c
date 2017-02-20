@@ -1012,11 +1012,11 @@ char** return_next_aperture(FILE *input)
         if (!strcmp(key,"APERTURE"))
           new_aper++;
 
-        sprintf(aper[i++],"%s",Buffer2);
+        sprintf(aper[i++], "%s", Buffer2);
 
         if (new_aper==2)
           {
-            sprintf(aper[i++],"NULL\0");
+            sprintf(aper[i++],"NULL");
             return aper;
           }
         }
@@ -1238,4 +1238,3 @@ int get_beamspec_size(object **oblist)
   // return the counter
   return specsize;
 }
-

@@ -10,6 +10,8 @@
 
 #ifndef _SPCE_OUTPUT_H
 #define _SPCE_OUTPUT_H
+#include "aper_conf.h"
+#include <gsl/gsl_matrix.h>
 
 /*
  * Structure to store all information on

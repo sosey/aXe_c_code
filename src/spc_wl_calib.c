@@ -8,7 +8,7 @@
  * @date    $Date: 2010-06-15 09:48:34 $
  */
 
-
+#include "spc_wl_calib.h"
 #include <stdarg.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_nan.h>
@@ -16,7 +16,6 @@
 #include "aXe_grism.h"
 #include "aXe_errors.h"
 #include "disp_conf.h"
-#include "spc_wl_calib.h"
 
 
 /**

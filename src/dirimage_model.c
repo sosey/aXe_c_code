@@ -1,6 +1,6 @@
 /**
  *  File: dirimage_model.c
- *  Subroutines to calculate 
+ *  Subroutines to calculate
  *  a direct image
  *
  * @author  Martin Kuemmel
@@ -32,11 +32,12 @@
 #include "fringe_conf.h"
 #include "dirimage_model.h"
 
+
 #define MAX(x,y) (((x)>(y))?(x):(y))
 #define MIN(x,y) (((x)<(y))?(x):(y))
 #define SQR(x) ((x)*(x))
 
-int 
+int
 compute_dirimage_model(char dirim_file[], char conf_file[], char tpass_file[],
 		       char specmod_file[], char objmod_file[], char aper_file[],
 		       const double model_scale, const double tel_area, const double lambda_psf,
@@ -85,7 +86,7 @@ compute_dirimage_model(char dirim_file[], char conf_file[], char tpass_file[],
   dirlist = oblist_to_dirlist2(dirim_file, conf_file, npixels, oblist,
 			       spec_mod, obj_mod, model_scale, 1);
 
-  // determine the XOFF and YOFF values 
+  // determine the XOFF and YOFF values
   // for the various beams
   fill_xy_offsets(dirlist, conf_file);
 
@@ -155,7 +156,7 @@ make_dirimage(object **oblist, dirobject **dirlist, const px_point npixels,
       // get the integrated direct image intensity in cps
       cps = get_cps_for_dirobject(tpass, actdir);
 
-      // correct the direct image positions for 
+      // correct the direct image positions for
       // the offset values introduced by building
       // the direct image objects around the reference
       // position, which is shifted from the true
@@ -198,7 +199,7 @@ make_dirimage(object **oblist, dirobject **dirlist, const px_point npixels,
 		// to get a more appropriate value for the
 		// emission val
 		sval = get_sub_emodel_value(dpixel, actbeam, actdir->drzscale);
-	      
+
 	      // compute and set the new pixel values
 	      value = gsl_matrix_get(dirimage_matrix, nx, ny) + sval*cps;
 	      gsl_matrix_set(dirimage_matrix, nx, ny, value);
@@ -267,7 +268,7 @@ combine_tpass_SED(interpolator *tpass, dirobject *actdir)
   int act_index;
 
   gsl_vector     *indep_data;
-  
+
   // go over all SED data points
   for (index = 0; index < actdir->SED->npoints; index++)
     {
@@ -276,9 +277,9 @@ combine_tpass_SED(interpolator *tpass, dirobject *actdir)
 
       // check whether the independent data point
       // falls in the area of the sensitivity
-      if (actdir->SED->wavelength[index] < tpass->xmax 
+      if (actdir->SED->wavelength[index] < tpass->xmax
 	  && actdir->SED->wavelength[index] >  tpass->xmin)
-	// enhance the number 
+	// enhance the number
 	// of additional data points
 	n_additional += 1;
     }
@@ -298,7 +299,7 @@ combine_tpass_SED(interpolator *tpass, dirobject *actdir)
   for (index = 0; index < actdir->SED->npoints; index++)
     // check whether the independent data point
     // falls in the area of the sensitivity
-    if (actdir->SED->wavelength[index] < tpass->xmax 
+    if (actdir->SED->wavelength[index] < tpass->xmax
 	&& actdir->SED->wavelength[index] >  tpass->xmin)
       {
 	// fill in the additional independent data point
@@ -316,8 +317,8 @@ combine_tpass_SED(interpolator *tpass, dirobject *actdir)
   // compose a new interpolator from the independent values
   combine = get_combined_tpass_SED(indep_data, tpass, actdir);
 
-  // release memory in the weight vector 
-  gsl_vector_free(indep_data); 
+  // release memory in the weight vector
+  gsl_vector_free(indep_data);
 
   // go over all SED data points
   for (index = 0; index < actdir->SED->npoints; index++)
@@ -347,7 +348,7 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
 
   // set all the weights
   gsl_vector_int_set_all(indep_weight, 1);
-  
+
   // go over the independent data
   for (index = 1; index < indep_data->size; index++)
     // check whether the current entry is equal the previous one
@@ -359,7 +360,7 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
   // initialize the
   // final number
   n_new = 0;
-  
+
   // go over the weight array
   for (index=0; index < indep_weight->size; index++)
     // just count the weights
@@ -391,8 +392,8 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
   combine = create_interp(n_new, TPASS_INTERP_TYPE, xvals_new, yvals_new);
 
 
-  // release memory in the weight vector 
-  gsl_vector_int_free(indep_weight); 
+  // release memory in the weight vector
+  gsl_vector_int_free(indep_weight);
 
   // return the interpolator
   return combine;

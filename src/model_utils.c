@@ -8,6 +8,7 @@
  * @version $Revision: 1.3 $
  * @date    $Date: 2010-06-15 09:48:34 $
  */
+#include "model_utils.h"
 #include <math.h>
 #include <fitsio.h>
 #include <gsl/gsl_matrix.h>
@@ -24,8 +25,6 @@
 #include "aper_conf.h"
 #include "crossdisp_utils.h"
 #include "spc_FITScards.h"
-#include "specmodel_utils.h"
-#include "model_utils.h"
 
 
 #define MAX(x,y) (((x)>(y))?(x):(y))

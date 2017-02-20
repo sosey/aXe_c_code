@@ -6,23 +6,19 @@
  * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
  * @package aper_check
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * @date    $Date: 2010-06-15 09:48:34 $
  */
-
-
+#include "aper_check.h"
+#include <gsl/gsl_vector.h>
+#include "spce_output.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
-#include "aXe_grism.h"
-#include "aper_check.h"
-
 
 void mark_trace_in_aXe_mask(ap_pixel * ap_p, aXe_mask *mask)
 {
   gsl_vector_int *trace_inds;
   int i, ind;
-        
+
   trace_inds = (gsl_vector_int *) get_trace_inds (ap_p);
 
 
@@ -37,8 +33,8 @@ void mark_trace_in_aXe_mask(ap_pixel * ap_p, aXe_mask *mask)
 
 /**
    Function to create and return a gsl array of the same size as the grism
-   part of n observation structure. 
-   
+   part of n observation structure.
+
    @param ob a pointer to an observation structure
    @return a pointer to a newly allocated aXe_mask structure
 
@@ -66,7 +62,7 @@ aXe_mask_init (observation * ob)
     for (j=0;j<ob->grism->size2;j++) {
       v = gsl_matrix_get(ob->grism,i,j);
       gsl_matrix_set(mask->img, i,j, v);
-      
+
     }
   }
 
@@ -78,7 +74,7 @@ aXe_mask_init (observation * ob)
 /**
  * This function sets all the pixels listed in an ap_pixel list
  * in an aXe_mask to 0.0
-   
+
     @param a pointer to a ap_pixel array
     @param mask an existing aXe_mask structure
 
@@ -87,9 +83,9 @@ void
 add_ap_p_to_aXe_mask (ap_pixel * ap_p, aXe_mask * mask)
 {
   ap_pixel *cur_p;
-  
+
   if (ap_p==NULL) return;
-  
+
   for (cur_p = ap_p; cur_p->p_x != -1; cur_p++)
     {
 
@@ -97,7 +93,7 @@ add_ap_p_to_aXe_mask (ap_pixel * ap_p, aXe_mask * mask)
       if (!isnan (cur_p->count))
         {
           //   fprintf(stderr,"%d %d\n",cur_p->p_x, cur_p->p_y);
-          
+
           gsl_matrix_set (mask->img, cur_p->p_x, cur_p->p_y, 0.0);
         }
     }

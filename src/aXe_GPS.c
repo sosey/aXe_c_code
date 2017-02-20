@@ -274,7 +274,7 @@ main(int argc, char *argv[])
 		    curbeam->bbox[0].x+1, curbeam->bbox[0].y+1,
 		    curbeam->bbox[1].x+1, curbeam->bbox[1].y+1);
 	    fprintf(stdout, "aXe_GPS: Information for pixel (%i,%i):\n",xval,yval);
-	    fprintf(stdout, "-------------------------------------------\n",xval,yval);
+	    fprintf(stdout, "-------------------------------------------\n");
 	    fprintf(stdout, "aXe_GPS:                    lambda: %8.2f [AA],\n",result[0].lambda);
 	    fprintf(stdout, "aXe_GPS:                dispersion: %8.2f [AA/px],\n",result[0].dlambda);
 	    fprintf(stdout, "aXe_GPS: trace length of sect. pt.: %8.2f [px],\n",result[0].xi);

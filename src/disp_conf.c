@@ -2,20 +2,18 @@
  *
  * File: disp_conf.c
  * Subroutines to read the dispersion coefficients and other
- * beam related keywords from the configuration file. 
+ * beam related keywords from the configuration file.
  *
  * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
  * @package disp_conf
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * @date    $Date: 2010-06-15 09:48:34 $
  */
+#include "disp_conf.h"
 #include <string.h>
 #include <math.h>
-#include "aXe_grism.h"
 #include "aXe_errors.h"
 #include "spc_cfg.h"
-#include <gsl/gsl_vector.h>
-#include "disp_conf.h"
 
 /**
  * Routine to read in the MMAG_EXTRACT keyword for a specific beam
@@ -24,7 +22,7 @@
  * @param  filename     filename of the configuration file
  * @param  beamID       beamID of the beam of interest (A=0, B=1, etc...)
  *
- * @return mmag_extract mag_extract-value for that beam 
+ * @return mmag_extract mag_extract-value for that beam
  */
 float
 get_beam_mmag_extract (char *filename, int beamID)
@@ -33,13 +31,13 @@ get_beam_mmag_extract (char *filename, int beamID)
   float mmag_extract = -1;
   int found = 0;
   int i=0;
-  
+
   struct CfgStrings DispConfig[] = {
     {NULL, NULL},
     {NULL, NULL}
   };
   DispConfig[0].name = beam;
-  
+
   sprintf (beam, "MMAG_EXTRACT_%c", BEAM (beamID));
   CfgRead (filename, DispConfig);
   if ((DispConfig[0].name == beam) && (DispConfig[0].data != NULL))
@@ -70,7 +68,7 @@ get_beam_mmag_extract (char *filename, int beamID)
  * @param  filename     filename of the configuration file
  * @param  beamID       beamID of the beam of interest (A=0, B=1, etc...)
  *
- * @return mmag_mark mag_mark-value for that beam 
+ * @return mmag_mark mag_mark-value for that beam
  */
 float
 get_beam_mmag_mark (char *filename, int beamID)
@@ -79,13 +77,13 @@ get_beam_mmag_mark (char *filename, int beamID)
   float mmag_mark = -1;
   int found = 0;
   int i=0;
-  
+
   struct CfgStrings DispConfig[] = {
     {NULL, NULL},
     {NULL, NULL}
   };
   DispConfig[0].name = beam;
-  
+
   sprintf (beam, "MMAG_MARK_%c", BEAM (beamID));
   CfgRead (filename, DispConfig);
   if ((DispConfig[0].name == beam) && (DispConfig[0].data != NULL))
@@ -106,7 +104,7 @@ get_beam_mmag_mark (char *filename, int beamID)
     free(DispConfig[i++].data);
 
   // return the value
-  return mmag_mark;  
+  return mmag_mark;
 }
 
 /**
@@ -125,13 +123,13 @@ get_beam_disp_norder (char *filename, int beamID)
 {
   char beam[MAXCHAR];
   int disporder = -1, found = 0, i;
-  
+
   struct CfgStrings DispConfig[] = {
     {NULL, NULL},
     {NULL, NULL}
   };
   DispConfig[0].name = beam;
-  
+
   sprintf (beam, "DISP_ORDER_%c", BEAM (beamID));
   CfgRead (filename, DispConfig);
   if ((DispConfig[0].name == beam) && (DispConfig[0].data != NULL))
@@ -149,10 +147,10 @@ get_beam_disp_norder (char *filename, int beamID)
   while(DispConfig[i].name!=NULL){
     free(DispConfig[i++].data);
   }
-  
+
   //free(DispConfig[0].data);
   return disporder;
-  
+
 }
 
 /**
@@ -162,7 +160,7 @@ get_beam_disp_norder (char *filename, int beamID)
  *
  * @param  filename filename of the configuration file
  * @param  beamID   beamID of the beam of interest (A=0, B=1, etc...)
- * @param  order    order of the coefficient for which the 2D field dependent 
+ * @param  order    order of the coefficient for which the 2D field dependent
  *                  coefficients are queried.
  *
  * @return v        a gsl_vector() containing all of the 2D field
@@ -173,7 +171,7 @@ get_beam_disp_order (char *filename, const int for_grism, int beamID,
                      int order)
 {
   char beam[MAXCHAR];
-  
+
   int norder, found = 0;
   int i;
   gsl_vector *v = NULL;
@@ -213,12 +211,12 @@ get_beam_disp_order (char *filename, const int for_grism, int beamID,
 
 /**
  * Parses a configuration file, computes and return the value
- * of the order^th dispersion polynomial coefficient at a given 
+ * of the order^th dispersion polynomial coefficient at a given
  * detector pixel.
  *
  * @param filename filename of the configuration file
  * @param beamID   beamID of the beam of interest (A=0, B=1, etc...)
- * @param order    order of the coefficient for which the 2D field dependent 
+ * @param order    order of the coefficient for which the 2D field dependent
  * @param p        a d_point object containing the position to compute the
  *                 dispersion coefficient at.
  *
@@ -232,7 +230,7 @@ get_disp_coeff_at_pos (char *filename, const int for_grism, int beamID,
   gsl_vector *v;
   float n, c, res;
   int i, j, k;
-  
+
   v = get_beam_disp_order (filename, for_grism, beamID, order);
   n = 0.5 * (-1.0 + sqrt (1 + 8 * v->size));
   if ((floor (n) - n) != 0)
@@ -242,7 +240,7 @@ get_disp_coeff_at_pos (char *filename, const int for_grism, int beamID,
                    "Order %d of Beam %d in %s does not contain a correct number of entries (i.e. "
                    "1,3,6,10,15...,n^2/2+n/2", order, beamID, filename);
     }
-  
+
   i = 0;
   res = 0;
   for (j = 0; j < n; j++)
@@ -279,9 +277,9 @@ get_disp_coeffs_at_pos (char *filename, const int for_grism, int beamID,
   int norder, i;
   gsl_vector *v;
   float c;
-  
+
   norder = get_beam_disp_norder (filename, beamID);
-  
+
   v = gsl_vector_alloc (norder + 1);
   for (i = 0; i < norder + 1; i++)
     {
@@ -303,7 +301,7 @@ get_disp_coeffs_at_pos (char *filename, const int for_grism, int beamID,
  *                 the dispersion coefficients at.
  *
  * @return res     a dispersion structure computed for beam beamID at
- *                 detector pixel p.    
+ *                 detector pixel p.
  */
 dispstruct *
 get_dispstruct_at_pos (char *filename, const int for_grism, int beamID,
@@ -311,13 +309,13 @@ get_dispstruct_at_pos (char *filename, const int for_grism, int beamID,
 {
   dispstruct *res;
   gsl_vector *pol2;
-  
+
   res = malloc (sizeof (dispstruct));
-  
-  
+
+
   res->pol = get_disp_coeffs_at_pos (filename, for_grism, beamID, p);
   pol2 = res->pol;
-  
+
   res->ID = beamID;
   res->cpoint.x = p.x;
   res->cpoint.y = p.y;
@@ -379,7 +377,7 @@ check_for_grism (char *filename, int beamID)
         c += check_disp_coeff (filename, 0, beamID, i);
 
       // if also this assumption is wrong,
-      // raise an error that the configuration file 
+      // raise an error that the configuration file
       // is inconsistent
       if (c != 0)
         aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -453,7 +451,7 @@ get_prange (char *filename, int beamID)
   char beam[MAXCHAR];
 
   gsl_vector *v = NULL;
-  
+
   struct CfgStrings DispConfig[] = {
     {NULL, NULL},
     {NULL, NULL}
@@ -473,7 +471,7 @@ get_prange (char *filename, int beamID)
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
                    "get_prange: PMIN must be smaller than PMAX, however PMIN: %f, PMAX %f\n",
                    gsl_vector_get(v,0), gsl_vector_get(v,1));
-      
+
   }
   return v;
 }
@@ -482,25 +480,25 @@ global_disp *
 get_global_disp(char *filename, const int for_grism, int beamID)
 {
   global_disp *gdisp;
-  
+
   gsl_vector *tmp;
-  
+
   int order;
-  
+
 
   gdisp =  (global_disp *)malloc (sizeof(global_disp));
-  
+
   gdisp->n_order = get_beam_disp_norder(filename, beamID);
-  
+
   //  fprintf (stdout, "Order of Polynomial: %i\n", gdisp->n_order);
-    
+
   gdisp->all_coeffs = (gsl_vector **)malloc((gdisp->n_order+1)*sizeof(gsl_vector *));
 
   for (order=0; order <  gdisp->n_order+1; order++)
     {
-        
+
       tmp = get_beam_disp_order (filename, for_grism, beamID, order);
-      
+
       if (check_disp_order(tmp, beamID, order))
         gdisp->all_coeffs[order] = tmp;
 
@@ -510,7 +508,7 @@ get_global_disp(char *filename, const int for_grism, int beamID)
   gdisp->ID = beamID;
   sprintf (gdisp->file, "%s", filename);
   gdisp->for_grism = for_grism;
-  
+
   return gdisp;
 }
 
@@ -519,7 +517,7 @@ get_calvector_from_gdisp(const global_disp *gdisp, const d_point p)
 {
 
   gsl_vector *calvector;
-  
+
   double value;
 
   int order;
@@ -543,9 +541,9 @@ get_2Ddep_value(const gsl_vector *coeffs, const d_point p)
 {
   double value=0.0;
   double c=0.0;
-  
+
   int i, j, k, n;
-  
+
   i=0;
   n = 0.5 * (-1.0 + sqrt (1 + 8 * coeffs->size));
   for (j = 0; j < n; j++)
@@ -565,15 +563,15 @@ print_global_disp(const global_disp *gdisp)
 {
   int order;
   int i;
-  
+
   fprintf(stdout, "Filename: %s\n", gdisp->file);
   fprintf(stdout, "BEAM: %c\n", BEAM(gdisp->ID));
   fprintf(stdout, "Grism: %i\n", gdisp->for_grism);
   fprintf(stdout, "Number of orders: %i\n", gdisp->n_order);
-  
+
   for (order=0; order <  gdisp->n_order+1; order++)
     {
-      fprintf(stdout, "Dimension in order %i: %i", order, gdisp->all_coeffs[order]->size);
+      fprintf(stdout, "Dimension in order %i: %zi", order, gdisp->all_coeffs[order]->size);
       for (i=0; i < gdisp->all_coeffs[order]->size; i++)
         fprintf(stdout, " %e ", gsl_vector_get(gdisp->all_coeffs[order], i));
       fprintf(stdout, "\n");
@@ -585,7 +583,7 @@ check_disp_order(const gsl_vector *tmp, const int beamID, const int order)
 {
 
   int n;
-  
+
   n = 0.5 * (-1.0 + sqrt (1 + 8 * tmp->size));
   if ((floor (n) - n) != 0)
     {
@@ -602,10 +600,10 @@ void
 free_global_disp(global_disp *gdisp)
 {
   int order;
-  
+
   for (order=0; order <  gdisp->n_order+1; order++)
     gsl_vector_free(gdisp->all_coeffs[order]);
-  
+
   free(gdisp->all_coeffs);
   free(gdisp);
   gdisp = NULL;

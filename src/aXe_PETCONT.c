@@ -27,6 +27,8 @@
 #include "aXe_utils.h"
 #include "aper_conf.h"
 #include "spce_output.h"
+#include "spc_model.h"
+#include "model_utils.h"
 
 #define AXE_IMAGE_PATH "AXE_IMAGE_PATH"
 #define AXE_OUTPUT_PATH "AXE_OUTPUT_PATH"
@@ -149,7 +151,7 @@ main (int argc, char *argv[])
   // a name for the object models file is given
   if (cont_model == 2)
     {
-      if (opt = get_online_option ("model_images", argc, argv))
+      if ( (opt = get_online_option ("model_images", argc, argv)) )
 	{
 	  // get and set up the name for the image templates
 	  strcpy (objmod_file, opt);

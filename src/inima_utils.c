@@ -47,7 +47,7 @@ get_axe_inputs(char inima[], char confterm[])
   Filelist = fopen (inima, "r");
   if (NULL == Filelist)
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Could not open %s\n",
-		   inima); 
+		   inima);
   fclose(Filelist);
 
   // convert the configuration term
@@ -62,7 +62,7 @@ get_axe_inputs(char inima[], char confterm[])
   // one with the grism file and one with the IOL
   if (ncols < 2)
     aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
-		 "get_axe_inputs: less than 2 items inlist: %s\n", inima); 
+		 "get_axe_inputs: less than 2 items inlist: %s\n", inima);
 
   // analyze the content of the input image list.
   // find the multiplicity, which is the number of
@@ -78,7 +78,7 @@ get_axe_inputs(char inima[], char confterm[])
     {
       // report the error and go out
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
-		   "get_axe_inputs: Number of configs from input (%i) conflicts with multiplicity (%i) !\n", conf_array->nitems, nmult); 
+		   "get_axe_inputs: Number of configs from input (%i) conflicts with multiplicity (%i) !\n", conf_array->nitems, nmult);
       //      fprintf(stderr, "ERROR: Number of configs from input (%i) conflicts with multiplicity (%i) !\n", conf_array->nitems, nmult);
       //      exit(1);
     }
@@ -132,9 +132,9 @@ copy_basic_input(char_array *line_array, char_array *iol_array,
   if (dirim_col > -1)
     strcpy(axe_item->dirima_file, line_array->char_items[dirim_col]);
   else
-    // store the NULL value    
+    // store the NULL value
     strcpy(axe_item->dirima_file, null_entry);
-    
+
   // check whether a dmag value exists
   // copy it over if possible
   if (dmag_col > -1)
@@ -155,7 +155,7 @@ copy_basic_input(char_array *line_array, char_array *iol_array,
  * Parameters:
  * @param inima     - the name of the input image list
  * @param confterm  - the configuration files given in the input
- * @param nrows     - the number of rows 
+ * @param nrows     - the number of rows
  * @param nmult     - the multiplicity
  * @param dirim_col - the direct column index
  * @param conf_col  - the configuration column index
@@ -167,7 +167,7 @@ copy_basic_input(char_array *line_array, char_array *iol_array,
 axe_inputs *
 extract_axe_inputs(char inima[], char confterm[], int nrows, int nmult,
 		   int dirim_col, int conf_col, int dmag_col)
-{  
+{
   FILE *flist;
 
   char Buffer[LINE_LEN_MAX];
@@ -215,7 +215,7 @@ extract_axe_inputs(char inima[], char confterm[], int nrows, int nmult,
 	// report the error and go out
 	aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		     "extract_axe_inputs: Number of IOL's in \"%s\" conflicts with multiplicity (%i) !\n", line_array->char_items[1], nmult);
-      
+
       // get the aXe configuration files
       // either from the line of from the command input
       if (conf_col > -1)
@@ -329,7 +329,7 @@ get_inima_cols(char inima[], int *dirim_col,
     {
       // try to convert the item to a float
       dmag = strtod(line_array->char_items[index], &t_err);
-      
+
       // check whether the conversion to float was successful
       if (dmag || strcmp(line_array->char_items[index], t_err))
 	// set the column for the dmag-values
@@ -341,13 +341,13 @@ get_inima_cols(char inima[], int *dirim_col,
       else
 	*conf_col = index;
     }
-      
+
   // if there is a column with aXe configuration files
   if (*conf_col > -1)
     {
       // extract the items in an char_array
       item_array = get_items(line_array->char_items[*conf_col], ",");
-      
+
       // check the multiplicity
       if (item_array->nitems != *nmult)
 	// report the error and go out
@@ -408,7 +408,7 @@ get_inlist_basics(char inima[], int *nrows, int *ncols)
 
       // increment the row counter
       *nrows = *nrows + 1;
-	  
+
       // check whether the token counter
       // is not yet set
       if (*ncols < 0)
@@ -433,6 +433,46 @@ get_inlist_basics(char inima[], int *nrows, int *ncols)
 
   // close the file
   fclose(flist);
+}
+
+/**
+ * Function: get_nitems
+ * The function determines and returns the number of items in
+ * the input string when using the second parameter as token.
+ *
+ * Parameters:
+ * @param input_line - the character string to analyze
+ * @param tokens     - the tokens to split the string
+ *
+ * Returns:
+ * @return nitems - number of items in the string
+ */
+int
+get_nitems(char input_line[], char tokens[])
+{
+  char input[LINE_LEN_MAX];
+  char *tok;
+
+  int ntoken=0;
+
+  // copy the input in a local string
+  strcpy(input, input_line);
+
+  // search for the first token
+  tok = strtok(input, tokens);
+
+  // iterate while a token exists
+  while(tok)
+    {
+      // increase the counter
+      ntoken++;
+
+      // search for the next token
+      tok = strtok(NULL, tokens);
+    }
+
+  //
+  return ntoken;
 }
 
 
@@ -486,7 +526,7 @@ get_items(char input_line[], char tokens[])
 	  // copy the token to the array structure
 	  strcpy(an_array->char_items[index], tok);
 	  index ++;
-	  
+
 	  // search for the next token
 	  tok = strtok(NULL, tokens);
 	}
@@ -527,7 +567,7 @@ is_valid_inima_line(char input_line[])
 
   // trim the input line
   trim(input, trim_input);
-  
+
   // check whether the line is commented
   if (!strncmp(trim_input, comment, 1))
     return 0;
@@ -540,45 +580,6 @@ is_valid_inima_line(char input_line[])
 }
 
 
-/**
- * Function: get_nitems
- * The function determines and returns the number of items in
- * the input string when using the second parameter as token.
- *
- * Parameters:
- * @param input_line - the character string to analyze
- * @param tokens     - the tokens to split the string
- *
- * Returns:
- * @return nitems - number of items in the string
- */
-int
-get_nitems(char input_line[], char tokens[])
-{
-  char input[LINE_LEN_MAX];
-  char *tok;
-
-  int ntoken=0;
-
-  // copy the input in a local string
-  strcpy(input, input_line);
-
-  // search for the first token
-  tok = strtok(input, tokens);
-
-  // iterate while a token exists
-  while(tok)
-    {
-      // increase the counter
-      ntoken++;
-
-      // search for the next token
-      tok = strtok(NULL, tokens);
-    }
-
-  // 
-  return ntoken;
-}
 
 /**
  * Function: alloc_char_array
@@ -603,9 +604,9 @@ alloc_char_array(int nitems)
 
   // allocate the memory for the pointers to the char data
   an_array->char_items = (char **)malloc(nitems * sizeof(char *));
-  
+
   // allocate memory for every cha data item
-  for (i=0; i < nitems; i++) 
+  for (i=0; i < nitems; i++)
     // allocate the item
     an_array->char_items[i] = malloc(MAXCHAR * sizeof(char));
 
@@ -717,7 +718,7 @@ free_axe_inputs(axe_inputs *in_list)
 
   // free the base structure
   free(in_list);
-  
+
   // set the structure to NULL
   in_list = NULL;
 }
@@ -744,8 +745,8 @@ print_axe_inputs(axe_inputs *in_list)
       // print the basic input onto the screen
       fprintf(stdout, "(%i) Grism: %s, IOL: %s, Conf: %s", index + 1,
 	      in_list->axe_items[index].grism_file,
-	      in_list->axe_items[index].iol_cat, 
-	      in_list->axe_items[index].config_file); 
+	      in_list->axe_items[index].iol_cat,
+	      in_list->axe_items[index].config_file);
 
       // print the direct image name, if there is any
       if (strlen(in_list->axe_items[index].dirima_file) > 0)
@@ -760,9 +761,9 @@ print_axe_inputs(axe_inputs *in_list)
 }
 
 /**
- * Function: trim 
+ * Function: trim
  * Trim leading and trailing blank charachters from a string.
- * blank charachters are the one recognised as such by the isspace lib function 
+ * blank charachters are the one recognised as such by the isspace lib function
  * (Space, horizontal and vertical tab, form feed, carriage return).
  *
  * Parameters:
@@ -771,27 +772,27 @@ print_axe_inputs(axe_inputs *in_list)
  *
  * Returns:
  * @return -
- */ 
+ */
 char * trim(char inString[], char outString[])
 {
   int headIndex = 0;
   int tailIndex = 0;
   int outputLength = 0;
-  
+
   if (inString == NULL) { return NULL; }
-  
-  tailIndex = strlen(inString) - 1; // Last char index in the input (excluding the '\0') 
-  
+
+  tailIndex = strlen(inString) - 1; // Last char index in the input (excluding the '\0')
+
   // Get rid of the leading blanks:
   while (isspace(inString[headIndex]) && (headIndex <= tailIndex)) {headIndex++; }
-  
+
   // Get rid of the trailing blanks:
   while (isspace(inString[tailIndex]) && (tailIndex > headIndex)) {tailIndex--; }
-  
+
   // compute the total length
   // add one for the null character
-  outputLength = tailIndex - headIndex + 1; 
-  
+  outputLength = tailIndex - headIndex + 1;
+
   // copy over from input to output
   strncpy(outString, &inString[headIndex], outputLength);
 
@@ -800,5 +801,5 @@ char * trim(char inString[], char outString[])
 
   // just for fun, return also
   // the result here
-  return outString; 
+  return outString;
 }

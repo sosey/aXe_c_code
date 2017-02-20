@@ -5,12 +5,12 @@
  * @author  Martin Kuemmel, Nor Pirzkal
  * @package spc_wl_calib
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _SPC_WL_CALIB_H
 #define _SPC_WL_CALIB_H 1
-
+#include "disp_conf.h"
 
 /**
  * A calibration function, mostly containing the coefficients of
@@ -27,7 +27,7 @@ typedef struct
 calib_function;
 
 
-extern calib_function *
+calib_function *
 create_calib_from_gsl_vector (const int for_grism, const gsl_vector * a);
 
 extern void
@@ -45,4 +45,3 @@ prange_cut(ap_pixel * ap_p, const gsl_vector * lambda_range,
 	   const calib_function * wl_calibration);
 
 #endif
-

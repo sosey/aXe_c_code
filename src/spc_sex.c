@@ -1191,7 +1191,8 @@ SexObject_to_object (SexObject * sobj, observation * const obs,
       // give a warning for small angles
       // between the orientation direction and
       // the trace angle.
-      if ((fabs(paposang < MIN_DIFFANGLE) || fabs(paposang-180.0) < MIN_DIFFANGLE) && auto_reorient == 0)
+      // BUGFIX comparison should be to paposang not the logical comparison MLS
+      if ( ( (fabs(paposang) < MIN_DIFFANGLE) || (fabs(paposang-180.0) < MIN_DIFFANGLE) ) && (auto_reorient == 0) )
         aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
                      "aXe_GOL2AF: Object ID: %i: The angle between the extraction orientation and "
                      "the trace is less than %5.2f degrees. You may get severe problems"
@@ -1577,11 +1578,11 @@ fill_object_bbox (observation * const obs, beam * b, const float m_width,
 
      /* Compute the area of this aperture */
      area =
-          0.5 * (fabs (b->corners[0].y - b->corners[4].y) *
-                 fabs (b->corners[0].x - b->corners[1].x) +
-                 fabs (b->corners[2].y -
-                       b->corners[1].y) * fabs (b->corners[3].x -
-                                                b->corners[2].x));
+          0.5 * (abs (b->corners[0].y - b->corners[4].y) *
+                 abs (b->corners[0].x - b->corners[1].x) +
+                 abs (b->corners[2].y -
+                       b->corners[1].y) * abs (b->corners[3].x -
+                                               b->corners[2].x));
      if (area == 0)
        {
             fprintf (stderr, "aper debug: area is zero!\n");

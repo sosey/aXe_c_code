@@ -1,5 +1,5 @@
 /**
- * File: specmodel_utils.h 
+ * File: specmodel_utils.h
  * Header file for specmodel_utils.c
  *
  * @author  Martin Kuemmel
@@ -9,6 +9,12 @@
  */
 #ifndef _SPECMODEL_UTILS_H
 #define _SPECMODEL_UTILS_H
+#include <gsl/gsl_interp.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+#include <fitsio.h>
+#include "axe_grism.h"
+
 
 // interpolation type used for the
 // spectral models
@@ -25,7 +31,7 @@ typedef struct
 
   gsl_interp *interp;
   gsl_interp_accel *accel;
-  
+
 }
 energy_distrib;
 
@@ -35,7 +41,7 @@ energy_distrib;
 typedef struct
 {
   int n_models;
-  
+
   energy_distrib **SEDlist;
 }
 spectral_models;
@@ -54,7 +60,7 @@ typedef struct
 typedef struct
 {
   int n_models;              // the number of direct image object
-  
+
   dirim_emission **obj_list; // the list of direct image objects
 }
 object_models;
@@ -63,7 +69,7 @@ extern object_models *
 load_object_models(const char object_models_file[]);
 
 extern dirim_emission **
-load_diremission_list(const char object_models_file[], const n_models);
+load_diremission_list(const char object_models_file[], const int n_models);
 
 extern dirim_emission *
 load_diremission(const char object_models_file[], const int n_extension);
@@ -96,7 +102,7 @@ bilin_interp_matrix(const gsl_matrix *modimage, const double x, const double y);
 extern spectral_models *
 load_spectral_models(const char spectral_models_file[]);
 
-extern void 
+extern void
 print_spectral_models(const spectral_models *smodels);
 
 extern energy_distrib **

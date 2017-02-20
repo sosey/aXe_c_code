@@ -17,9 +17,9 @@
  * these two routines. Either modify them here, or copy and rename them.
  */
 
-void lm_evaluate_default( double* par, int m_dat, double* fvec, 
+void lm_evaluate_default( double* par, int m_dat, double* fvec,
                           void *data, int *info )
-/* 
+/*
  *	par is an input array. At the end of the minimization, it contains
  *        the approximate solution vector.
  *
@@ -40,16 +40,16 @@ void lm_evaluate_default( double* par, int m_dat, double* fvec,
     mydata = (lm_data_type*)data;
 
     for (i=0; i<m_dat; i++)
-            fvec[i] = mydata->user_y[i] 
+            fvec[i] = mydata->user_y[i]
                 - mydata->user_func( mydata->user_t[i], par);
 
     *info = *info; /* to prevent a 'unused variable' warning */
     /* if <parameters drifted away> { *info = -1; } */
 }
 
-void lm_evaluate_fpar( double* par, int m_dat, double* fvec, 
+void lm_evaluate_fpar( double* par, int m_dat, double* fvec,
                           void *data, int *info )
-/* 
+/*
  *	par is an input array. At the end of the minimization, it contains
  *        the approximate solution vector.
  *
@@ -78,18 +78,18 @@ void lm_evaluate_fpar( double* par, int m_dat, double* fvec,
       //fprintf(stderr, "indep: %e ", mydata->user_t[i]);
       //fprintf(stderr, "value: %e, ", mydata->user_y[i]);
       //fprintf(stderr, "func_value: %e \n", mydata->user_func( mydata->user_t[i], par, mydata->fpars));
-      
 
-      fvec[i] = mydata->user_y[i] 
+
+      fvec[i] = mydata->user_y[i]
 	- mydata->user_func( mydata->user_t[i], par, mydata->fpars);
-    
+
     }
   //fprintf(stderr, "2.: %e, %e, %e: %e\n", mydata->fpars[0], mydata->fpars[1],  mydata->fpars[2], par[0]);
   *info = *info; /* to prevent a 'unused variable' warning */
   /* if <parameters drifted away> { *info = -1; } */
 }
 
-void lm_print_default( int n_par, double* par, int m_dat, double* fvec, 
+void lm_print_default( int n_par, double* par, int m_dat, double* fvec,
                        void *data, int iflag, int iter, int nfev )
 /*
  *       data  : for soft control of printout behaviour, add control
@@ -131,7 +131,7 @@ void lm_print_default( int n_par, double* par, int m_dat, double* fvec,
     }
 }
 
-void lm_print_nothing( int n_par, double* par, int m_dat, double* fvec, 
+void lm_print_nothing( int n_par, double* par, int m_dat, double* fvec,
                        void *data, int iflag, int iter, int nfev )
 /*
  *       data  : for soft control of printout behaviour, add control

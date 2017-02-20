@@ -7,6 +7,8 @@
  * @version $Revision: 1.5 $
  * @date    $Date: 2010/12/16 07:25:05 $
  */
+ 
+#include "spce_output.h"
 #include <stdio.h>
 #include <math.h>
 #include "aXe_grism.h"
@@ -15,7 +17,6 @@
 #include <gsl/gsl_vector.h>
 #include "spc_driz.h"
 #include "crossdisp_utils.h"
-#include "spce_output.h"
 
 
 #define MIN(x,y) (((x)<(y))?(x):(y))
@@ -1269,5 +1270,3 @@ get_trace_inds (const ap_pixel * const ap_p)
 
   return trace_inds2;
 }
-
-

@@ -9,10 +9,15 @@
  */
 #ifndef _MODEL_UTILS_H
 #define _MODEL_UTILS_H
+#include "specmodel_utils.h"
+#include "axe_grism.h"
+//calib_function structure defined here
+#include "spc_wl_calib.h"
+//aper_conf structure is defined here
+#include "aper_conf.h"
 
 
 #define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
-
 #define LIGHTVEL 2.99792458  // light velocity/1.0E+08
 
 #define NSUB 1.0    // half the number of subsampling steps

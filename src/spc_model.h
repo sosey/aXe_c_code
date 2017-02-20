@@ -11,9 +11,19 @@
 #ifndef _SPC_MODEL_H
 #define _SPC_MODEL_H
 
+// this file needs to define beamspec
+#include "model_utils.h"
+// observation is defined here
+#include "aXe_grism.h"
+// calib_function defined here
+#include "spc_wl_calib.h"
+// flux_cube is defined here
+#include "spc_fluxcube.h"
+
+
 extern int
 compute_gauss_cont(char grism_file[], char OAF_file[], char CONF_file[],
-		   const char specmod_file[], const double model_scale, 
+		   const char specmod_file[], const double model_scale,
 		   const int inter_type, const double lambda_psf, observation *obs,
 		   const char PET_file[], char map_file[], const int store);
 
@@ -41,7 +51,7 @@ compute_geometr_cont(char OAF_file[], observation *obs,
 		     const char PET_file[], char map_file[],
 		     const int store);
 
-extern int 
+extern int
 fill_contam_info(const char PET_file[], beamspec  **speclist,
 		 const gsl_matrix *all_models, char model_name[]);
 
@@ -77,7 +87,7 @@ fill_pixel_in_speed(const dirobject *actdir, const tracedata *acttrace,
 		    const d_point dpixel, const spectrum *resp,
 		    beamspec *actspec, const calib_function  *wl_calibration);
 
-extern int 
+extern int
 no_diffuse_spectrum(int ix, int iy, double cps, beamspec *actspec);
 
 extern int

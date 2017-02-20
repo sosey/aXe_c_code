@@ -90,13 +90,13 @@ main(int argc, char *argv[])
     build_path(AXE_OUTPUT_PATH, fits_image, fits_image_path);
     fprintf(stdout, "aXe_FILET: Input data file name:  %s\n", fits_image_path);
 
-    if (opt = get_online_option("opt_extr", argc, argv))
+    if ( (opt = get_online_option("opt_extr", argc, argv)) )
       opt_extr=1;
     else
       opt_extr=0;
 
     // get the name of the output directory
-    if ((opt = get_online_option ("drztmp", argc, argv)))
+    if ( (opt = get_online_option ("drztmp", argc, argv)) )
       strcpy (out_image_dir, opt);
     else
       strcpy (out_image_dir, getenv (AXE_DRIZZLE_PATH));

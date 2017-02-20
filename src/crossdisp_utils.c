@@ -29,14 +29,15 @@
  * @param iter - the iteration number
  * @param s    - the multi-d solver
  */
-print_state (size_t iter, gsl_multiroot_fsolver * s)
+
+void print_state (size_t iter, gsl_multiroot_fsolver *s)
 {
-  printf ("iter = %3u x = % .3f % .3f "
+  printf ("iter = %3zu x = % .3f % .3f "
           "f(x) = % .3e % .3e\n",
           iter,
-          gsl_vector_get (s->x, 0), 
+          gsl_vector_get (s->x, 0),
           gsl_vector_get (s->x, 1),
-          gsl_vector_get (s->f, 0), 
+          gsl_vector_get (s->f, 0),
           gsl_vector_get (s->f, 1));
   // print: current x-value, y-value, x-error, y-error
 }
@@ -52,7 +53,7 @@ print_state (size_t iter, gsl_multiroot_fsolver * s)
  * the coordinates x and y, respectively and the
  * constants x_0 and y_0.
  * Solving for f'(x,y)=g'(x,y)=0.0
- * means to find (x,y) such that 
+ * means to find (x,y) such that
  * f(x,y) = x_0 and g(x,y) = y_0.
  *
  * Parameters:
@@ -61,7 +62,7 @@ print_state (size_t iter, gsl_multiroot_fsolver * s)
  * @param f      - the result values in x,y
  *
  * Returns:
- * @return GSL_SUCCESS - always 
+ * @return GSL_SUCCESS - always
  */
 int
 drizzle_distort(const gsl_vector * x, void *params, gsl_vector * f)
@@ -159,9 +160,9 @@ distort_point(gsl_matrix *coeffs, const px_point pixmax, d_point xy_image)
 
     // do an iteration
     status = gsl_multiroot_fsolver_iterate (msolve);
-    
+
     //    print_state (iter, msolve);
-    
+
     // check if solver is stuck
     if (status)
       break;
@@ -241,8 +242,8 @@ get_crossdisp_matrix(char * filename, int sci_numext)
     // in case that the keyword does not exist,
     // find a nice way out of the door
     aXe_message(aXe_M_FATAL, __FILE__, __LINE__,
-                "Could not find drizzle keywords in: %s\n", filename); 
-    ret = gsl_matrix_alloc(1,1);    
+                "Could not find drizzle keywords in: %s\n", filename);
+    ret = gsl_matrix_alloc(1,1);
     gsl_matrix_set(ret, 0,0,GSL_NAN);
     return ret;
   }
@@ -254,7 +255,7 @@ get_crossdisp_matrix(char * filename, int sci_numext)
   // allocate the matrix, set it to the default
   ret = gsl_matrix_alloc(2,ncoeffs);
   gsl_matrix_set_all (ret, 0.0);
-  
+
   // go over the number of coefficients
   for (i=0; i<ncoeffs; i++){
 
@@ -333,7 +334,7 @@ get_axis_scales(beam actbeam, gsl_matrix * drzcoeffs, px_point pixmax){
 /*
  * Function: get_crossdisp_scale
  * The function computes the drizzle scale in cross-
- * dispersion direction for a given point and the 
+ * dispersion direction for a given point and the
  * drizzle parameters of an image.
  *
  * Parameters:
@@ -394,7 +395,7 @@ get_crossdisp_scale(trace_func *trace, d_point refpnt, gsl_matrix * drzcoeffs,
  * Returns:
  * @return ret - the undistorted coordinate value
  */
-double 
+double
 evaln(double x, double y, gsl_matrix * drzcoeffs, int row){
 
   double ret=0.0;
@@ -437,7 +438,7 @@ evaln(double x, double y, gsl_matrix * drzcoeffs, int row){
  * Returns:
  * @return ret - the differential
  */
-double 
+double
 devalndx(double x, double y, gsl_matrix * drzcoeffs, int row){
   double ret=0.0;
   int order;
@@ -480,7 +481,7 @@ devalndx(double x, double y, gsl_matrix * drzcoeffs, int row){
  * Returns:
  * @return ret - the differential
  */
-double 
+double
 devalndy(double x, double y, gsl_matrix * drzcoeffs, int row){
   double ret=0.0;
   int order;
@@ -513,14 +514,14 @@ devalndy(double x, double y, gsl_matrix * drzcoeffs, int row){
  * Function: get_jacobian
  *
  * Parameters:
- * @param i         - 
- * @param j         - 
+ * @param i         -
+ * @param j         -
  * @param drzcoeffs - the drizzle coefficients
- * @param width     - 
- * @param height    - 
+ * @param width     -
+ * @param height    -
  *
  * Returns:
- * @return ret - 
+ * @return ret -
  */
 gsl_matrix *
 get_jacobian(int i, int j, gsl_matrix * drzcoeffs, int width, int height){
@@ -547,14 +548,14 @@ get_jacobian(int i, int j, gsl_matrix * drzcoeffs, int width, int height){
  * Function: get_det_jacobian
  *
  * Parameters:
- * @param i         - 
- * @param j         - 
+ * @param i         -
+ * @param j         -
  * @param drzcoeffs - the drizzle coefficients
- * @param width     - 
- * @param height    - 
+ * @param width     -
+ * @param height    -
  *
  * Returns:
- * @return ret - 
+ * @return ret -
  */
 double
 get_det_jacobian(int i, int j, gsl_matrix * drzcoeffs, int width, int height){
@@ -564,7 +565,7 @@ get_det_jacobian(int i, int j, gsl_matrix * drzcoeffs, int width, int height){
 
   jacob = get_jacobian(i,j,drzcoeffs,width,height);
 
-  ret = gsl_matrix_get(jacob, 0, 0) * gsl_matrix_get(jacob, 1, 1) 
+  ret = gsl_matrix_get(jacob, 0, 0) * gsl_matrix_get(jacob, 1, 1)
        -gsl_matrix_get(jacob, 0, 1) * gsl_matrix_get(jacob, 1, 0);
 
   gsl_matrix_free(jacob);
@@ -580,8 +581,8 @@ get_det_jacobian(int i, int j, gsl_matrix * drzcoeffs, int width, int height){
  * has the same dimension as the distorted.
  *
  * Parameters:
- * @param in_point  - the coordinates in the distorted frame 
- * @param drzcoeffs - the drizzle coefficients 
+ * @param in_point  - the coordinates in the distorted frame
+ * @param drzcoeffs - the drizzle coefficients
  * @param pixmax    - the image dimension of the distorted frame
  *
  * Returns:
@@ -593,7 +594,7 @@ get_drz_position(d_point in_point, gsl_matrix *drzcoeffs, px_point pixmax)
   d_point ou_point;
   double xr, yr;
   double xn, yn;
-  
+
   // transform the input coos into the drizzle system
   xr = in_point.x - ((double)(pixmax.x/2)+1.0);
   yr = in_point.y - ((double)(pixmax.y/2)+1.0);
@@ -620,8 +621,8 @@ get_drz_position(d_point in_point, gsl_matrix *drzcoeffs, px_point pixmax)
  * image coordinates. The size of the input and output image are free.
  *
  * Parameters:
- * @param in_point  - the coordinates in the distorted frame 
- * @param drzcoeffs - the drizzle coefficients 
+ * @param in_point  - the coordinates in the distorted frame
+ * @param drzcoeffs - the drizzle coefficients
  * @param pix_in    - the image dimension of the distorted frame
  * @param pix_out   - the image dimension of the distorted frame
  *
@@ -635,7 +636,7 @@ get_drz_position_free(d_point in_point, gsl_matrix *drzcoeffs,
   d_point ou_point;
   double xr, yr;
   double xn, yn;
-  
+
   // transform the input coos into the drizzle system
   xr = in_point.x - ((double)(pix_in.x/2)+1.0);
   yr = in_point.y - ((double)(pix_in.y/2)+1.0);
