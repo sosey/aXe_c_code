@@ -23,7 +23,7 @@ void mark_trace_in_aXe_mask(ap_pixel * ap_p, aXe_mask *mask)
   trace_inds = (gsl_vector_int *) get_trace_inds (ap_p);
 
 
-  for (i = 0; i < trace_inds->size; i++)
+  for (i = 0; i < (int)trace_inds->size; i++)
     {
       ind = gsl_vector_int_get (trace_inds, i);
       fprintf(stderr,"%d %d\n",ap_p[ind].p_x,ap_p[ind].p_y);
@@ -59,8 +59,8 @@ aXe_mask_init (observation * ob)
   //  fprintf(stderr,"%ld %ld\n",ob->grism->size1,ob->grism->size2);
 
   /* Initialise the mask array */
-  for (i=0;i<ob->grism->size1;i++) {
-    for (j=0;j<ob->grism->size2;j++) {
+  for (i=0;i<(int)ob->grism->size1;i++) {
+    for (j=0;j<(int)ob->grism->size2;j++) {
       v = gsl_matrix_get(ob->grism,i,j);
       gsl_matrix_set(mask->img, i,j, v);
 

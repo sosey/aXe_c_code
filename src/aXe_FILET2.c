@@ -7,7 +7,7 @@
 int main(int argc, char *argv[])
 {
   fitsfile *infptr, *outfptr1, *outfptr2, *outfptr3;   /* FITS file pointers defined in fitsio.h */
-  int status = 0, ii = 1;       /* status must always be initialized = 0  */
+  int status = 0;       /* status must always be initialized = 0  */
   int hdu_start=0;
 
   hdu_start = atoi(argv[2]);

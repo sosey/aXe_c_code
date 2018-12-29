@@ -257,7 +257,7 @@ drzinfo_to_FITScards(object *ob, int beamnum, d_point outref,
 		     double objwidth, d_point refwave_pos, float sky_cps,
 		     double drizzle_width, double cdref, double spcorr)
 {
-    double dx, dy;
+    //double dx, dy;
     char templt[FLEN_CARD];
     int i=0,keytype, f_status=0;
     beam *b = ob->beams+beamnum;
@@ -428,7 +428,7 @@ FITScards *dispstruct_to_FITScards(dispstruct *disp)
   cards = allocate_FITScards(numcards);
 
   i=0;
-  for (j=0;j<disp->pol->size;j++) {
+  for (j=0; j<(int)disp->pol->size;j++) {
     sprintf(templt,"DLDX%d = %g / Wavelength solution parameter",j,gsl_vector_get(disp->pol,j));
     fits_parse_template (templt, cards->cards[i++], &keytype, &f_status);
   }
@@ -456,7 +456,7 @@ void
 update_contam_model(fitsfile *fptr, char model_name[])
 {
 
- char templt[FLEN_CARD];
+ //char templt[FLEN_CARD];
  char keyw[FLEN_KEYWORD];
  char comment[FLEN_COMMENT];
 

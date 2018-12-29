@@ -41,7 +41,7 @@ extern d_point
 compute_tput_angles(const beam act_beam, const ap_pixel *act_pet);
 
 extern pixel_tput *
-alloc_pixel_tput();
+alloc_pixel_tput(void);
 
 void
 print_pixel_tput(pixel_tput *p_tput);

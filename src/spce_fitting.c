@@ -49,7 +49,6 @@ det_vector_polyN (int m, const double *const xs, double *const ys,
   
   double *tmp, *xmp;
   double median, xean;
-  double xf, yf, yf_err, sq_yf_err;
 
   gsl_vector *interp;
 
@@ -236,7 +235,7 @@ comp_vector_average (const double *xs, double *ys,
 		     double *ws, double *yi, const int n, const int final)
 {
   double ave, std;
-  int i, m;
+  //int i, m;
 
   det_vector_average (xs, ys, ws, n, &ave, &std);
   fill_const_value(ys, ws, yi, n, ave, std, final);
@@ -351,7 +350,7 @@ det_vector_linear(const double *xs, double *ys, double *ws,
   double c0, c1, cov00, cov01, cov11, chisq;
   double *xx, *yy, *ww, *tmp, *xmp;
   double median, xean;
-  double xf, yf, yf_err;
+  //double xf, yf, yf_err;
 
   gsl_vector *ret;
 

@@ -64,12 +64,12 @@ main (int argc, char *argv[])
   char conf_file[MAXCHAR];
   char conf_file_path[MAXCHAR];
 
-  float mmag_extract, mmag_mark, mfwhm, dmag;
+  float mfwhm, dmag;
 
   int leaveout_ignored = 1;
   int auto_reorient = 1;
-  int no_orient = 0;
-  int slitless_geom=0;
+  //int no_orient = 0;
+  //int slitless_geom=0;
   int num;
   char ext[MAXCHAR];
   double lambda_mark=0.0;

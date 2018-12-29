@@ -107,7 +107,7 @@ main (int argc, char *argv[])
   int bck_aperID, bck_beamID;
 
   char table[MAXCHAR], table_path[MAXCHAR];
-  char comment[FLEN_COMMENT];
+  //char comment[FLEN_COMMENT];
   int empty;
   int drizzle;
   int quant_cont=0;
@@ -121,7 +121,7 @@ main (int argc, char *argv[])
   double sky_cps;
 
   drzstamp_dim  dimension;
-  gsl_matrix *coverage;
+  gsl_matrix *coverage = NULL;
 
   if (((argc < 3))
       || (opt = get_online_option ("help", argc, argv)))

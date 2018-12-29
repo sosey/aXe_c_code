@@ -157,8 +157,8 @@ normalize_weight(observation *wobs, object *ob,
                  const int opt_extr)
 {
   gsl_matrix *weight;
-  int i, j;
-  // check for optimal extraction
+  //int i, j;
+ // // check for optimal extraction
   if (opt_extr)
     {
       // let the optimal weights compute
@@ -207,9 +207,9 @@ comp_equ_weight(gsl_matrix *exp_map, const object *ob)
   gsl_matrix_set_all(weight, 0.0);
 
    // go over all columns
-  for (i=0; i < exp_map->size1; i++)
+  for (i=0; i < (int)exp_map->size1; i++)
     // go over all rows
-    for (j=0; j < exp_map->size2; j++)
+    for (j=0; j < (int)exp_map->size2; j++)
       // check whether the pixel is inside the extraction
       // area and has a positive exposure time
       if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5 &&
@@ -250,7 +250,7 @@ comp_exp_weight(gsl_matrix *exp_map, const object *ob)
   gsl_matrix_set_all(weight, 1000.0);
 
     //* go over all columns
-  for (i=0; i < exp_map->size1; i++)
+  for (i=0; i < (int)exp_map->size1; i++)
     {
       sum = 0.0;
       contr = 0.0;
@@ -258,7 +258,7 @@ comp_exp_weight(gsl_matrix *exp_map, const object *ob)
 
       // determine for each column the total exposure time
       // and the number of pixels with non-zero exposure time
-      for (j=0; j < exp_map->size2; j++)
+      for (j=0; j < (int)exp_map->size2; j++)
         {
           // check whether the pixel is inside the extraction
           // area and has a positive weight
@@ -279,7 +279,7 @@ comp_exp_weight(gsl_matrix *exp_map, const object *ob)
           norm = sum / contr;
 
           // go over each pixel
-          for (j=0; j < exp_map->size2; j++)
+          for (j=0; j < (int)exp_map->size2; j++)
             {
               // check whether the pixel is inside the extraction are
               if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5)
@@ -304,7 +304,7 @@ comp_exp_weight(gsl_matrix *exp_map, const object *ob)
         {
 
           // go over each row
-          for (j=0; j < exp_map->size2; j++)
+          for (j=0; j < (int)exp_map->size2; j++)
             {
               // check whether the pixel is inside the extraction are
               if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5)
@@ -345,14 +345,15 @@ comp_opt_weight(gsl_matrix *mod_map,
   int i, j;
   double mod_sum, weight_sum, contr, norm, allweight;
   int beamInt = 0;
-  double mod_val, var_val;
+  double mod_val;
+  //double var_val;
 
   // allocate the weight matrix and set the default
   weight = gsl_matrix_alloc(mod_map->size1, mod_map->size2);
   gsl_matrix_set_all(weight, 0.0);
 
   //* go over all columns
-  for (i=0; i < mod_map->size1; i++)
+  for (i=0; i < (int)mod_map->size1; i++)
     {
       mod_sum = 0.0;
       contr = 0.0;
@@ -361,7 +362,7 @@ comp_opt_weight(gsl_matrix *mod_map,
 
       // determine for each column the total model counts
       // and the number of pixels with non-zero model_counts
-      for (j=0; j < mod_map->size2; j++)
+      for (j=0; j < (int)mod_map->size2; j++)
         {
           if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5 &&
               gsl_matrix_get(mod_map, i, j) > 0.0 )
@@ -381,7 +382,7 @@ comp_opt_weight(gsl_matrix *mod_map,
           norm = mod_sum;
 
           // go over each row
-          for (j=0; j < mod_map->size2; j++)
+          for (j=0; j < (int)mod_map->size2; j++)
             {
               // check whether the pixel is inside the extraction area
               if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5 &&
@@ -400,7 +401,7 @@ comp_opt_weight(gsl_matrix *mod_map,
 
           // finally compute and write the weights:
           // go over each pixel
-          for (j=0; j < mod_map->size2; j++)
+          for (j=0; j < (int)mod_map->size2; j++)
             {
               // check whether the pixel is inside the extraction area
               if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5)
@@ -423,7 +424,7 @@ comp_opt_weight(gsl_matrix *mod_map,
       else
         {
           // go over each row
-          for (j=0; j < mod_map->size2; j++)
+          for (j=0; j < (int)mod_map->size2; j++)
             {
               // check whether the pixel is within the extraction area
               if (fabs(ob->beams[beamInt].refpoint.y-(double)j) <= ob->beams[beamInt].width+0.5)

@@ -141,8 +141,8 @@ void lm_print_nothing( int n_par, double* par, int m_dat, double* fvec,
  *       nfev  : number of calls to *evaluate
  */
 {
-    double f, y, t;
-    int i;
+    //double f, y, t;
+    //int i;
     lm_data_type *mydata;
     mydata = (lm_data_type*)data;
 

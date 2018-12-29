@@ -195,7 +195,7 @@ tracedist_criteria(const double x, const double y, sectionfun *sf,
 		   const trace_func *tracefun, const double width)
 {
   double x_sect, y_sect;
-  double dist, max_dist;
+  double dist;
 
   int ireturn=0;
 

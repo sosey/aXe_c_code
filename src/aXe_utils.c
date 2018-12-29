@@ -43,8 +43,8 @@ simulate_errors_t(gsl_matrix * img, const double exptime,
 
   sqr_rdnoise = rdnoise*rdnoise;
 
-  for (i = 0; i < img->size1; i++) {
-    for (j = 0; j < img->size2; j++) {
+  for (i = 0; i < (int)img->size1; i++) {
+    for (j = 0; j < (int)img->size2; j++) {
 
       nc = fabs(gsl_matrix_get(img, i, j));
 
@@ -76,8 +76,8 @@ apply_DQ(observation * obs, int dqmask)
                 "DQ array and DATA arrays have different sizes!\n");
   }
   if (obs->dq != NULL) {
-    for (i = 0; i < obs->dq->size1; i++) {
-      for (j = 0; j < obs->dq->size2; j++) {
+    for (i = 0; i < (int)obs->dq->size1; i++) {
+      for (j = 0; j < (int)obs->dq->size2; j++) {
         if ((int)gsl_matrix_get(obs->dq, i, j) & dqmask) {
           gsl_matrix_set(obs->grism, i, j, GSL_NAN);
         }
@@ -547,12 +547,13 @@ get_npixels(const char *const fname, int hdunum)
 {
      fitsfile *input;
      int f_status = 0;
-     float nulval = 0;
-     int anynul;
+     //float nulval = 0;
+     //int anynul;
      int bitpix, naxis;
      long naxes[2];
-     long zero[2] = { 1, 1 };
-     int x, y;
+     //long zero[2] = { 1, 1 };
+     //int x;
+     //int y;
      int hdutype;
      px_point numpix;
 
@@ -1206,7 +1207,8 @@ FITScards *get_FITS_cards_opened (fitsfile *input)
     int f_status=0;
     int ninc, nexc;
     FITScards *cards=NULL;
-    int hdutype,i,n;
+    //int hdutype;
+    int i,n;
     char card[FLEN_CARD];
     char *inclist[1] = {
     "*"
@@ -1461,7 +1463,7 @@ void
 build_path (char envpathname[], const char inputfile[], char filename[MAXCHAR])
 {
      char *envvar;
-     int envpathname_len;
+     //int envpathname_len;
 
      /*
        Changed for aXe-1.4 such that the pathnames are OPTIONAL only.
@@ -1575,7 +1577,7 @@ build_config_files(char list_file[], char **list_files, int maxnrows)
   mod_maxrows = maxnrows -1;
 
   // go over the input string
-  for (i=0; i<strlen(list_file); i++)
+  for (i=0; i<(int)strlen(list_file); i++)
     {
 
       // check whether the actual character
@@ -1942,7 +1944,7 @@ int drzprep_fitstrans(char filename[], int hdunum, fitsfile *PET_ptr){
   char kcomment[FLEN_COMMENT];
   fitsfile *input;
   int      f_status=0, hdutype=0;
-  long tmp;
+  //long tmp;
 
   fits_open_file (&input, filename, READONLY, &f_status);
   if (f_status)

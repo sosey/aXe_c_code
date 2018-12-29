@@ -175,7 +175,7 @@ extract_axe_inputs(char inima[], char confterm[], int nrows, int nmult,
 
   axe_inputs *in_list;
 
-  char null_entry[1] = "";
+  //char null_entry[1] = "";
 
   char_array *line_array;
   char_array *conf_array;
@@ -687,7 +687,7 @@ alloc_axe_inputs(int nitems)
 {
   axe_inputs *in_list;
 
-  int i;
+  //int i;
 
   // allocate memory for the return structure
   in_list = (axe_inputs *)malloc(sizeof(axe_inputs));

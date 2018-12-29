@@ -62,21 +62,21 @@ main(int argc, char *argv[])
 
   char            output_path[MAXCHAR];
 
-  object        **oblist;
+  //object        **oblist;
   observation    *obs;
   ap_pixel       *PET;
   fitsfile       *PET_ptr;
 
-  int             index, i;
-  char            label[MAXCHAR];
+  int             index;
+  //char            label[MAXCHAR];
 
   int             f_status = 0;
 
   aXe_mask       *mask;
 
 
-  int             aperID, beamID, objindex;
-  FITScards      *cards;
+  int             aperID, beamID;
+  //FITScards      *cards;
 
   if ((argc < 3) || (opt = get_online_option("help", argc, argv))) {
     fprintf(stdout,
@@ -133,7 +133,7 @@ main(int argc, char *argv[])
 	  output_path);
 
   obs = load_dummy_observation();
-  obs = load_image_t(grism_image_path, 1, -1, -1, 0);
+  obs = load_image_t(grism_image_path, 1, -1, -1, 0, 0, 0);
 
   /* Loading the object list */
   //fprintf(stdout, "aXe_CHECK: Loading object aperture list...");
@@ -173,7 +173,7 @@ main(int argc, char *argv[])
   }
   //free_oblist(oblist);
 
-  fits_close_file(&PET_ptr, &f_status);
+  fits_close_file(PET_ptr, &f_status);
 
   gsl_to_FITSimage(mask->img, "tmp.fits", 1, NULL);
 

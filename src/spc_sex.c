@@ -262,7 +262,7 @@ sobs_to_vout(const SexObject *sobs)
   // see whether there is MAG_AUTO
   if (sobs->magnitudes){
     // fill in the magnitude values
-    for (i=0; i < sobs->magnitudes->size; i++)
+    for (i=0; i < (int)sobs->magnitudes->size; i++)
       gsl_vector_set (vout, count++, gsl_vector_get(sobs->magnitudes, i));
   }
   else{
@@ -310,7 +310,7 @@ catalog_to_wcs (char grismfile[], int hdunum, char infile[], char outfile[],
   gsl_matrix *coeffs=NULL;
   char Buffer[CATBUFFERSIZE];
   char line[CATBUFFERSIZE], str[CATBUFFERSIZE];
-  int i,index, hasmags=0, magcencol = 0;
+  int i, hasmags=0, magcencol = 0;
   SexObject *o;
   colinfo * actcatinfo;
   px_point    pixmax;
@@ -394,7 +394,7 @@ catalog_to_wcs (char grismfile[], int hdunum, char infile[], char outfile[],
       v_out = sobs_to_vout(o);
 
       sprintf (Buffer, "%8.5g ", gsl_vector_get (v_out, 0));
-      for (i = 1; i < v_out->size; i++)
+      for (i = 1; i < (int)v_out->size; i++)
         {
           sprintf (str, " %8.5g ", gsl_vector_get (v_out, i));
           strcat (Buffer, str);
@@ -450,7 +450,7 @@ catalog_to_wcs_nodim (char infile[], char outfile[],
   gsl_vector *cnums;
   char Buffer[CATBUFFERSIZE];
   char line[CATBUFFERSIZE], str[CATBUFFERSIZE];
-  int i,index;
+  int i;
   SexObject *o;
   int compute_imcoos=0;
   int th_sky=0;
@@ -524,7 +524,7 @@ catalog_to_wcs_nodim (char infile[], char outfile[],
 
 
       sprintf (Buffer, "%8.5g ", gsl_vector_get (v_out, 0));
-      for (i = 1; i < v_out->size; i++)
+      for (i = 1; i < (int)v_out->size; i++)
         {
           sprintf (str, " %8.5g ", gsl_vector_get (v_out, i));
           strcat (Buffer, str);
@@ -592,7 +592,7 @@ SexMags_to_beamFlux(SexObject * sobj, beam *actbeam)
         jj=0;
 
         //  go over all magnidute values
-        for (j=0; j < sobj->magnitudes->size; j++)
+        for (j=0; j < (int)sobj->magnitudes->size; j++)
           {
             // check whether the current entry is valuied
             if (is_valid_entry(gsl_vector_get(sobj->magnitudes, j)))
@@ -800,7 +800,7 @@ set_extraction_parameters(SexObject * sobj, int bck_mode, float mfwhm,
     double dya;
     double dyb;
 
-    int iturn=0;
+    //int iturn=0;
 
     // convert the orientation to rad;
     // turn into the right quadrant
@@ -1139,7 +1139,7 @@ SexObject_to_object (SexObject * sobj, observation * const obs,
 
           // fill the flux vector with values
           jj=0;
-          for (j=0; j < sobj->magnitudes->size; j++)
+          for (j=0; j < (int)sobj->magnitudes->size; j++)
             {
               if (is_valid_entry(gsl_vector_get(sobj->magnitudes, j)))
                 {
@@ -1471,7 +1471,7 @@ fill_object_bbox (observation * const obs, beam * b, const float m_width,
      float wcos, wsin;
      float area;
 
-     int xmin, xmax, xact, i;
+     int xmin, xmax, xact;
      double yact;
 
      pmin.x = b->refpoint.x + dxmin;
@@ -1624,7 +1624,7 @@ size_of_sextractor_catalog (char filename[])
       lv1ws (Buffer);
       v = string_to_gsl_array (Buffer);
       if (v==NULL) continue;
-      if (v->size == catsize)
+      if ((int)v->size == catsize)
         num++;
     }
   return num;
@@ -1802,7 +1802,7 @@ fill_missing_WCS_coordinates (SexObject * o, struct WorldCoor *from_wcs, int ove
 {
   sky_coord as, bs, cs;
   d_point a, b, c;
-  int offscl;
+  //int offscl;
 
   /***************************************************************/
   /* If the WCS coordinates are missing, generate them using     */
@@ -2014,7 +2014,7 @@ compute_new_image_coordinates (SexObject * o, struct WorldCoor *to_wcs)
 void
 compute_new_image_sexobject (SexObject * o, struct WorldCoor *to_wcs, int th_sky)
 {
-  sky_coord as, bs, cs;
+  sky_coord  bs, cs;
   d_point a, b, c;
   int offscl;
 

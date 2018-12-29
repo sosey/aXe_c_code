@@ -86,7 +86,7 @@ main (int argc, char *argv[])
   dispstruct  *disp, *outdisp;
   trace_func  *trace;
   gsl_matrix  *drizzcoeffs;
-  gsl_vector  *lambdaref = gsl_vector_alloc(2);
+  //gsl_vector  *lambdaref = gsl_vector_alloc(2);
 
   FILE *in_file;
 
@@ -95,7 +95,7 @@ main (int argc, char *argv[])
   int nobjects, nobjects2;
   int boxwidth, boxheight,trlength;
   double relx, rely, objwidth, orient;
-  double min_px, min_py;
+  //double min_px, min_py;
   double drizzle_width;
   double cdref, cdscale, cdcorr, cdmeanscale;
   double sprefreso, spreso, spmeanreso, spcorr;
@@ -118,11 +118,11 @@ main (int argc, char *argv[])
 
   axe_inputs *input_list;
 
-  int rectified = 0;
-  int drizzled  = 0;
+  //int rectified = 0;
+  //int drizzled  = 0;
   int bckmode   = 0;
   int backpet   = 1;
-  int usemode   = 0;
+  //int usemode   = 0;
   int quant_cont= 0;
   int opt_extr  = 0;
 

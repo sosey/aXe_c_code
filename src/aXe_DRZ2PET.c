@@ -31,7 +31,7 @@ int
 main(int argc, char *argv[])
 {
 
-  char           *opt;
+  //char           *opt;
   char            option_value[MAXCHAR];
   char            grism_image[MAXCHAR];
   char            grism_image_path[MAXCHAR];
@@ -44,29 +44,31 @@ main(int argc, char *argv[])
 
   char            PET_file[MAXCHAR];
   char            PET_file_path[MAXCHAR];
-  char            label[MAXCHAR];
+  //char            label[MAXCHAR];
   char            hdu_name[MAXCHAR];
   char            keyword[FLEN_COMMENT];
 
-  int             i, j, flags;
+  int             i;
+  //int j, flags;
 
   object        **oblist;
   observation    *obs=NULL,*wobs=NULL;
 
   ap_pixel       *result = NULL;
-  d_point         pixel;
+  //d_point         pixel;
   aperture_conf  *conf;
 
-  dispstruct     *disp;
-  calib_function *wl_calibration;
+  //dispstruct     *disp;
+  //calib_function *wl_calibration;
 
-  FITScards      *cards;
+  //FITScards      *cards;
 
   int             f_status = 0;
 
   int             bckmode = 0;
   int             opt_extr=0;
-  fitsfile       *PET_fitsptr, ME_fitsptr;
+  fitsfile       *PET_fitsptr;
+  //fitsfile     ME_fitsptr;
 
   int             index=0;
   int             extver=0;
@@ -82,7 +84,8 @@ main(int argc, char *argv[])
   static char Buffer[LINE_LEN_MAX];
   char *WorkPtr;
   char *WorkPtr2;
-  double refpntx, refpnty, lambda0, dlambda, xoffs;
+  //double refpntx, refpnty, xoffs;
+  double lambda0, dlambda;
   char extname[FLEN_COMMENT];
 
 

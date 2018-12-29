@@ -47,12 +47,12 @@ fringe_correct_PET(const fringe_conf *fconf, const beam act_beam,
   ap_pixel *obj_pix=NULL;
   ap_pixel *bck_pix=NULL;
 
-  d_point angles;
+  //d_point angles;
   pixel_tput *p_tput ;
   gsl_vector **tput_vectors=NULL;
 
-  int ii=0;
-  int jj=0;
+  //int ii=0;
+  //int jj=0;
   int index;
   int pix_index;
 
@@ -115,7 +115,7 @@ fringe_correct_PET(const fringe_conf *fconf, const beam act_beam,
 			      obj_pix->p_y, optprops);
 
       pixel_ampl = 0.0;
-      for (index=0; index < tput_vectors[0]->size; index++)
+      for (index=0; index < (int)tput_vectors[0]->size; index++)
 	{
 	  // fill all information in the optical
 	  // property list
@@ -277,7 +277,7 @@ evaluate_pixel_throughput(const fringe_conf *fconf,
   through_tot += through_act;
   gsl_vector_set(through_values, fconf->num_steps, through_act);
 
-  for (index=0; index < through_values->size; index++)
+  for (index=0; index < (int)through_values->size; index++)
     {
       // normalize the filter throughput values
       gsl_vector_set(through_values, index,
@@ -336,7 +336,7 @@ get_gauss_throughput(const fringe_conf *fconf, const ap_pixel *obj_pix,
   gsl_vector *lambda_values;
   gsl_vector *through_values;
 
-  interpolator *interp;
+  //interpolator *interp;
 
   double stepsize;
   double lambda_act;
@@ -410,7 +410,7 @@ get_gauss_throughput(const fringe_conf *fconf, const ap_pixel *obj_pix,
   gsl_vector_set(through_values, fconf->num_steps, through_act);
 
 
-  for (index=0; index < through_values->size; index++)
+  for (index=0; index < (int)through_values->size; index++)
     {
       // normalize the filter throughput values
       gsl_vector_set(through_values, index,

@@ -58,7 +58,7 @@ get_valid_entries(const gsl_vector *magnitudes){
   int nvalid = 0;
   
   // go over each entry in the vector
-  for (i=0; i < magnitudes->size; i++)
+  for (i=0; i < (int)magnitudes->size; i++)
     {
       // check whether an entry is valid,
       // count up 'nvalid' if the entry is valid
@@ -433,7 +433,8 @@ resolve_colname(const char colname[]){
   char *WorkPtr2;
 
   int i, len;
-  int nmagcols = 0, iwave=0;
+  //int nmagcols = 0;
+  int iwave=0;
 
   // copy everything after 'MAG_C' to tmp
   strcpy(tmp, &colname[5]);
@@ -474,7 +475,7 @@ has_magnitudes(const colinfo * actcatinfo){
 
   int hasmags = 0, magauto=0;
   int i= 0;
-  int iwlength=0;
+  //int iwlength=0;
 
   // go over all columns
   for (i = 0; i < actcatinfo->numcols; i++)
@@ -755,7 +756,7 @@ get_magauto_col(const gsl_vector *wavelength, const gsl_vector *colnums,
   }
   else{
     // in case there are more magnitude columns, loop over all
-    for (i=0; i < wavelength->size; i++){
+    for (i=0; i < (int)wavelength->size; i++){
       // look whether the difference to LAMBDACENTRAL is 
       // smaller then the actual minimum
       if (fabs(lambda_mark - gsl_vector_get(wavelength,i)) < minimum)

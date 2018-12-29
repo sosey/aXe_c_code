@@ -153,7 +153,7 @@ load_CCD_layers(char fring_conf_path[])
   char layer[MAXCHAR];
   char refr_table[MAXCHAR];
 
-  int nlayers;
+  //int nlayers;
   int i=0;
 
   struct CfgStrings LayerConfig[] = {

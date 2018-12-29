@@ -81,13 +81,19 @@ main (int argc, char *argv[])
   aperture_conf *conf;
 
   object **oblist;
-  observation *obs, *bck;
+  observation *obs=NULL, *bck;
+
+  //Initialize obs struct memebers
+  obs->grism = NULL;
+  obs->pixerrs = NULL;
+  obs->dq = NULL;
 
   interpolator *ipcorr;
 
   interpolator *nlincorr;
 
-  int index, i;
+  int index;
+  //int i;
 
   full_spectr *SPC;
 
@@ -97,7 +103,8 @@ main (int argc, char *argv[])
 
   int f_status=0;
 
-  int aperID=0, beamID=0, objindex;
+  int aperID=0, beamID=0;
+  //objindex;
 
   int spec_OAF=0;
   int point_like=0;
@@ -105,9 +112,9 @@ main (int argc, char *argv[])
   beam act_beam;
   beam *beam_ptr;
 
-  double max_ext;
-  double adcgain;
-  double exptime;
+  double max_ext=0.0;
+  //double adcgain;
+  double exptime=NAN;
 
   gsl_matrix *data_matrix;
 
@@ -243,8 +250,6 @@ main (int argc, char *argv[])
       // get the maximum extension number
       if ((opt = get_online_option ("max_ext", argc, argv)))
 	max_ext = atof(opt);
-      else
-	max_ext = 0.0;
 
       // check whether either max_ext is defined
       // OR a special OAF file is given

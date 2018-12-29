@@ -227,8 +227,8 @@ make_spc_table (object * const ob, const int beamorder,
       for (x = 0; x < bb_w; x++)
 	{
 	  if ((bb_x + x < 0) || (bb_y + y < 0)
-	      || (bb_x + x >= ob->grism_obs->grism->size1)
-	      || (bb_y + y >= ob->grism_obs->grism->size2))
+	      || (bb_x + x >= (int)ob->grism_obs->grism->size1)
+	      || (bb_y + y >= (int)ob->grism_obs->grism->size2))
 	    {
 	      *flags |= SPC_W_BORDER;
 	      continue;

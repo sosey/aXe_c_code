@@ -11,8 +11,8 @@ AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE([foreign])
 
 # libtools init and update
-LT_INIT
-AC_SUBST([LIBTOOL_DEPS])
+# LT_INIT
+# AC_SUBST([LIBTOOL_DEPS])
 
 
 # Checks for programs.

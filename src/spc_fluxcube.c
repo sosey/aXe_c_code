@@ -41,7 +41,7 @@ load_fluxcube(const char fcube_file[])
 {
   flux_cube *fcube;
 
-  gsl_matrix *test;
+  //gsl_matrix *test;
 
   int nflux, n_ext=0;
   int i;
@@ -177,9 +177,9 @@ load_segmentation(const char fcube_file[])
   segmentation = gsl_matrix_int_alloc(dvals->size1,dvals->size2);
 
   // fill the integer matrix with values from the double matrix
-  for (i=0; i < dvals->size1; i++)
+  for (i=0; i < (int)dvals->size1; i++)
     {
-      for (j=0; j < dvals->size2; j++)
+      for (j=0; j < (int)dvals->size2; j++)
         {
           gsl_matrix_int_set(segmentation, i, j, (int)gsl_matrix_get(dvals, i, j));
 
@@ -426,7 +426,7 @@ fluxcube_to_dirlist(const flux_cube *fcube, object  **oblist)
   dirobject **dirlist;
   dirobject  *actdir;
 
-  px_point fcube_point;
+  //px_point fcube_point;
   px_point flt_point;
 
   d_point tmp1, tmp2;
@@ -437,7 +437,7 @@ fluxcube_to_dirlist(const flux_cube *fcube, object  **oblist)
   int i, j;
   int objindex;
 
-  int itmp=0;
+  //int itmp=0;
 
   // determine the number of objects in the object list
   nobjects = object_list_size(oblist);
@@ -458,11 +458,10 @@ fluxcube_to_dirlist(const flux_cube *fcube, object  **oblist)
   //    return dirlist;
 
   // go over each column in the segmentation image
-  for (i=0; i < fcube->segmentation->size1; i++)
+  for (i=0; i < (int)fcube->segmentation->size1; i++)
     {
-
       // go over each row in the segmentation image
-      for (j=0; j < fcube->segmentation->size2; j++)
+      for (j=0; j < (int)fcube->segmentation->size2; j++)
         {
 
           // get the pixel value in the segmentation image
@@ -606,7 +605,7 @@ void fill_xy_offsets(dirobject **dirlist, char CONF_file[])
 
   d_point m_point;
 
-  double xoffs, yoffs;
+  //double xoffs, yoffs;
 
   int beamID=0;
   int i;

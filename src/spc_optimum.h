@@ -45,13 +45,13 @@ extern drzstamp_dim
 get_resample_dims(const ap_pixel *ap_p, const beam actbeam);
 
 extern drzstamp_dim
-get_default_dim();
+get_default_dim(void);
 
 extern drzstamp *
-get_default_modvar();
+get_default_modvar(void);
 
 extern gsl_matrix *
-get_default_weight();
+get_default_weight(void);
 
 extern gsl_matrix *
 comp_allweight(drzstamp *modvar);

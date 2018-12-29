@@ -52,7 +52,7 @@ compute_fringe_amplitude(fringe_conf *fconf)
 
   double lambda_mean;
   double pixel_ampl;
-  double phase_number;
+  //double phase_number;
 
   optical_property *optprops;
 
@@ -75,11 +75,11 @@ compute_fringe_amplitude(fringe_conf *fconf)
   // initialize some values in the optical property list
   init_optprops_list(fconf, lambda_mean, optprops);
 
-    for (ii=0; ii < fringe_image->size1; ii++)
+    for (ii=0; ii < (int)fringe_image->size1; ii++)
       //    for (ii=0; ii < 2; ii++)
     {
       fprintf(stderr, "Computing row No.: %i\n", ii);
-            for (jj=0; jj < fringe_image->size2; jj++)
+            for (jj=0; jj < (int)fringe_image->size2; jj++)
 	      //for (jj=0; jj < 2; jj++)
 	{
 	  // fill the optical thickness of the layers
@@ -87,7 +87,7 @@ compute_fringe_amplitude(fringe_conf *fconf)
 	  fill_optprops_thickness(fconf->opt_layers, ii, jj, optprops);
 
 	  pixel_ampl = 0.0;
-	  for (index=0; index < filter_vectors[0]->size; index++)
+	  for (index=0; index < (int)filter_vectors[0]->size; index++)
 	    {
 	      // fill all information in the optical
 	      // property list
@@ -145,7 +145,7 @@ alloc_fringe_image(const ccd_layers *opt_layers)
   int index      = 0;
   int is_defined = 0;
   
-  gsl_matrix *fringe_image;
+  gsl_matrix *fringe_image=NULL;
   // go through all CCD layers
   for (index=0; index < opt_layers->num_layers; index++)
     {
@@ -468,7 +468,7 @@ evaluate_wavelength_steps(fringe_conf *fconf)
   gsl_vector_set(through_values, nsteps-1, through_act);
 
  
-  for (index=0; index < through_values->size; index++)
+  for (index=0; index < (int)through_values->size; index++)
     {
       // normalize the filter throughput values
       gsl_vector_set(through_values, index,

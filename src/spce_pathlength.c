@@ -33,7 +33,7 @@ absc_to_pathl_path_len (const trace_func * const func,
 {
   int i;
 
-  for (i = 0; i < data->size; i++)
+  for (i = 0; i < (int)data->size; i++)
     {
       gsl_vector_set (data, i,
 		      func->path_len (gsl_vector_get (data, i),
@@ -134,7 +134,7 @@ absc_to_pathl_deriv (const trace_func * const func, gsl_vector * const data)
   spline = gsl_spline_alloc (gsl_interp_cspline, NUM_INTERPOINTS);
   gsl_spline_init (spline, xvals, yvals, NUM_INTERPOINTS);
 
-  for (i = 0; i < data->size; i++)
+  for (i = 0; i < (int)data->size; i++)
     {
       //gsl_interp_eval_impl(interpolator, xvals, yvals, 
       //  gsl_vector_get(data, i), accelerator, &res);

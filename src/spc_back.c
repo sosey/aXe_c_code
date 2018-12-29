@@ -247,8 +247,8 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
   gsl_vector_int *tmp;
   gsl_vector_int *ret;
   int np_act=0;
-  int y_low;
-  int y_upp;
+  //int y_low;
+  //int y_upp;
   int l_space=1;
   int u_space=1;
   int l_act;
@@ -396,7 +396,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
   trace_func *tracefun;
   px_point tpoint;
   double *ys, *fs, *ws, *yi;
-  double var;
+  //double var;
 
   int i, ii;
   int j, n;
@@ -478,14 +478,14 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
 
       // transfer the values from the image column
       // to the double vectors, set the weight
-      for (ii = 0; ii < yvec->size; ii++)
+      for (ii = 0; ii < (int)yvec->size; ii++)
         {
           // extract the row number
           j = gsl_vector_int_get (yvec, ii);
 
           // check whether the row is inside the imag
           // and whether the is no object on the pixel
-          if ((j != -1) && (j != obs->grism->size2)
+          if ((j != -1) && (j != (int)obs->grism->size2)
               && !gsl_matrix_get(bck_mask, tpoint.x, j))
             {
               // set the values and the weight
@@ -569,7 +569,7 @@ get_xrange(observation *obs, beam actbeam)
 
   // warn if the beam is completely outside
   // the grism image
-  if (ret.x > obs->grism->size1 || ret.y < 0)
+  if (ret.x > (int)obs->grism->size1 || ret.y < 0)
     {
       aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
                    "Object  is not in the image start_i:%d end_i:%d",
@@ -811,12 +811,13 @@ compute_global_background (object **oblist, const int obj_index,
                            int interporder)
 {
   int i, j, n;
-  double *ys, *fs, *ws, *yi, *ws0;
+  double *ys, *fs, *ws, *yi;
+  //double *ws0;
   observation *grism = oblist[obj_index]->grism_obs;
-  long ma;
-  double var;
+  //long ma;
+  //double var;
 
-  for (i = 0; i < grism->grism->size1; i++)
+  for (i = 0; i < (int)grism->grism->size1; i++)
     {
       /* Loop over the columns of interest */
 
@@ -1021,7 +1022,7 @@ compute_fullimg_background (observation *obs, object **oblist,
   background *backg;
   gsl_matrix *bck_mask;
   int i, j;
-  object *const *obp;
+  //object *const *obp;
 
   // allocate space for the backgrounds
   fib   = (fullimg_background *)malloc (sizeof (fullimg_background));
@@ -1032,9 +1033,9 @@ compute_fullimg_background (observation *obs, object **oblist,
 
   if (nor_flag)
     {
-      for (i = 0; i < fib->bck->size1; i++)
+      for (i = 0; i < (int)fib->bck->size1; i++)
         {
-          for (j = 0; j < fib->bck->size2; j++)
+          for (j = 0; j < (int)fib->bck->size2; j++)
             {
               gsl_matrix_set (fib->bck, i, j,
                               gsl_matrix_get (obs->grism, i, j));
@@ -1092,9 +1093,9 @@ compute_fullimg_background (observation *obs, object **oblist,
       }
     }
   // replace all NAN's with values 0.0
-  for (i = 0; i < fib->bck->size1; i++)
+  for (i = 0; i < (int)fib->bck->size1; i++)
     {
-      for (j = 0; j < fib->bck->size2; j++)
+      for (j = 0; j < (int)fib->bck->size2; j++)
         {
           if(isnan(gsl_matrix_get (fib->bck, i, j)))
             gsl_matrix_set (fib->bck, i, j,0.0);
@@ -1140,8 +1141,8 @@ compute_backsub_mask (observation *obs, object **oblist)
   background *backg; // = malloc (sizeof (background));
   gsl_matrix *bck_mask;
   int i, j;
-  object *const *obp;
-  int tnbeams;
+  //object *const *obp;
+  //int tnbeams;
 
   // make the mask image
   bck_mask = aperture_mask(obs,oblist);
@@ -1158,9 +1159,9 @@ compute_backsub_mask (observation *obs, object **oblist)
 
   // transfer the pixel values from the grism image
   // to the mask image
-  for (i = 0; i < fib->bck->size1; i++)
+  for (i = 0; i < (int)fib->bck->size1; i++)
     {
-      for (j = 0; j < fib->bck->size2; j++)
+      for (j = 0; j < (int)fib->bck->size2; j++)
         {
           gsl_matrix_set (fib->bck, i, j,
                           gsl_matrix_get (obs->grism, i, j));
@@ -1169,9 +1170,9 @@ compute_backsub_mask (observation *obs, object **oblist)
 
   // set pixels occupied by beams
   // to the value -10000000
-  for (i = 0; i < fib->bck->size1; i++)
+  for (i = 0; i < (int)fib->bck->size1; i++)
     {
-      for (j = 0; j < fib->bck->size2; j++)
+      for (j = 0; j < (int)fib->bck->size2; j++)
         {
 
           if (gsl_matrix_get (bck_mask, i, j))
@@ -1261,9 +1262,9 @@ compute_fullimg_global_background(observation *obs, object **oblist,
 
 
   // replace all NAN's with values 0.0
-  for (i = 0; i < fib->bck->size1; i++)
+  for (i = 0; i < (int)fib->bck->size1; i++)
     {
-      for (j = 0; j < fib->bck->size2; j++)
+      for (j = 0; j < (int)fib->bck->size2; j++)
         {
           if(isnan(gsl_matrix_get (fib->bck, i, j)))
             {
@@ -1383,8 +1384,8 @@ aperture_mask (observation * const obs, object **oblist)
 
                   // neglect the pixel if it is a]outside the
                   // image area
-                  if ((x < 0) || (y < 0) || (x >= obs->grism->size1)
-                      || (y >= obs->grism->size2))
+                  if ((x < 0) || (y < 0) || (x >= (int)obs->grism->size1)
+                      || (y >= (int)obs->grism->size2))
                     continue;
 
                   // check the order of the trace polynomial
@@ -1653,15 +1654,15 @@ gsmooth_background (const gsl_matrix *bck_mask, const int smooth_length,
   efactor = compute_efactor(fwhm);
 
   // fill the weights
-  for (ix=0; ix < weights->size; ix++)
+  for (ix=0; ix < (int)weights->size; ix++)
     gsl_vector_set(weights, ix, compute_gvalue((double)ix - (double)smooth_length, efactor));
 
 
   // go over all rows
-  for (iy=0; iy < fib->bck->size2; iy++)
+  for (iy=0; iy < (int)fib->bck->size2; iy++)
     {
       // go over all columns
-      for (ix=0; ix < fib->bck->size1; ix++)
+      for (ix=0; ix < (int)fib->bck->size1; ix++)
         {
           // check whether the pixel IS part of a beam
           if (!(gsl_matrix_get(bck_mask, ix, iy) != 0.0
@@ -1721,7 +1722,7 @@ get_weighted_mean(const gsl_vector *pixvalues, const gsl_vector *weights,
   double sum=0.0;
   double www=0.0;
 
-  for (index=0; index < pixvalues->size; index ++)
+  for (index=0; index < (int)pixvalues->size; index ++)
     {
 
       if (gsl_vector_get(pmask, index))
@@ -1776,7 +1777,7 @@ fill_pixvalues(const gsl_matrix *bck_mask, const int smooth_length,
   for (iact=ix-smooth_length; iact<=ix+smooth_length; iact++)
     {
       // check if you are within the chip
-      if (iact > -1 && iact < bck_mask->size1)
+      if (iact > -1 && iact < (int)bck_mask->size1)
         {
           // check whether the pixel was interpolated
           // and whether the background is non-zero

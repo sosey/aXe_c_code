@@ -32,7 +32,7 @@ int gauss_f(const gsl_vector * x, void *params, gsl_vector * f)
   int ndata      = ((struct function_data *)params)->n;
   double *x_data = ((struct function_data *)params)->x;
   double *y_data = ((struct function_data *)params)->y;
-  double *e_data = ((struct function_data *)params)->sig;
+  //double *e_data = ((struct function_data *)params)->sig;
 
   double a  = gsl_vector_get (x, 0);
   double b  = gsl_vector_get (x, 1);
@@ -64,12 +64,12 @@ gauss_df(const gsl_vector * x, void *params,
 {
   int ndata      = ((struct function_data *)params)->n;
   double *x_data = ((struct function_data *)params)->x;
-  double *y_data = ((struct function_data *)params)->y;
-  double *e_data = ((struct function_data *)params)->sig;
+  //double *y_data = ((struct function_data *)params)->y;
+  //double *e_data = ((struct function_data *)params)->sig;
 
   double a  = gsl_vector_get (x, 0);
   double b  = gsl_vector_get (x, 1);
-  double c  = gsl_vector_get (x, 2);
+  //double c  = gsl_vector_get (x, 2);
   double x0 = gsl_vector_get (x, 3);
 
   int i;
@@ -128,7 +128,7 @@ gsl_vector *
 fit_beamtrace(const aperture_conf  *conf, observation *obs,
 	      const int beamID, beam act_beam)
 {
-  gsl_vector_int *yvec;
+  //gsl_vector_int *yvec;
   gsl_vector     *fit_params;
   gsl_vector     *lin_fit;
   gsl_vector     *fit_result;
@@ -507,12 +507,13 @@ fit_function(const fit_data *f_data)
   gsl_vector *x_init = gsl_vector_alloc(4);
 
   int status;
-  size_t i, iter = 0;
+  //size_t i, 
+  size_t iter = 0;
 
   const size_t n = f_data->n_data;
   const size_t p = 4;
 
-  gsl_matrix *covar = gsl_matrix_alloc (p, p);
+  //gsl_matrix *covar = gsl_matrix_alloc (p, p);
 
   struct function_data d = {f_data->n_data, f_data->x_values,
 			    f_data->y_values, f_data->e_values};
@@ -588,8 +589,8 @@ get_fitdata(observation *obs, int np, px_point tr_point)
 
   int np_act=0;
 
-  int y_low;
-  int y_upp;
+  //int y_low;
+  //int y_upp;
 
   int l_space=1;
   int u_space=1;
@@ -683,7 +684,7 @@ get_fitdata(observation *obs, int np, px_point tr_point)
 
   // fill the pixel values into the data structure
   index = 0;
-  for (ii=(tmp->size - np_act); ii < tmp->size; ii++)
+  for (ii=((int)tmp->size - np_act); ii < (int)tmp->size; ii++)
     {
       f_data->x_values[index] = (double)gsl_vector_int_get(tmp, ii);
       f_data->y_values[index] = gsl_matrix_get(obs->grism, tr_point.x,
@@ -958,9 +959,9 @@ bcksub_observation(observation *obs, observation *bck)
   gsl_matrix_set_all(ret, GSL_NAN);
 
   // go over all cols
-  for (ii=0; ii < obs->grism->size1; ii++)
+  for (ii=0; ii < (int)obs->grism->size1; ii++)
     // go over all rows
-    for (jj=0; jj < obs->grism->size2; jj++)
+    for (jj=0; jj < (int)obs->grism->size2; jj++)
       {
 	// check whether there is valid data in
 	// object and background image
@@ -992,7 +993,7 @@ evaluate_ipc_fit(fit_data *f_data, double *gpars, double *fpars)
 {
   int index;
 
-  double yvalue;
+  //double yvalue;
 
   double *y_values;
 
@@ -1247,7 +1248,7 @@ get_wf_special(const aperture_conf  *conf,  observation *obs,
   int index;
 
   fit_data *fdata  = NULL;
-  fit_data *f_final= NULL;
+  //fit_data *f_final= NULL;
 
   double yyy;
 
@@ -1478,7 +1479,7 @@ kappa_sigma_klipp_ipc(const aperture_conf  *conf, observation *obs,
   fit_data *f_work   = NULL;
 
   double   *y_values = NULL;
-  double   *test = NULL;
+  //double   *test = NULL;
   double    sigma;
 
   d_point   ret;

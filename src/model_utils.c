@@ -473,7 +473,7 @@ get_valid_tracedata(tracedata *acttrace, const calib_function *wl_calibration)
   double lower, upper, a_0, d_xi;
 
   int nentries=0;
-  int i=0, iact;
+  int i=0;
 
   // get the lower and upper boundaries of the accepted range
   lower = gsl_vector_get(wl_calibration->pr_range, 0);
@@ -1015,7 +1015,7 @@ get_refpoint_ranges(const object *actobject)
 {
   gsl_vector *ret;
   int j;
-  d_point reference;
+  //d_point reference;
 
   // allocate memory
   ret = gsl_vector_alloc(4);
@@ -1063,7 +1063,7 @@ void
 fill_spectrum(const object *actobject, dirobject *actdir,
               spectral_models *spec_mod, const int int_type)
 {
-  energy_distrib *sed;
+  energy_distrib *sed=NULL;
   //  double *sed_wavs;
   //  double *sed_flux;
 
@@ -1257,7 +1257,7 @@ dirobject *
 get_dirobject_from_list(dirobject ** dirlist, const int ID)
 {
 
-  dirobject * actdir;
+  //dirobject * actdir;
   int i, ndirs = 0;
 
   // count the number of dirobjects in the list
@@ -1376,7 +1376,7 @@ get_beam_for_beamspec(object **oblist, const int nobjects,
 beamspec *
 get_beamspec_from_list(beamspec **speclist, const int aperID, const int beamID)
 {
-  beamspec *ret;
+  //beamspec *ret;
   int i=0;
 
   while (speclist[i] != NULL)
@@ -1485,7 +1485,7 @@ check_interp_type(const int inter_type, const int n_flux, const int ID)
 void
 free_dirlist (dirobject ** dirlist)
 {
-  int i, j, ndirs = 0;
+  int i, ndirs = 0;
 
   // count the number of dirobjects
   while (dirlist[ndirs] != NULL)
@@ -1803,11 +1803,11 @@ fill_gaussvalues(const d_point dpixel, const beam actbeam,
   beam new_beam;
 
   double dpsf=0.0;
-  double gval=0.0;
+  //double gval=0.0;
   double lambda=0.0;
-  double factor=0.0;
-  double nom=0.0;
-  double denom=0.0;
+  //double factor=0.0;
+  //double nom=0.0;
+  //double denom=0.0;
 
   int i=0;
   int minpsf_flagg=0;
@@ -2187,7 +2187,7 @@ get_polyN_gsl (const double x, const gsl_vector *params)
 
   // go over the gsl-vector and
   // sum up the individual terms
-  for (i=0; i<params->size; i++)
+  for (i=0; i<(int)params->size; i++)
     {
       p += gsl_vector_get(params,i)*pow(x,i);
     }

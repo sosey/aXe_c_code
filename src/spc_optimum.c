@@ -79,7 +79,7 @@ compute_modvar(ap_pixel *ap_p, const beam actbeam,
   int stpi, stpj;
 
   double maxarr, arr;
-  int iim, jjm;
+  //int iim, jjm;
   double value, allweig, weig;
   double stpc;
   double totweight;
@@ -603,10 +603,10 @@ comp_allweight(drzstamp *modvar)
 
   double mod_sum, weight_sum;
   double contr, norm, allweight;
-  double mod_val, var_val;
+  double mod_val;
   double act_weight=0;
 
-  int beamInt = 0;
+  //int beamInt = 0;
   int i, j;
 
   // allocate the weight matrix and set the default
@@ -614,7 +614,7 @@ comp_allweight(drzstamp *modvar)
   gsl_matrix_set_all(weight, 1000.0);
 
   //* go over all columns
-  for (i=0; i < modvar->counts->size1; i++)
+  for (i=0; i < (int)modvar->counts->size1; i++)
     {
       mod_sum = 0.0;
       contr = 0.0;
@@ -623,7 +623,7 @@ comp_allweight(drzstamp *modvar)
 
       // determine for each column the total model counts
       // and the number of pixels with non-zero model_counts
-      for (j=0; j < modvar->counts->size2; j++)
+      for (j=0; j < (int)modvar->counts->size2; j++)
 	{
 	  mod_sum = mod_sum + gsl_matrix_get(modvar->counts, i, j);
 	  contr = contr + 1.0;
@@ -639,7 +639,7 @@ comp_allweight(drzstamp *modvar)
 	  norm = mod_sum;
 
 	  // go over each row
-	  for (j=0; j < modvar->counts->size2; j++)
+	  for (j=0; j < (int)modvar->counts->size2; j++)
 	    {
 	      // normalize the model counts
 	      mod_val = gsl_matrix_get(modvar->counts, i, j)/norm;
@@ -654,7 +654,7 @@ comp_allweight(drzstamp *modvar)
 
 	  // finally compute and write the weights:
 	  // go over each pixel
-	  for (j=0; j < modvar->counts->size2; j++)
+	  for (j=0; j < (int)modvar->counts->size2; j++)
 	    {
 	      if (gsl_matrix_get(modvar->counts, i, j) > 0.0 )
 		{
@@ -677,7 +677,7 @@ comp_allweight(drzstamp *modvar)
       else
 	{
 	  // go over each row
-	  for (j=0; j < modvar->counts->size2; j++)
+	  for (j=0; j < (int)modvar->counts->size2; j++)
 	    {
 	      // set the inside default value
 	      gsl_matrix_set(weight, i,j,1.0);

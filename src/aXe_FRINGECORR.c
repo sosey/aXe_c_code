@@ -63,7 +63,7 @@ main (int argc, char *argv[])
   char grism_file_path[MAXCHAR];
 
   char FF_file[MAXCHAR];
-  char FF_file_path[MAXCHAR];
+  //char FF_file_path[MAXCHAR];
 
   char OPET_file[MAXCHAR];
   char OPET_file_path[MAXCHAR];

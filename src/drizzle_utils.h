@@ -72,7 +72,7 @@ px_point recalc_mins(int xmin, int xmax, int ymin, int ymax, px_point pixmax);
 d_point get_refwave_position(dispstruct * disp, trace_func * trace,
                              d_point refpix, aperture_conf *conf);
 double get_drizzle_width(object *ob, int beamnum,trace_func * trace);
-objectobs **malloc_objectobs();
+objectobs **malloc_objectobs(void);
 void free_objectobs(objectobs **allobjects);
 void print_objectobs(objectobs **allobjects, int nobjects);
 void print_objectobs2(objectobs allobjects[], int nobjects);

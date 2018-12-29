@@ -120,9 +120,9 @@ get_minxy_from_PET(const ap_pixel * const ap_p)
 {
   const ap_pixel *cur_p;
   double min_px = 1e32;
-  double max_px = -1e32;
+  //double max_px = -1e32;
   double min_py = 1e32;
-  double max_py = -1e32;
+  //double max_py = -1e32;
   d_point res;
 
   // return -1 in case of an empty PET
@@ -163,9 +163,9 @@ d_point
 get_maxxy_from_PET(const ap_pixel * const ap_p)
 {
   const ap_pixel *cur_p;
-  double min_px = 1e32;
+  //double min_px = 1e32;
   double max_px = -1e32;
-  double min_py = 1e32;
+  //double min_py = 1e32;
   double max_py = -1e32;
   d_point res;
 
@@ -502,8 +502,8 @@ drizzled_stamp_img (const  ap_pixel * const ap_p, double width,
   double maxarr=0.0;
   int iim, jjm;
 
-  double totweigth;
-  double cos_phi=0.0;
+  //double totweigth;
+  //double cos_phi=0.0;
 
   int ii,jj;
   double arr;
@@ -734,9 +734,11 @@ get_stamp_dim(const ap_pixel *const ap_p, float width,
   double min_dlam = 1e32;
   double max_dlam = -1e32;
 
-  double resampwidth = 0.0;
+  //double resampwidth = 0.0;
 
-  long xsize,ysize,npixel=0,j;
+  //long xsize,ysize;
+  long npixel=0;
+  //long j;
 
   // check whether there are entries;
   // if not, return a dummy structure
@@ -1130,9 +1132,9 @@ void interpolate_over_NaN (gsl_matrix *data)
   x = malloc(sizeof(double)*data->size2*data->size1);
   y = malloc(sizeof(double)*data->size2*data->size1);
 
-  for (i=0;i<data->size1;i++) {
+  for (i=0;i<(int)data->size1;i++) {
     n = 0;
-    for (j=0;j<data->size2;j++) {
+    for (j=0;j<(int)data->size2;j++) {
       if ( !isnan(gsl_matrix_get(data,i,j)) )  {
 	x[n] = j;
 	y[n] = gsl_matrix_get(data,i,j);
@@ -1148,7 +1150,7 @@ void interpolate_over_NaN (gsl_matrix *data)
     /* Interpolating */
     gsl_spline_init (spline, x, y, n);
 
-    for (j=0;j<data->size2;j++) {
+    for (j=0;j<(int)data->size2;j++) {
       double xi = j;
       double yi = gsl_spline_eval(spline,xi,acc);
       //if (n<data->size2)  fprintf(stderr,"%d %g => %d %g\n",j,gsl_matrix_get(data,i,j),j,yi);
@@ -1258,7 +1260,7 @@ get_trace_inds (const ap_pixel * const ap_p)
     }
   trace_inds2 = gsl_vector_int_alloc (n);
   n = 0;
-  for (i = 0; i < trace_inds->size; i++)
+  for (i = 0; i < (int)trace_inds->size; i++)
     {
       if (gsl_vector_int_get (trace_inds, i) != -1)
 	{

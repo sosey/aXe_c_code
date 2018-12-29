@@ -118,9 +118,9 @@ distort_point(gsl_matrix *coeffs, const px_point pixmax, d_point xy_image)
   gsl_multiroot_fsolver *msolve;
 
   int status;
-  size_t i, iter = 0;
+  size_t iter = 0;
 
-  const size_t n = 2;
+  //const size_t n = 2;
 
   gsl_multiroot_function mult_func;
 
@@ -231,7 +231,7 @@ get_crossdisp_matrix(char * filename, int sci_numext)
   int ncoeffs;
   int i;
   gsl_matrix * ret;
-  px_point    pixmax;
+  //px_point    pixmax;
   char templt[FLEN_CARD];
   float acoeff, tmp;
 
@@ -353,7 +353,7 @@ get_crossdisp_scale(trace_func *trace, d_point refpnt, gsl_matrix * drzcoeffs,
 {
   double crscale;
   double phi_trace;
-  int beamID = 0;
+  //int beamID = 0;
   d_point dispnt;
   d_point drz_ref;
   d_point drz_dis;

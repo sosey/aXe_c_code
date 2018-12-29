@@ -139,7 +139,7 @@ extern long *
 get_lcolumn_from_SPC_opened(fitsfile *SPC_ptr, char colname[], int nelems);
 
 extern interpolator *
-create_nlincor();
+create_nlincor(void);
 
 extern void
 nlin_corr_beam(interpolator *nlincorr, double adcgain, full_spectr *SPC);

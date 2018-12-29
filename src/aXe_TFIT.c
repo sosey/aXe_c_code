@@ -58,9 +58,6 @@ main(int argc, char *argv[])
 
   aperture_conf  *conf;
 
-
-  int err_num=0, dq_num=0, extver=0;
-
   double exptime;
 
   gsl_vector *fit_result;

@@ -63,7 +63,8 @@ main(int argc, char *argv[])
     FILE           *in_file;
 
 
-    int             i, j, flags;
+    //int             j, flags;
+    int i;
     int             f_status=0;
     int             hdunum, hdutype;
     int             backmode=0;
@@ -72,7 +73,7 @@ main(int argc, char *argv[])
 
     float           exptime = 0.0;
 
-    char           *outim;
+    //char           *outim;
 
     if ((argc < 2) || (opt = get_online_option("help", argc, argv))) {
       fprintf(stdout,
@@ -257,7 +258,7 @@ get_file_name (char *filename, int opt_extr, char *fits_val, int backmode, char 
   char cont[5] = "CONT\0";
   char mod[4]  = "MOD\0";
   char var[4]  = "VAR\0";
-  char under[2] = "_\0";
+  //char under[2] = "_\0";
   char dot[2]   = ".\0";
 
   int ret=0;
@@ -358,8 +359,8 @@ get_file_name2 (char *filename, char *fits_val, int backmode, char *out_image)
   char beam[5] = "BEAM\0";
   char err[4]  = "ERR\0";
   char cont[5] = "CONT\0";
-  char mod[4]  = "MOD\0";
-  char under[2] = "_\0";
+  //char mod[4]  = "MOD\0";
+  //char under[2] = "_\0";
   char dot[2]   = ".\0";
 
   strcpy(in_image,filename);

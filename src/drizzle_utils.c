@@ -29,7 +29,8 @@ d_point
 get_refwave_position(dispstruct * disp, trace_func * trace, d_point refpix,
                      aperture_conf *conf)
 {
-  double a, b, c, c_star;
+  double a=0.0;
+  double b, c, c_star;
   double *cf;
   double rot;
   double dx, dy, dtr;
@@ -128,7 +129,8 @@ get_drizzle_coeffs(dispstruct * disp, trace_func * trace,
   double ao, bo, co, bref, cref;
   double a11, a12, a21, a22;
   double xr, yr;
-  double lambda0, dlambda;
+  //double lambda0;
+  //double dlambda;
   double tmp, rotation;
   double *cf;
   double shear_term;
@@ -390,7 +392,7 @@ add_obs_to_allobj(objectobs *actobject, object * actobs, px_point pixmax, double
 {
 
   int xmin, xmax, ymin, ymax;
-  double m, b;
+  //double m, b;
   gsl_vector_int * xvec;
   gsl_vector_int * yvec;
   px_point bbox;
@@ -451,7 +453,7 @@ add_obj_to_allobj(objectobs **allobjects, int nobjects, object * actobs,
                    px_point pixmax, double cdscale, double spreso, int tlength)
 {
   int xmin, xmax, ymin, ymax;
-  double m, b;
+  //double m, b;
 
   gsl_vector_int * xvec;
   gsl_vector_int * yvec;
@@ -547,8 +549,8 @@ int make_refpoints( char * conf_file, char * filename, px_point pixmax, objectob
   int nobs;
   int max_width, max_height, omax;
   double xmean, ymean;
-  double xdata[NMAXOBS];
-  double ydata[NMAXOBS];
+  //double xdata[NMAXOBS];
+  //double ydata[NMAXOBS];
   //  objectobs  oneobject;
   objectobs *oneobject; // = malloc (sizeof (objectobs));
 
@@ -556,7 +558,7 @@ int make_refpoints( char * conf_file, char * filename, px_point pixmax, objectob
   gsl_vector * yvec;
   aperture_conf *conf;
   gsl_matrix * drzcoeffs;
-  double cdscale;
+  //double cdscale;
   double drzscale;
   trace_func  *trace;
   int beamID=0;

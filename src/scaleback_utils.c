@@ -105,7 +105,7 @@ make_scale_back(char grism_image[], const char grism_mask[], char conf_file[],
   gsl_vector *bck_vals;
 
   fitbck_data *fbck_data;
-  int f_status=0;
+  //int f_status=0;
 
   FITScards *cards;
 
@@ -273,9 +273,9 @@ compute_scale_grism(gsl_matrix *gr_img, gsl_matrix *gr_dqval, gsl_matrix *gr_mas
     bck_img = gsl_matrix_alloc(gr_img->size1, gr_img->size2);
 
     // go over each row
-    for (ii=0; ii < gr_img->size1; ii++)
+    for (ii=0; ii < (int)gr_img->size1; ii++)
       // go over each column
-      for (jj=0; jj < gr_img->size2; jj++)
+      for (jj=0; jj < (int)gr_img->size2; jj++)
         // compute and set the value in the background image
         if (gsl_matrix_get(gr_mask, ii, jj) > 0.0 ||
             (int)gsl_matrix_get(gr_dqval, ii, jj) & dqmask)
@@ -315,9 +315,9 @@ compute_scale_master(const gsl_matrix *sc_img, const gsl_vector *bck_vals)
     bck_img = gsl_matrix_alloc(sc_img->size1, sc_img->size2);
 
     // go over each row
-    for (ii=0; ii < sc_img->size1; ii++)
+    for (ii=0; ii < (int)sc_img->size1; ii++)
       // go over each column
-      for (jj=0; jj < sc_img->size2; jj++)
+      for (jj=0; jj < (int)sc_img->size2; jj++)
         // scale the master sky
         gsl_matrix_set(bck_img, ii, jj, gsl_matrix_get(sc_img, ii, jj) * scale);
 
@@ -358,9 +358,9 @@ fill_mask_data(gsl_matrix *gr_img, gsl_matrix *gr_dqval, gsl_matrix *gr_mask,
 
     // go over all pixels
     // in the grism image
-    for (ix=0; ix < sc_img->size1; ix++)
+    for (ix=0; ix < (int)sc_img->size1; ix++)
       {
-      for (iy=0; iy < sc_img->size2; iy++)
+      for (iy=0; iy < (int)sc_img->size2; iy++)
         {
         // set the scale image pixel as independent variable
         fbck_data->x_values[index] = gsl_matrix_get(gr_img, ix, iy);
@@ -432,9 +432,9 @@ fill_cont_data(gsl_matrix *gr_img, gsl_matrix *gr_dqval, gsl_matrix *gr_mask,
 
     // go over all pixels
     // in the grism image
-    for (ix=0; ix < sc_img->size1; ix++)
+    for (ix=0; ix < (int)sc_img->size1; ix++)
       {
-      for (iy=0; iy < sc_img->size2; iy++)
+      for (iy=0; iy < (int)sc_img->size2; iy++)
         {
         // set the scale image pixel as independent variable
         fbck_data->x_values[index] = gsl_matrix_get(sc_img, ix, iy);
@@ -620,7 +620,7 @@ clipp_scale_data(fitbck_data *fbck_data, const gsl_vector *bck_vals,
     int nclip=0;
     int newclip=0;
     double mean;
-    double stdev;
+    //double stdev;
     double absdev;
 
     // get the mean value

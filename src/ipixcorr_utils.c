@@ -281,7 +281,7 @@ double
 get_tlength_from_dispersion(gsl_vector *cdisp, float lambda)
 {
   double tlength=0.0;
-  double tlength_a=0.0;
+  //double tlength_a=0.0;
   double det;
 
   // check whether the polynomial is linear
@@ -596,7 +596,7 @@ get_ipc_lambdas(const beam actbeam, char conf_file_path[], gsl_vector *xvalues)
   lambdas = gsl_vector_alloc(xvalues->size);
 
   // go over all tracelength values
-  for (i=0; i < xvalues->size; i++)
+  for (i=0; i < (int)xvalues->size; i++)
     {
       // determine and store the wavelength for each tracelength
       gsl_vector_set(lambdas, i,
@@ -646,7 +646,7 @@ get_ipc_cvalues(const beam actbeam, interpolator *ipcorr, gsl_vector *xvalues)
   cvalues = gsl_vector_alloc(xvalues->size);
 
   // go over all x-values
-  for (i=0; i < xvalues->size; i++)
+  for (i=0; i < (int)xvalues->size; i++)
     {
       // determine the y-fraction for the x-value
       yfract = get_yfract_for_xvalue(&actbeam, gsl_vector_get(xvalues, i));
@@ -761,7 +761,7 @@ get_ipclambda(beam actbeam, char conf_file_path[],
     {
       // transfer the values from the
       // gsl vectors to the c-vectors
-      for (i = 0; i < cvalues->size; i++)
+      for (i = 0; i < (int)cvalues->size; i++)
 	{
 	  cv[i] = gsl_vector_get(cvalues, i);
 	  lv[i] = gsl_vector_get(lambdas, i);
@@ -774,7 +774,7 @@ get_ipclambda(beam actbeam, char conf_file_path[],
       // invert the order from the
       // gsl-vectors
       j = cvalues->size - 1;
-      for (i = 0; i < cvalues->size; i++)
+      for (i = 0; i < (int)cvalues->size; i++)
 	{
 	  cv[j] = gsl_vector_get(cvalues, i);
 	  lv[j] = gsl_vector_get(lambdas, i);
@@ -994,7 +994,7 @@ get_ALL_from_next_in_SPC(fitsfile *SPC_ptr, int *aperID, int *beamID)
   int f_status=0, hdutype;
 
   long tmp;
-  long nrows=0;
+  //long nrows=0;
   char comment[FLEN_COMMENT];
 
   full_spectr *SPC;

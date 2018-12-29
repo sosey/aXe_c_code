@@ -135,5 +135,5 @@ extern void
 check_libraries (void);
 
 extern observation *
-load_dummy_observation ();
+load_dummy_observation (void);
 #endif

@@ -29,14 +29,14 @@ char      *get_fits_header_l(char filename[], int hdunum);
 
 int main(int argc, char *argv[])
 {
-  char *opt;
+  //char *opt;
   char direct_image[30];
-  char direct_image_path[30];
-  int direct_hdunum;
+  //char direct_image_path[30];
+  //int direct_hdunum;
 
   char grism_image[30];
-  char grism_image_path[30];
-  int grism_hdunum;
+  //char grism_image_path[30];
+  //int grism_hdunum;
 
   struct WorldCoor *dirim_wcs;
   struct WorldCoor *grisi_wcs;

@@ -73,13 +73,13 @@ compute_gauss_cont(char grism_file[], char OAF_file[], char CONF_file[],
   beamspec  **speclist;
   spectral_models *spec_mod;
 
-  dirobject  *actdir;
+  //dirobject  *actdir;
   gsl_matrix *all_models;
   char model_name[60];
 
   px_point npixels;
 
-  time_t timer;
+  //time_t timer;
 
   // load the object list
   fprintf (stdout, "aXe_PETCONT: Loading object aperture list...");
@@ -181,13 +181,13 @@ compute_gaussdirim_cont(char grism_file[], char OAF_file[], char CONF_file[],
   spectral_models *spec_mod;
   object_models   *obj_mod;
 
-  dirobject  *actdir;
+  //dirobject  *actdir;
   gsl_matrix *all_models;
   char model_name[60];
 
   px_point npixels;
 
-  time_t timer;
+  //time_t timer;
 
   // load the object list
   fprintf (stdout, "aXe_PETCONT: Loading object aperture list...");
@@ -289,16 +289,17 @@ make_gauss_spectra2(object **oblist, dirobject **dirlist,
   beam             actbeam;
   tracedata       *acttrace;
 
-  double eval=0.0;
+  //double eval=0.0;
   double psf_offset=0;
 
-  int nspecs;
-  int i=0;
-  int j=0;
-  int jj=0,ii=0;
+  //int nspecs;
+  //int i=0;
+  //int j=0;
+  //int jj=0;
+  int ii=0;
   int nobjects;
 
-  int kk, ll;
+  //int kk, ll;
   double sval;
   double frac_prev, frac;
 
@@ -457,7 +458,7 @@ make_gauss_spectra(object **oblist, dirobject **dirlist,
   beam             actbeam;
   tracedata       *acttrace;
 
-  double eval=0.0;
+  //double eval=0.0;
   double psf_offset=0;
 
   int nspecs;
@@ -466,7 +467,7 @@ make_gauss_spectra(object **oblist, dirobject **dirlist,
   int jj=0,ii=0;
   int nobjects;
 
-  int kk, ll;
+  //int kk, ll;
   double sval;
 
   int nx, ny;
@@ -662,7 +663,7 @@ compute_fcube_cont(char grism_file[], char OAF_file[], char fcube_file[],
   beamspec  **speclist;
   flux_cube  *fcube;
 
-  dirobject  *actdir;
+  //dirobject  *actdir;
   gsl_matrix *all_models;
 
   char model_name[60];
@@ -764,7 +765,7 @@ make_fcube_spectra(object **oblist, dirobject **dirlist,
   int nobjects;
 
   int nx, ny;
-  d_point dpixel;
+  //d_point dpixel;
   d_point dflt_point;
   px_point fcube_point;
 
@@ -880,8 +881,8 @@ alloc_beamlist_from_dirlist(object **oblist, dirobject **dirlist,
                             const px_point npixels, aperture_conf *conf)
 {
   beamspec  **speclist;
-  dirobject  *actdir;
-  object     *actobj;
+  //dirobject  *actdir;
+  //object     *actobj;
 
   int nspecs;
   int i, j, jj=0;
@@ -1096,7 +1097,8 @@ fill_pixel_in_speed(const dirobject *actdir, const tracedata *acttrace,
   double dx;
   double sens;
   double fval;
-  double tmp1, tmp2, tmp3;
+  double tmp1;
+  //double tmp2, tmp3;
 
   double ddx, ddy;
 
@@ -1144,7 +1146,7 @@ fill_pixel_in_speed(const dirobject *actdir, const tracedata *acttrace,
       ddy = gsl_vector_get(acttrace->dy,ipos) + actdir->xy_off[actspec->beamID].y + dpixel.y - actspec->model_ref.y;
 
       // if the y-position is outside, go to the next dx value
-      if (iy < 0 || iy > actspec->model->size2-1)
+      if (iy < 0 || iy > (int)actspec->model->size2-1)
         continue;
 
       // in case that the actual wavelength is outside the range
@@ -1169,7 +1171,7 @@ fill_pixel_in_speed(const dirobject *actdir, const tracedata *acttrace,
       tmp1 = fval * sens * gsl_vector_get(acttrace->dlambda,ipos);
 
       // double check whether we are inside the image
-      if (ix < 0 || iy < 0 || ix > (actspec->model->size1-1) || iy > (actspec->model->size2-1))
+      if (ix < 0 || iy < 0 || ix > (int)(actspec->model->size1-1) || iy > (int)(actspec->model->size2-1))
         {
           fprintf(stdout, "xval: %i, yval: %i, size1: %zi, size2: %zi\n",ix, iy, actspec->model->size1, actspec->model->size2);
         }
@@ -1321,7 +1323,7 @@ diffuse_spectrum(double ddx, double ddy, double cps, beamspec *actspec)
           iy = floor(dy_act + 0.5);
 
           // double check whether we are inside the image
-          if (ix < 0 || iy < 0 || ix > (actspec->model->size1-1) || iy > (actspec->model->size2-1))
+          if (ix < 0 || iy < 0 || ix > (int)(actspec->model->size1-1) || iy > (int)(actspec->model->size2-1))
             continue;
 
           // add the contribution of the actual dx value to the model spectrum
@@ -1395,7 +1397,7 @@ diffuse_spectrumII(double ddx, double ddy, double cps, beamspec *actspec)
 
   // increment the first quarter
   // double check whether we are inside the image
-  if ( ! (ix < 0 || iy < 0 || ix > (actspec->model->size1-1) || iy > (actspec->model->size2-1)))
+  if ( ! (ix < 0 || iy < 0 || ix > (int)(actspec->model->size1-1) || iy > (int)(actspec->model->size2-1)))
     {
       // compute the area
       d_incr = p * q;
@@ -1408,7 +1410,7 @@ diffuse_spectrumII(double ddx, double ddy, double cps, beamspec *actspec)
 
   // increment the second quarter
   // double check whether we are inside the image
-  if ( ! (ix < 0 || iy_rem < 0 || ix > (actspec->model->size1-1) || iy_rem > (actspec->model->size2-1)))
+  if ( ! (ix < 0 || iy_rem < 0 || ix > (int)(actspec->model->size1-1) || iy_rem > (int)(actspec->model->size2-1)))
     {
       // compute the area
       d_incr = p * q_rem;
@@ -1421,7 +1423,7 @@ diffuse_spectrumII(double ddx, double ddy, double cps, beamspec *actspec)
 
   // increment the third quarter
   // double check whether we are inside the image
-  if ( ! (ix_rem < 0 || iy < 0 || ix_rem > (actspec->model->size1-1) || iy > (actspec->model->size2-1)))
+  if ( ! (ix_rem < 0 || iy < 0 || ix_rem > (int)(actspec->model->size1-1) || iy > (int)(actspec->model->size2-1)))
     {
       // compute the area
       d_incr = p_rem * q;
@@ -1434,7 +1436,7 @@ diffuse_spectrumII(double ddx, double ddy, double cps, beamspec *actspec)
 
   // increment the fourth quarter
   // double check whether we are inside the image
-  if ( ! (ix_rem < 0 || iy_rem < 0 || ix_rem > (actspec->model->size1-1) || iy_rem > (actspec->model->size2-1)))
+  if ( ! (ix_rem < 0 || iy_rem < 0 || ix_rem > (int)(actspec->model->size1-1) || iy_rem > (int)(actspec->model->size2-1)))
     {
       // compute the area
       d_incr = p_rem * q_rem;
@@ -1491,9 +1493,9 @@ make_model_image(const px_point npixels, observation *obs, beamspec **speclist)
        fprintf(stdout, "aXe_PETCONT: summing up object %i beam %c ...", speclist[i]->objectID, BEAM(speclist[i]->beamID));
 
        // go over each pixel in the array of the beam model
-       for (xact=0; xact < speclist[i]->model->size1; xact++)
+       for (xact=0; xact < (int)speclist[i]->model->size1; xact++)
          {
-           for (yact=0; yact < speclist[i]->model->size2; yact++)
+           for (yact=0; yact < (int)speclist[i]->model->size2; yact++)
              {
 
                // find the coordinates of the pixels in the whole image model
@@ -1547,7 +1549,7 @@ fill_contam_info(const char PET_file[], beamspec **speclist,
   fitsfile *OPET_ptr;
   ap_pixel *PET;
   beamspec *actspec;
-  FITScards *cards;
+  //FITScards *cards;
 
   char ID[60];
 
@@ -1617,7 +1619,7 @@ fill_contam_info(const char PET_file[], beamspec **speclist,
             // check whether the PET entry is outside of the model array.
             // correct for self contamination if the PET-etry is inside
 
-            if (ix > -1 && iy >-1 && ix < actspec->model->size1 && iy < actspec->model->size2)
+            if (ix > -1 && iy >-1 && ix < (int)actspec->model->size1 && iy < (int)actspec->model->size2)
               {
                 m = gsl_matrix_get(actspec->model, ix, iy);
                 c = c - m;
@@ -1832,10 +1834,10 @@ compute_gauss_dirim(char grism_file[], char OAF_file[], char CONF_file[],
   object    **oblist;
   dirobject **dirlist;
 
-  dirobject  *actdir;
+  //dirobject  *actdir;
   gsl_matrix *all_models;
 
-  char model_name[60];
+  //char model_name[60];
 
   px_point npixels;
 
@@ -1886,13 +1888,15 @@ make_gauss_dirim(object **oblist, dirobject **dirlist,
   dirobject       *actdir;
   beam             actbeam;
 
-  int nspecs;
-  int i=0;
-  int j=0;
-  int jj=0,ii=0;
+  //int nspecs;
+  //int i=0;
+  //int j=0;
+  //int jj=0;
+  int ii=0;
   int nobjects;
 
-  int kk, ll;
+  //int kk;
+  //int ll;
   double sval=0.0;
   double flux=0.0;
   double value=0.0;

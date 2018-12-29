@@ -63,11 +63,12 @@ main (int argc, char *argv[])
   aperture_conf *conf;
 
   object **oblist;
-  observation *obs;
+  observation *obs = NULL;
 
   interpolator *ipcorr;
 
-  int index, i;
+  int index;
+  //int i;
 
   ap_pixel *PET;
 
@@ -78,7 +79,8 @@ main (int argc, char *argv[])
   int f_status=0;
   int bckmode = 0;
 
-  int aperID=0, beamID=0, objindex;
+  int aperID=0, beamID=0;
+  //int objindex;
 
   int spec_OAF=0;
   int point_like=0;

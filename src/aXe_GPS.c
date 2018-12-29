@@ -52,7 +52,7 @@ main(int argc, char *argv[])
   char            aper_file_path[MAXCHAR];
 
   char            search_beam[MAXCHAR];
-  char            find_beam[MAXCHAR];
+  //char            find_beam[MAXCHAR];
 
   int             i, j, flags;
   int             for_grism;
@@ -61,17 +61,17 @@ main(int argc, char *argv[])
 
   ap_pixel       *result = NULL;
   d_point         pixel;
-  tracestruct    *trace;
+  //tracestruct    *trace;
   aperture_conf  *conf;
 
   dispstruct     *disp;
   calib_function *wl_calibration;
 
-  FITScards      *cards;
+  //FITScards      *cards;
 
-  int             f_status = 0;
+  //int             f_status = 0;
 
-  int             bckmode = 0;
+  //int             bckmode = 0;
 
   int             found = 0;
 
@@ -79,7 +79,7 @@ main(int argc, char *argv[])
   int             yval = 0;
   beam           *curbeam;
 
-  fitsfile       *PET_fitsptr;
+  //fitsfile       *PET_fitsptr;
 
   double exptime;
 

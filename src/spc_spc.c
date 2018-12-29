@@ -738,7 +738,7 @@ get_ID_index_to_SPC (char filename[], char ID[])
   fitsfile *input;
   int f_status = 0, hdutype;
   char comment[FLEN_COMMENT];
-  long hdunum;
+  long hdunum=0;
 
   //  Open the file for reading
   fits_open_file (&input, filename, READONLY, &f_status);

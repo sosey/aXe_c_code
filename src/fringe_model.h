@@ -51,10 +51,10 @@ extern gsl_matrix  *
 alloc_fringe_image(const ccd_layers *opt_layers);
 
 extern gsl_vector **
-get_calibration_data();
+get_calibration_data(void);
 
 gsl_vector **
-get_PET_calibration_data();
+get_PET_calibration_data(void);
 
 extern double
 eval_linear_interp(linear_interp *lin_int, const double xval);

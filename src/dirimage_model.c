@@ -173,13 +173,13 @@ make_dirimage(object **oblist, dirobject **dirlist, const px_point npixels,
       for (nx=actdir->ix_min; nx<=actdir->ix_max; nx++)
 	{
 	  // make sure to be inside the image
-	  if (nx < 0 || nx >=  dirimage_matrix->size1)
+	  if (nx < 0 || nx >=  (int)dirimage_matrix->size1)
 	    // skip column if not
 	    continue;
 	  for (ny=actdir->iy_min; ny<=actdir->iy_max; ny++)
 	    {
 	      // make sure to be inside the image
-	      if (ny < 0 || ny >=  dirimage_matrix->size2)
+	      if (ny < 0 || ny >=  (int)dirimage_matrix->size2)
 		// skip element if not
 		continue;
 
@@ -350,7 +350,7 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
   gsl_vector_int_set_all(indep_weight, 1);
 
   // go over the independent data
-  for (index = 1; index < indep_data->size; index++)
+  for (index = 1; index < (int)indep_data->size; index++)
     // check whether the current entry is equal the previous one
     if (gsl_vector_get(indep_data, index) ==  gsl_vector_get(indep_data, index-1))
       // set the weight of the current entry to zero
@@ -362,7 +362,7 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
   n_new = 0;
 
   // go over the weight array
-  for (index=0; index < indep_weight->size; index++)
+  for (index=0; index < (int)indep_weight->size; index++)
     // just count the weights
     n_new += gsl_vector_int_get(indep_weight, index);
 
@@ -372,7 +372,7 @@ get_combined_tpass_SED(gsl_vector *indep_data, interpolator *tpass, dirobject *a
 
   // go over the weight array
   act_index=0;
-  for (index=0; index < indep_weight->size; index++)
+  for (index=0; index < (int)indep_weight->size; index++)
     // check for weight
     if (gsl_vector_int_get(indep_weight, index))
       {

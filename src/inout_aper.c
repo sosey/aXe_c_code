@@ -33,7 +33,7 @@ object_list_to_file (object * const *oblist, char *filename,
   char curve[MAXCHAR];
   char width[MAXCHAR];
   char orient[MAXCHAR];
-  char bwindow[MAXCHAR];
+  //char bwindow[MAXCHAR];
   char awidth[MAXCHAR];
   char bwidth[MAXCHAR];
   char aorient[MAXCHAR];
@@ -47,7 +47,7 @@ object_list_to_file (object * const *oblist, char *filename,
   char label[80];
   double *cf;
   int wrote_aper;
-  int j = 0;
+  //int j = 0;
 
   // open the output file;
   // give error in case of problems
@@ -164,7 +164,7 @@ object_list_to_file (object * const *oblist, char *filename,
               sprintf (flux,"     FLUX%i%c    ", oid, BEAM (i));
 
               // go over all flux vector values
-              for (ii=0;ii<b->flux->size;ii++)
+              for (ii=0;ii<(int)b->flux->size;ii++)
                 {
                   // print and append the current value
                   sprintf(tmps," %.5e", gsl_vector_get(b->flux, ii));
@@ -652,7 +652,7 @@ int get_beam_from_char_array(char **aper, int aperID, int beamID, beam * b)
                 gsl_vector *vv;
 
                 vv = gsl_vector_alloc(v->size -1);
-                for (ii=0; ii<v->size -1; ii++)
+                for (ii=0; ii<(int)v->size -1; ii++)
                   {
                     gsl_vector_set(vv, ii, gsl_vector_get(v, ii+1));
                   }
@@ -868,7 +868,7 @@ get_aperture_from_char_array (char **aper, int aperID)
   // derive the number of beams by checking
   // the integer array for non default values
   nbeams=0;
-  while( nbeams < beamlist->size && gsl_vector_int_get (beamlist, nbeams) > -1)
+  while( nbeams < (int)beamlist->size && gsl_vector_int_get (beamlist, nbeams) > -1)
     nbeams++;
 
   // set some default values for struct
@@ -939,7 +939,7 @@ object ** file_to_object_list_seq(char filename[], observation * obs)
     if (input==NULL)
       aXe_message(aXe_M_FATAL, __FILE__, __LINE__, "Could not open %s", filename);
 
-    for (i = 0; i < l->size; i++)
+    for (i = 0; i < (int)l->size; i++)
       {
         aperID = gsl_vector_int_get(l, i);
         aper = return_next_aperture(input);
@@ -1118,7 +1118,7 @@ beam *
 find_beamptr_in_object_list(object **oblist, const int objID,
                             const int beamID)
 {
-  beam *actbeam;
+  beam *actbeam=NULL;
 
   int obj_index=0;
   int j=0;
@@ -1152,7 +1152,7 @@ void
 refurbish_object_list(object **oblist, const int new_default,
                        const int old_value, const int new_value)
 {
-  object *act_obj;
+  //object *act_obj;
   beam   *act_beam;
 
   int j=0;

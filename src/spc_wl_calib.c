@@ -58,7 +58,7 @@ pwise_wl_calib(const global_disp *gdisp, const d_point pixel,
   d_point actpix;
 
   double l1,l2;
-  double tmp, tmp2;
+  double tmp;
 
   int i=0;
 
@@ -110,7 +110,7 @@ prange_cut(ap_pixel * in_p, const gsl_vector * prange,
            const calib_function * wl_calibration)
 {
 
-  long nelem;
+  //long nelem;
   ap_pixel * ret, *cur_ap, *ap_p;
   double prel;
   double trmin=1.0E+06, trmax=-1.0E6;

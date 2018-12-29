@@ -645,7 +645,7 @@ get_num_extensions(const char spectral_models_file[])
 {
   int n_ext=0;
   int n_models=0;
-  int i;
+  //int i;
   int f_status=0;
 
 

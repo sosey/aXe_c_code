@@ -58,7 +58,7 @@ extern int
 check_fbck_data(fitbck_data *fbck_data);
 
 extern gsl_vector*
-get_fbck_defaults();
+get_fbck_defaults(void);
 
 extern int
 clipp_fbck_data(fitbck_data *fbck_data, const gsl_vector *lfit, const float kappa);

@@ -58,7 +58,7 @@ make_nicmos_back(const observation * const obs, const char *msk_name,
   gsl_vector *lfit;
 
   fitbck_data *fbck_data;
-  int f_status=0;
+  //int f_status=0;
 
   FITScards *cards;
 
@@ -219,10 +219,10 @@ compute_nicmos_back(const gsl_matrix *mbck_img, const double factor,
   grism_bck = gsl_matrix_alloc(mbck_img->size1, mbck_img->size2);
 
   // go over each row
-  for (ii=0; ii < mbck_img->size1; ii++)
+  for (ii=0; ii < (int)mbck_img->size1; ii++)
     {
       // go over each column
-      for (jj=0; jj < mbck_img->size2; jj++)
+      for (jj=0; jj < (int)mbck_img->size2; jj++)
 	{
 	  // compute and set the value in the background image
 	  if (corr_img != NULL)
@@ -580,9 +580,9 @@ fill_fbck_data(const observation * const obs, const gsl_matrix *msk_img,
 
   // go over all pixels
   // in the grism image
-  for (ix=0; ix < obs->grism->size1; ix++)
+  for (ix=0; ix < (int)obs->grism->size1; ix++)
     {
-      for (iy=0; iy < obs->grism->size2; iy++)
+      for (iy=0; iy < (int)obs->grism->size2; iy++)
 	{
 	  // set the master background pixel as independent variable
 	  fbck_data->x_values[index] = gsl_matrix_get(mbck_img, ix, iy);

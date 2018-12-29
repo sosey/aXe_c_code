@@ -406,7 +406,8 @@ check_disp_coeff (char *filename,const int for_grism,int beamID,int order)
 {
   char beam[MAXCHAR];
 
-  int norder, found = 1;
+  //int norder;
+  int found = 1;
   int i;
 
   struct CfgStrings DispConfig[] = {
@@ -572,7 +573,7 @@ print_global_disp(const global_disp *gdisp)
   for (order=0; order <  gdisp->n_order+1; order++)
     {
       fprintf(stdout, "Dimension in order %i: %zi", order, gdisp->all_coeffs[order]->size);
-      for (i=0; i < gdisp->all_coeffs[order]->size; i++)
+      for (i=0; i < (int)gdisp->all_coeffs[order]->size; i++)
         fprintf(stdout, " %e ", gsl_vector_get(gdisp->all_coeffs[order], i));
       fprintf(stdout, "\n");
     }

@@ -514,7 +514,7 @@ apply_smoothed_response(const calib_function *wl_calibration, const int for_gris
 {
   long j;
   double fr, fr1, fr2;
-  double sigma_wav=10.0;
+  //double sigma_wav=10.0;
 
   double *resp_vals = malloc( 2 * sizeof(double));
   //double *tmp_vals  = malloc( 2 * sizeof(double));
@@ -819,7 +819,7 @@ get_smoothed_response(const double wavelength, const d_point smooth_pars,
   //    wl_calibration->func(tl_central, wl_calibration->order, wl_calibration->coeffs));
 
   // go over the array
-  for (j=0; j < pixvalues->size; j++)
+  for (j=0; j < (int)pixvalues->size; j++)
     {
       // determine the wavelength value
       lambda_act = wl_calibration->func(tl_act, wl_calibration->order, wl_calibration->coeffs);
@@ -889,7 +889,7 @@ get_weighted_sensitivity(const gsl_vector *pixvalues, const gsl_vector *errvalue
   double www=0.0;
 
   // go over all indices of an array
-  for (index=0; index < pixvalues->size; index ++)
+  for (index=0; index < (int)pixvalues->size; index ++)
     {
       // check whether the index is masked
       if (gsl_vector_get(pmask, index) != 0.0)
@@ -947,7 +947,7 @@ fill_weight(gsl_vector *weights)
   // compute the initial exponent
   // go over the weights vector
   value = -(double)RESP_SMOOTH_NSIG;
-  for (j=0; j < weights->size; j++)
+  for (j=0; j < (int)weights->size; j++)
     {
       // compute and set the weight
       gsl_vector_set(weights, j, exp(-1.0*value * value));

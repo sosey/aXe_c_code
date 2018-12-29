@@ -27,9 +27,9 @@ simulate_flatfield (flatfield_d * const flat, double stdev)
   gsl_rng *r = gsl_rng_alloc (gsl_rng_ran0);
   
   flat_pixels = gsl_matrix_alloc (flat->w, flat->h);
-  for (i = 0; i < flat_pixels->size1; i++)
+  for (i = 0; i < (int)flat_pixels->size1; i++)
     {
-      for (j = 0; j < flat_pixels->size2; j++)
+      for (j = 0; j < (int)flat_pixels->size2; j++)
 	{
 	  gsl_matrix_set (flat_pixels, i, j,
 			  1. + gsl_ran_gaussian (r, stdev));
@@ -242,9 +242,9 @@ load_flatfield_errors (flatfield_d * const ff, const char *const flat_name)
       err_pixels =
 	gsl_matrix_alloc (ff->data.poly->flatfield->size1,
 			  ff->data.poly->flatfield->size2);
-      for (i = 0; i < err_pixels->size1; i++)
+      for (i = 0; i < (int)err_pixels->size1; i++)
 	{
-	  for (j = 0; j < err_pixels->size2; j++)
+	  for (j = 0; j < (int)err_pixels->size2; j++)
 	    {
 	      //gsl_matrix_set(err_pixels, i, j, 
 	      //  1-gsl_matrix_get(ff->data.poly->flatfield, i, j));

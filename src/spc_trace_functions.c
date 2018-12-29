@@ -249,7 +249,7 @@ create_polyN (gsl_vector *v)
   func->data = cf;
   func->type = v->size - 1;
   cf[0] = v->size;
-  for (i=0;i<(v->size);i++)
+  for (i=0;i<(int)v->size;i++)
     {
       cf[i+1]=gsl_vector_get (v, i);
     }
