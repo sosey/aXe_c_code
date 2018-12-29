@@ -11,7 +11,7 @@
 #ifndef _DISP_CONF_H
 #define _DISP_CONF_H
 #include <gsl/gsl_vector.h>
-#include "axe_grism.h"
+#include "aXe_grism.h"
 
 
 /**

@@ -6,8 +6,14 @@ AC_INIT([aXe], [2.6], [help@stsci.edu])
 AC_CONFIG_AUX_DIR(config)
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIRS([m4])
 
 AM_INIT_AUTOMAKE([foreign])
+
+# libtools init and update
+LT_INIT
+AC_SUBST([LIBTOOL_DEPS])
+
 
 # Checks for programs.
 AC_PROG_CC
@@ -72,3 +78,4 @@ AC_CHECK_FUNCS([floor pow rint sqrt strchr strdup strstr strtol])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
+

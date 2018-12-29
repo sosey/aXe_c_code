@@ -3,14 +3,10 @@
  * Subroutines to calculate the
  * various contamination models
  *
- * @author  Martin Kuemmel
- * @package spc_fluxcube
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include <math.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>

@@ -1,9 +1,5 @@
 /**
  * File: spc_FITScards.h
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_FITScards
- * @version $Revision: 1.4 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef SPC_FITSCARDS_H

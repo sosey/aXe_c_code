@@ -1,18 +1,14 @@
 /**
  * File: fringe_conf.c
- * @author  Martin Kuemmel
- * @package fringe_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <math.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
 #include "spc_cfg.h"
-#include "aXe_utils.h" 
-#include "aXe_errors.h" 
+#include "aXe_utils.h"
+#include "aXe_errors.h"
 #include "fringe_conf.h"
 
 #define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
@@ -82,7 +78,7 @@ load_CCD_layer(const char refr_table[], const char thickness[])
 
       // build the full pathname to the thickness image
       build_path (AXE_CONFIG_PATH, thickness, thickness_path);
-      
+
       // load the 2D image for the thickness
       opt_layer->thickness2D = FITSimage_to_gsl(thickness_path, 1, 1);
     }
@@ -91,7 +87,7 @@ load_CCD_layer(const char refr_table[], const char thickness[])
       fprintf(stderr, "Loading refractive index table: %s\n", refr_table);
 #endif
   // load the real part of the refraction index
-  opt_layer->re_refraction = 
+  opt_layer->re_refraction =
     create_interp_ftable(refr_table_path, 2, "WAVELENGTH", "N",
 			 REFRAC_INTERP_TYPE);
 
@@ -164,7 +160,7 @@ load_CCD_layers(char fring_conf_path[])
     {NULL, NULL},
     {NULL, NULL}
   };
-  
+
   LayerConfig[0].name = layer;
 
   // allocate space for the return structure;
@@ -197,12 +193,12 @@ load_CCD_layers(char fring_conf_path[])
 
 
   // allocate space for the array to
-  // the layers described in the 
+  // the layers described in the
   // configuration file
   opt_layers->opt_layer =
     (ccd_layer **)malloc (opt_layers->num_layers*sizeof(ccd_layers));
 
-  // successively find the 
+  // successively find the
   // description and finally
   // load all layers
   for (i = 0; i < MAX_BEAMS; i++)
@@ -221,7 +217,7 @@ load_CCD_layers(char fring_conf_path[])
 	  if (LayerConfig[0].data != NULL)
 	    {
 	      // load the layer
-	      opt_layers->opt_layer[i] = 
+	      opt_layers->opt_layer[i] =
 		load_CCD_layer(refr_table, LayerConfig[0].data);
 
 	      LayerConfig[0].data = NULL;
@@ -262,7 +258,7 @@ free_CCD_layers(ccd_layers *opt_layers)
   // free each layer individually
   for (index=0; index < opt_layers->num_layers; index++)
       free_CCD_layer(opt_layers->opt_layer[index]);
-    
+
   // free the interpolator for the substrate
   //  free_linint(opt_layers->substrate);
   free_interp(opt_layers->substrate);
@@ -279,7 +275,7 @@ free_CCD_layers(ccd_layers *opt_layers)
  * Function: load_fringe_conf
  * The function loads the fringe configuration file given as parameter.
  * All relevant data marked with keywords is extracted. A fringe
- * configuration structure is built up and returned from the 
+ * configuration structure is built up and returned from the
  * data given in the keyvalues.
  *
  * Parameters:
@@ -302,7 +298,7 @@ load_fringe_conf(char fring_conf_path[])
 
   gsl_vector *v=NULL;
 
-  struct CfgStrings FringeConfig[] = 
+  struct CfgStrings FringeConfig[] =
     {
       {"FRINGE_AMPLITUDE", NULL},
       {"FRINGE_PHASE", NULL},
@@ -312,11 +308,11 @@ load_fringe_conf(char fring_conf_path[])
       {"FRINGE_STEP",NULL},
       {"NUM_STEPS",NULL},
       {"SUBSTR_TRANS",NULL},
-      
+
       {NULL, NULL},
       {NULL, NULL}		/* array terminator. REQUIRED !!! */
     };
-  
+
 
   FringeConfig[8].name = beam;
 
@@ -347,7 +343,7 @@ load_fringe_conf(char fring_conf_path[])
 
   for (index = 0; index < 9; index++)
     {
-      
+
       // read in the fringe amplitude
       if (!strcmp (FringeConfig[index].name, "FRINGE_AMPLITUDE"))
 	{
@@ -365,7 +361,7 @@ load_fringe_conf(char fring_conf_path[])
 	      fconf->fringe_phase = atof(FringeConfig[index].data);
 	    }
 	}
-      
+
 
       // read in the fringe step
       if (!strcmp (FringeConfig[index].name, "FRINGE_STEP"))
@@ -410,10 +406,10 @@ load_fringe_conf(char fring_conf_path[])
 	  if (FringeConfig[index].data != NULL)
 	    {
 	      sprintf (ffile_name, "%s", FringeConfig[index].data);
-	      
+
 	      // build the full pathname to the refraction table
 	      build_path (AXE_CONFIG_PATH, ffile_name, ffile_name_path);
-	      
+
 	      fconf->filter_through =
 		create_interp_ftable(ffile_name_path, 2, "WAVELENGTH",
 				     "THROUGHPUT", FILTER_INTERP_TYPE);
@@ -447,7 +443,7 @@ load_fringe_conf(char fring_conf_path[])
  * @param fconf  - the fringe configuration structure
  *
  * Returns:
- * @return 
+ * @return
  */
 void
 check_fringe_conf(fringe_conf *fconf)
@@ -471,14 +467,14 @@ check_fringe_conf(fringe_conf *fconf)
 		 "fringe_conf: The substrate transmission\n"
 		 "must be given to be able determining pixel fringing!\n");
 
-  // make sure that there is a minimum 
+  // make sure that there is a minimum
   // number of layers.
   if (fconf->opt_layers->num_layers < NLAYERS_MIN)
     aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		 "The number of layers in the configuration\n file is %i. "
 		 "There must be at least: %i!\n",
 		 fconf->opt_layers->num_layers, NLAYERS_MIN);
-  
+
   // if not defined, give a meaningfull
   // default for the fringing range
    if (!fconf->fringe_range)
@@ -489,7 +485,7 @@ check_fringe_conf(fringe_conf *fconf)
       fprintf(stdout, "Setting the fringing range to defaults: [ %f, %f].\n",
 	      DEFAULT_MIN_LAMBDA, DEFAULT_MAX_LAMBDA);
     }
-   
+
    // give reasonable default for
    // the fringe step
    if (!fconf->fringe_step)
@@ -500,16 +496,16 @@ check_fringe_conf(fringe_conf *fconf)
      }
 
    // give a reasonable default for the
-   // number of steps 
+   // number of steps
    if (!fconf->num_steps)
      {
        fconf->num_steps = DEFAULT_NUM_STEPS;
        fprintf(stdout, "Setting the number of steps to default: %i.\n",
 	       DEFAULT_NUM_STEPS);
      }
-   
+
    // give a reasonable default for the
-   // maximum dispersion to correct for 
+   // maximum dispersion to correct for
    if (!fconf->max_dispersion)
      {
        fconf->max_dispersion = DEFAULT_MAX_DISPERSION;
@@ -527,7 +523,7 @@ check_fringe_conf(fringe_conf *fconf)
  * @param fconf  - the fringe configuration structure
  *
  * Returns:
- * @return - 
+ * @return -
  */
 void
 free_fringe_conf(fringe_conf *fconf)
@@ -546,7 +542,7 @@ free_fringe_conf(fringe_conf *fconf)
   fconf->fringe_range = NULL;
 
   // free everything
-  free(fconf); 
+  free(fconf);
 }
 
 
@@ -559,7 +555,7 @@ free_fringe_conf(fringe_conf *fconf)
  * types offered in the gsl-library.
  * This function is a tool to extract the relevant data points from
  * a fits table and to set up and return the interpolator.
- * 
+ *
  *
  * Parameters:
  * @param table_name  - the name of the fits table
@@ -610,7 +606,7 @@ create_interp_ftable(const char table_name[], const int hdunum,
 		   "get_response_function_fromFITS: "
 		   "Could not open" " file: %s",
 		   table_name);
-    }  
+    }
 
   /* Move to the correct hdu */
   fits_movabs_hdu (input, hdunum, &hdutype, &f_status);
@@ -619,7 +615,7 @@ create_interp_ftable(const char table_name[], const int hdunum,
       ffrprt (stderr, f_status);
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		   "create_interp_ftable:"
-		   "Could not read extention %d from file: %s", 
+		   "Could not read extention %d from file: %s",
 		   hdunum, table_name);
     }
 
@@ -635,7 +631,7 @@ create_interp_ftable(const char table_name[], const int hdunum,
 
   /* Allocate temporary memory space */
   x = (double *) malloc(nrows*sizeof(double));
-  if (!x) { 
+  if (!x) {
     aXe_message (aXe_M_ERROR, __FILE__, __LINE__,
 		 "Memory allocation failed");
   }
@@ -658,8 +654,8 @@ create_interp_ftable(const char table_name[], const int hdunum,
 		   "Could not determine column %s in "
 		   " table %s", xcol, table_name);
     }
- 
-  /* Read the data */  
+
+  /* Read the data */
   fits_read_col (input, TDOUBLE, colnum, 1, 1, nrows, NULL, x,
                     &anynul, &f_status);
   if (f_status)
@@ -684,8 +680,8 @@ create_interp_ftable(const char table_name[], const int hdunum,
 		   "Could not determine column %s in "
 		   " table %s", ycol, table_name);
     }
- 
-  /* Read the data */  
+
+  /* Read the data */
   fits_read_col (input, TDOUBLE, colnum, 1, 1, nrows, NULL, y,
                     &anynul, &f_status);
   if (f_status)
@@ -775,9 +771,9 @@ create_interp(const int nvals, const gsl_interp_type *interp_type,
  * @param interp - the interpolator structure
  *
  * Returns:
- * @return - 
+ * @return -
  */
-void 
+void
 print_interp(interpolator *interp)
 {
   int index;
@@ -791,9 +787,9 @@ print_interp(interpolator *interp)
   fprintf(stdout, "Characteristic value pair: (x,y) = (%e, %e)\n",
 	  x_typical, gsl_interp_eval(interp->interp, interp->xvals,
 				     interp->yvals, x_typical, interp->acc));
-  
+
   fprintf(stdout, "Alternative value pair: (x,y) = (%e, %e)\n",
-	  x_typical, eval_interp(interp, x_typical));  
+	  x_typical, eval_interp(interp, x_typical));
   for (index=0; index < interp->nvals; index++)
     fprintf(stdout, "xvalue: %e, yvalue: %e\n",interp->xvals[index], interp->yvals[index]);
   fprintf(stdout, "\n");
@@ -815,7 +811,7 @@ print_interp(interpolator *interp)
 double
 eval_interp(interpolator *interp, const double xval)
 {
-  // check whether the x-value is within 
+  // check whether the x-value is within
   // the range spanned by the data;
   // complain if the x-value is outside
   if (xval < interp->xmin || xval > interp->xmax)
@@ -840,9 +836,9 @@ eval_interp(interpolator *interp, const double xval)
  * @param interp - the interpolator structure
  *
  * Returns:
- * @return - 
+ * @return -
  */
-void 
+void
 free_interp(interpolator *interp)
 {
   // free the data vectors
@@ -922,7 +918,7 @@ create_linint_ftable(const char table_name[], const int hdunum,
 		   "get_response_function_fromFITS: "
 		   "Could not open" " file: %s",
 		   table_name);
-    }  
+    }
 
   /* Move to the correct hdu */
   fits_movabs_hdu (input, hdunum, &hdutype, &f_status);
@@ -931,7 +927,7 @@ create_linint_ftable(const char table_name[], const int hdunum,
       ffrprt (stderr, f_status);
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		   "create_interp_ftable:"
-		   "Could not read extention %d from file: %s", 
+		   "Could not read extention %d from file: %s",
 		   hdunum, table_name);
     }
 
@@ -947,7 +943,7 @@ create_linint_ftable(const char table_name[], const int hdunum,
 
   /* Allocate temporary memory space */
   x = (double *) malloc(nrows*sizeof(double));
-  if (!x) { 
+  if (!x) {
     aXe_message (aXe_M_ERROR, __FILE__, __LINE__,
 		 "Memory allocation failed");
   }
@@ -970,8 +966,8 @@ create_linint_ftable(const char table_name[], const int hdunum,
 		   "Could not determine column %s in "
 		   " table %s", xcol, table_name);
     }
- 
-  /* Read the data */  
+
+  /* Read the data */
   fits_read_col (input, TDOUBLE, colnum, 1, 1, nrows, NULL, x,
                     &anynul, &f_status);
   if (f_status)
@@ -996,8 +992,8 @@ create_linint_ftable(const char table_name[], const int hdunum,
 		   "Could not determine column %s in "
 		   " table %s", ycol, table_name);
     }
- 
-  /* Read the data */  
+
+  /* Read the data */
   fits_read_col (input, TDOUBLE, colnum, 1, 1, nrows, NULL, y,
                     &anynul, &f_status);
   if (f_status)
@@ -1014,7 +1010,7 @@ create_linint_ftable(const char table_name[], const int hdunum,
       aXe_message (aXe_M_ERROR, __FILE__, __LINE__,
 		   "Could not close %s", table_name);
   }
-  
+
 #ifdef DEBUGFCONF
   fprintf(stderr, "Number of rows: %i\n", nrows);
 #endif
@@ -1028,7 +1024,7 @@ create_linint_ftable(const char table_name[], const int hdunum,
   for (index=0; index < nrows; index++)
     {
       gsl_vector_set(xvals, index, x[index]);
-      gsl_vector_set(yvals, index, y[index]);      
+      gsl_vector_set(yvals, index, y[index]);
     }
 
   // reverse both vectors if necessary

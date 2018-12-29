@@ -17,13 +17,13 @@
 #include <string.h>
 #include "aXe_grism.h"
 #include "aXe_utils.h"
-#include <fitsio.h>
+#include "fitsio.h"
 #include <gsl/gsl_nan.h>
 #include <gsl/gsl_sys.h>
 
 #define SPCTOL 1.0e-5
 
-// interpolation type used for the 
+// interpolation type used for the
 // response function
 #define RESP_FUNC_INTERP_TYPE gsl_interp_linear
 
@@ -39,7 +39,7 @@ fprintf_spectrum (FILE * output, const spectrum * const sp);
 extern spectrum *
 subtract_spectra (spectrum * a, spectrum * b);
 
-extern int 
+extern int
 get_ID_index_to_SPC (char filename[], char ID[]);
 
 extern void
@@ -71,7 +71,7 @@ extern spectrum *
 trim_spectrum (spectrum * spc);
 
 extern spectrum *
-empty_counts_spectrum_copy (spectrum * a); 
+empty_counts_spectrum_copy (spectrum * a);
 
 extern void
 add_ID_to_SPC_opened (fitsfile *output, int N, char ID[]);

@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include "wcs.h"
 
 struct WorldCoor *get_wcs_l(char filename[], int hdunum);
@@ -189,4 +189,3 @@ struct WorldCoor * get_wcs_l (char filename[], int hdunum)
   // return the result
   return wcs;
 }
-

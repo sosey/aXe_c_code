@@ -3,11 +3,6 @@
  * Subroutines used mostly for working on catalogs
  * in the tasks SEX2GOL and GOL2AF.
  *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_sex
- * @version $Revision: 1.4 $
- * @date    $Date: 2011-03-04 14:52:34 $
- *
  * Howard Bushouse, STScI, 04-Mar-2011, version 1.4
  * Changed FATAL error to WARN3 when get_valid_entries returns no valid
  * magnitudes for an object.
@@ -1656,7 +1651,11 @@ get_SexObject_from_catalog (char filename[], const double lambda_mark)
   gsl_vector *v;
   gsl_vector *waves;
   gsl_vector *cnums;
-  int catsize, nobjs, i, hasmags=0, magcencol=0;
+  size_t hasmags=0;
+  size_t nobjs;
+  size_t catsize;
+  int i;
+  size_t magcencol=0;
   SexObject **sobjs, *sobj;
   colinfo * actcatinfo;
   px_point  backwin_cols;

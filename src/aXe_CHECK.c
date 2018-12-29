@@ -17,11 +17,11 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include "aper_check.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_PET.h"
 #include "inout_aper.h"
@@ -35,12 +35,10 @@
 #include "spce_pgp.h"
 #include "spce_output.h"
 #include "spc_FITScards.h"
-#include "aper_check.h"
 
 #define AXE_IMAGE_PATH "AXE_IMAGE_PATH"
 #define AXE_OUTPUT_PATH "AXE_OUTPUT_PATH"
 #define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
-
 
 
 

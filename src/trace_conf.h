@@ -7,14 +7,13 @@
  */
 
 #ifndef _TRACE_CONF_H
-
 #define _TRACE_CONF_H
 
 #include <string.h>
 #include <math.h>
+#include <gsl/gsl_vector.h>
 #include "aXe_grism.h"
 #include "aXe_errors.h"
-#include <gsl/gsl_vector.h>
 #include "spc_cfg.h"
 #include "disp_conf.h"
 
@@ -42,7 +41,7 @@ get_beam_trace_norder (char *filename, int beamID);
 extern gsl_vector *
 get_beam_trace_order (char *filename, int beamID, int order);
 
-extern float 
+extern float
 get_trace_coeff_at_pos (char *filename, int beamID, int order, d_point p);
 
 extern gsl_vector *
@@ -54,21 +53,21 @@ get_beam_trace_xoff (char *filename, int beamID);
 extern gsl_vector *
 get_beam_trace_yoff (char *filename, int beamID);
 
-extern float 
+extern float
 get_trace_xoff_at_pos (char *filename, int beamID, d_point p);
 
-extern float 
+extern float
 get_trace_yoff_at_pos (char *filename, int beamID, d_point p);
 
-extern float 
+extern float
 eval_trace_off_at_pos (gsl_vector *coeffs, d_point p, int beamID);
 
 extern tracestruct *
 get_tracestruct_at_pos (char *filename, int beamID, d_point p);
 
-extern void 
+extern void
 tracestruct_fprintf (FILE * file, tracestruct * trace);
 
-extern void 
+extern void
 free_tracestruct (tracestruct * trace);
 #endif

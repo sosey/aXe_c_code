@@ -2,10 +2,6 @@
  * File: aXe_utils.h
  * Interface for aXe_utils.c
  *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package aXe_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 
 #ifndef aXe_UTILS_H

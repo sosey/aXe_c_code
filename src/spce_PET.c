@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include <unistd.h>
 #include "aXe_grism.h"
 #include "aXe_utils.h"

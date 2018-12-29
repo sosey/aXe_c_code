@@ -10,7 +10,7 @@
 #ifndef _MODEL_UTILS_H
 #define _MODEL_UTILS_H
 #include "specmodel_utils.h"
-#include "axe_grism.h"
+#include "aXe_grism.h"
 //calib_function structure defined here
 #include "spc_wl_calib.h"
 //aper_conf structure is defined here

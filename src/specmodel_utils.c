@@ -83,7 +83,7 @@ load_diremission_list(const char object_models_file[], const int n_models)
     {
       // load one model
       // the 'i + 2' is necessary due to the
-      // different counting in cfitsio
+      // different counting in "fitsio.h"
       obj_list[i] =  load_diremission(object_models_file, i+2);
     }
 

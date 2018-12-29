@@ -5,13 +5,11 @@
  *
  * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
  * @package aper_check
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _APER_CHECK_H
 #define _APER_CHECK_H
-#include "gsl/gsl_matrix.h"
+#include <gsl/gsl_matrix.h>
 #include "aXe_grism.h"
 
 

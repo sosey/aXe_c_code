@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include "aXe_grism.h"
 #include "aXe_errors.h"
 #include "aXe_utils.h"

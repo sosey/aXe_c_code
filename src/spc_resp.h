@@ -17,7 +17,7 @@
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_nan.h>
 #include <gsl/gsl_sys.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include "aXe_grism.h"
 #include "spc_cfg.h"
 #include "spc_spc.h"
@@ -119,4 +119,3 @@ extern calib_function *
 get_calfunc_for_beam(const beam actbeam, const int for_grism, char CONF_file[], const aperture_conf * conf);
 
 #endif
-

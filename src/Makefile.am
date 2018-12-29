@@ -59,4 +59,3 @@ aXe_NICBACK_SOURCES = aXe_NICBACK.c $(suppl)
 aXe_TEST_SOURCES = aXe_TEST.c $(suppl)
 aXe_DIRIMAGE_SOURCES = aXe_DIRIMAGE.c $(suppl)
 aXe_SCALEBCK_SOURCES = aXe_SCALEBCK.c $(suppl)
-

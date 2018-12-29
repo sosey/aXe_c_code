@@ -2,10 +2,6 @@
  * File: spc_back.c
  * Set of functions to handle object slitless background subtraction
  *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_back
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,7 +15,7 @@
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_multifit.h>
-#include <fitsio.h>
+#include "fitsio.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_sect.h"
@@ -33,7 +29,7 @@
 
 
 
-/** 
+/**
  * Function: is_pt_in_a_beam
  * The function checks whether a particular image pixel is part
  * of a beam or not. The pixel is checked against an array
@@ -53,7 +49,7 @@ is_pt_in_a_beam (const px_point * const apoint,
                  const is_in_descriptor * const iids, const int tnbeams)
 {
   int i;
-  
+
   for (i = 0; i < tnbeams; i++)
     {
       if (apoint->x < (iids + i)->mini)
@@ -78,7 +74,7 @@ is_pt_in_a_beam (const px_point * const apoint,
  * for pixels which are suited for the background determination.
  * The extend of the window is specified in the beam structured,
  * and pixel which are part of any beam can not be used.
- * 
+ *
  * Parameters:
  * @param  obs      - the observation
  * @param  bck_mask - the background mask
@@ -90,7 +86,7 @@ is_pt_in_a_beam (const px_point * const apoint,
  */
 /*
 gsl_vector_int *
-get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam, 
+get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
                   px_point tr_point)
 {
   gsl_vector_int *tmp;
@@ -114,8 +110,8 @@ get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
 
   // allocate the vector
   tmp = gsl_vector_int_alloc((int)ceil(lmax) + (int)ceil(umax) + 1);
-  
-  // limit the starting point of the search 
+
+  // limit the starting point of the search
   // to values within the image dimension
   tr_point.y = MAX(0,tr_point.y);
   tr_point.y = MIN((int)obs->grism->size2,tr_point.y);
@@ -147,16 +143,16 @@ get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
             onbeam = 0;
 
           // enhance the counter
-          np_act++;       
+          np_act++;
         }
       // if you are still on the beam
       else if (onbeam && gsl_matrix_get(bck_mask,tr_point.x,l_act))
         {
           // store the pixel index
           gsl_vector_int_set(tmp, np_act, l_act);
-          
+
           // enhance the counter
-          np_act++;       
+          np_act++;
         }
       // decrease the search index
       l_act--;
@@ -178,7 +174,7 @@ get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
             onbeam = 0;
 
           // enhance the counter
-          np_act++;       
+          np_act++;
         }
       // if you are still on the beam
       else if (onbeam && gsl_matrix_get(bck_mask,tr_point.x,u_act))
@@ -187,7 +183,7 @@ get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
           gsl_vector_int_set(tmp, np_act, u_act);
 
           // enhance the counter
-          np_act++;       
+          np_act++;
         }
 
       // enhance the search index
@@ -234,7 +230,7 @@ get_window_points(observation *obs, gsl_matrix *bck_mask, beam actbeam,
  * the respective direction is "closed". The subroutine
  * then tries to get more background pixels on the other
  * size to reach the desired number.
- * 
+ *
  * Parameters:
  * @param  obs      - the observation
  * @param  bck_mask - the background mask
@@ -264,8 +260,8 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
 
   // allocate the vector
   tmp = gsl_vector_int_alloc(2*np+2);
-  
-  // limit the starting ppoint of the search 
+
+  // limit the starting ppoint of the search
   // to values within the image dimension
   tr_point.y = MAX(0,tr_point.y);
   tr_point.y = MIN((int)obs->grism->size2,tr_point.y);
@@ -275,7 +271,7 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
   l_act = tr_point.y -1;
   u_act = tr_point.y;
 
-  // as long as interpolation points are missing 
+  // as long as interpolation points are missing
   // and one direction, either up or down,
   // is 'open', continue searching
   while (np_act < 2*np && (l_space || u_space))
@@ -285,7 +281,7 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
       // downwards is still open
       if (l_space)
         {
-          // move downward until you either find 
+          // move downward until you either find
           // and interp. point or the end of the frame
           while (l_act > -1 && (gsl_matrix_get(bck_mask,tr_point.x,l_act)
                                 !=0 ||
@@ -311,12 +307,12 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
               l_act--;
             }
         }
-      
+
       // check whether the direction
       // upwards is still open
       if (u_space)
         {
-          // move upward until you either find 
+          // move upward until you either find
           // and interp. point or the end of the frame
           while (u_act < ncols && (gsl_matrix_get(bck_mask,tr_point.x,u_act)
                                    !=0 ||
@@ -340,10 +336,10 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
               np_act++;
               u_np++;
               u_act++;
-            }     
+            }
         }
     }
-  
+
   // check whether the beam extends over
   // the image. Add an artificial start or
   // end point if necessary
@@ -376,8 +372,8 @@ get_interp_points(observation *obs, gsl_matrix *bck_mask,
  * interpolated on the areas which are masked out. The interpolated
  * values are filled into a background structure. If kappa-sigma klipping
  * is applied, the clipped pixels are flagged in the dq-array
- * of the background image. 
- * 
+ * of the background image.
+ *
  * Parameters:
  * @param  obs         - the object list
  * @param  actbeam     - the beam to compute the background for
@@ -395,13 +391,13 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
                     int interporder, const int niter_med,
                     const int niter_fit, const double kappa)
 {
-  px_point xborder;  
+  px_point xborder;
   gsl_vector_int *yvec;
   trace_func *tracefun;
   px_point tpoint;
   double *ys, *fs, *ws, *yi;
   double var;
-  
+
   int i, ii;
   int j, n;
   int min_y, max_y;
@@ -413,7 +409,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
   /* If this beam's ignore flag is set to 1 then do nothing */
   if (actbeam.ignore == 1)
     return;
-    
+
   // determine the start and end point in x
   xborder = get_xrange(obs, actbeam);
 
@@ -427,7 +423,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
       tpoint.y = (int)floor(tracefun->func((double)i-actbeam.refpoint.x,
                                            tracefun->data)
                             + actbeam.refpoint.y+0.5);
-      
+
       // determine the interpolation points
       // around the trace
       yvec = get_interp_points(obs, bck_mask, npoints, tpoint);
@@ -438,7 +434,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
       //        yvec = get_interp_points(obs, bck_mask, npoints, tpoint);
       //      else
       //        yvec = get_window_points(obs, bck_mask, actbeam, tpoint);
-        
+
 
       // give a warning and go to the next
       // column if there are no background points
@@ -457,7 +453,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
       //      if (actbeam.backwindow.x == 23.3 && actbeam.backwindow.y == 4.0)
       //        {
           //    fprintf(stdout, "%i <--> %i; ", min_y, max_y);
-      //      if (min_y > tpoint.y - actbeam.width 
+      //      if (min_y > tpoint.y - actbeam.width
       //          || max_y < tpoint.y + actbeam.width)
       //        fprintf(stdout, "%i %f <--> %f %i;  ", min_y, tpoint.y - actbeam.width,
       //                tpoint.y + actbeam.width, max_y);
@@ -484,7 +480,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
       // to the double vectors, set the weight
       for (ii = 0; ii < yvec->size; ii++)
         {
-          // extract the row number 
+          // extract the row number
           j = gsl_vector_int_get (yvec, ii);
 
           // check whether the row is inside the imag
@@ -514,8 +510,8 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
 
       // do the final background determination
       comp_vector_interp( ys, fs, ws, yi, n, interporder, 1);
-  
-      // copy the intepolated values 
+
+      // copy the intepolated values
       // to the background matrix
       for (j = 0; j < n; j++)
         {
@@ -545,7 +541,7 @@ compute_background (observation *obs, beam actbeam, gsl_matrix *bck_mask,
  * The subroutine determines the extend of a beam in x-direction.
  * The minimum and maximum value in x of pixels which are part
  * of the particular beam are determined and returned.
- * 
+ *
  * Parameters:
  * @param  obs     - the object list
  * @param  actbeam - the beam to determine the extent for
@@ -565,7 +561,7 @@ get_xrange(observation *obs, beam actbeam)
                     actbeam.corners[2].x), actbeam.corners[3].x);
   ret.y  = MAX (MAX (MAX (actbeam.corners[0].x, actbeam.corners[1].x),
                      actbeam.corners[2].x), actbeam.corners[3].x);
-  
+
   // limit the start and end column
   // to the image size
   ret.x = MAX(ret.x, 0);
@@ -592,7 +588,7 @@ get_xrange(observation *obs, beam actbeam)
  * is "true value minus background value", where background
  * value is determined using the identical algorithm as the
  * final background determination.
- * 
+ *
  * Parameters:
  * @param xs     - array for independent values
  * @param ys     - array for dependent values
@@ -636,7 +632,7 @@ comp_kappasigma_interp(const double *const xs, double *const ys,
   // do niter times
   for (j=0; j < niter; j++)
     {
-      
+
       // make the background determination
       comp_vector_interp(xs, ys_tmp, ws, yi_tmp, n, interp, 0);
 
@@ -674,9 +670,9 @@ comp_kappasigma_interp(const double *const xs, double *const ys,
     }
 
 
-  for (i=0; i < n; i++)    
+  for (i=0; i < n; i++)
     ys[i] = ys_tmp[i];
-  
+
   // free memory
   free(ys_tmp);
   free(yi_tmp);
@@ -691,7 +687,7 @@ comp_kappasigma_interp(const double *const xs, double *const ys,
  * given in various vectors for independent, dipendent and
  * weight data. The difference to apply the clipping on
  * is "original value <minus> median of the data set".
- * 
+ *
  * Parameters:
  * @param xs     - array for independent values
  * @param ys     - array for dependent values
@@ -719,7 +715,7 @@ kappa_sigma_clipp(const double *const xs, double *const ys, double *const ws,
   ys_med = (double *) malloc (n * sizeof (double));
   iindex = (int *) malloc (n * sizeof (int));
 
-  // store the background values 
+  // store the background values
   // in the temporary vectors
   for (ii=0; ii < n; ii++)
     {
@@ -734,7 +730,7 @@ kappa_sigma_clipp(const double *const xs, double *const ys, double *const ws,
 
   // derive median and standard deviation
   gsl_sort (ys_tmp, 1, m);
-  median = gsl_stats_median_from_sorted_data(ys_tmp, 1, m); 
+  median = gsl_stats_median_from_sorted_data(ys_tmp, 1, m);
   stdev = gsl_stats_sd_m (ys_med, 1, m, median);
 
   // apply the clipping
@@ -819,13 +815,13 @@ compute_global_background (object **oblist, const int obj_index,
   observation *grism = oblist[obj_index]->grism_obs;
   long ma;
   double var;
-  
+
   for (i = 0; i < grism->grism->size1; i++)
-    {                   
+    {
       /* Loop over the columns of interest */
-      
+
       n = grism->grism->size2;
-      
+
       ys = (double *) malloc (n * sizeof (double));
       fs = (double *) malloc (n * sizeof (double));
       ws = (double *) malloc (n * sizeof (double));
@@ -844,7 +840,7 @@ compute_global_background (object **oblist, const int obj_index,
             }
         }
 
-                
+
       /* Median the background */
       if (interporder == -1)
         {
@@ -892,7 +888,7 @@ compute_global_background (object **oblist, const int obj_index,
         {
           double *tmp, sum = 0.0, avg = 0.0, std = 0.0;
           int nn = 0;
-          
+
           nn = 0;
           for (j = 0; j < n; j++)
             {
@@ -937,14 +933,14 @@ compute_global_background (object **oblist, const int obj_index,
           comp_vector_linear (ys, fs, ws, yi, n, 1);
           //      fit_vector_linear_t (ys, fs, ws, n);
         }
-      
+
       /* n(>1) order interpolation of the background */
       if (interporder > 1)
         {
           comp_vector_polyN (interporder + 1, ys,fs, ws, yi, n, 1);
       //          fit_vector_poly_N_t (interporder + 1, ys, fs, ws, n);
         }
-      
+
       for (j = 0; j < n; j++)
         {
           if ((ys[j] < 0) || (ys[j] >= grism->grism->size2))
@@ -958,7 +954,7 @@ compute_global_background (object **oblist, const int obj_index,
       fs = NULL;
       free (ws);
       ws = NULL;
-    }  
+    }
 }
 
 
@@ -983,7 +979,7 @@ fullimg_background_function (const int x, const int y, PIXEL_T * const val,
                              const background * const back)
 {
   const fullimg_background *const fib = back->pars;
-  
+
   *val = gsl_matrix_get (fib->bck, (int) rint (x), (int) rint (y));
   if (fib->err)
     {
@@ -1012,7 +1008,7 @@ fullimg_background_function (const int x, const int y, PIXEL_T * const val,
  * @param kappa       - order of the polynomial to fit to the background
  *
  * Returns:
- * @return background - an allocated background structure       
+ * @return background - an allocated background structure
  *
  */
 background *
@@ -1064,7 +1060,7 @@ compute_fullimg_background (observation *obs, object **oblist,
   // initialize the dq-array
   //      gsl_matrix_set_all (obs->dq, 0.0);
   //    }
-  
+
   if (oblist != NULL)
     {
       // Now compute background for each beam, one after the other
@@ -1089,7 +1085,7 @@ compute_fullimg_background (observation *obs, object **oblist,
                                    fib, npoints, interporder, niter_med,
                                    niter_fit, kappa);
                 fprintf(stdout," Done.\n");
-              }     
+              }
           }
         // increment the counter
         i++;
@@ -1100,9 +1096,9 @@ compute_fullimg_background (observation *obs, object **oblist,
     {
       for (j = 0; j < fib->bck->size2; j++)
         {
-          if(isnan(gsl_matrix_get (fib->bck, i, j))) 
+          if(isnan(gsl_matrix_get (fib->bck, i, j)))
             gsl_matrix_set (fib->bck, i, j,0.0);
-          if(isnan(gsl_matrix_get (fib->err, i, j))) 
+          if(isnan(gsl_matrix_get (fib->err, i, j)))
             gsl_matrix_set (fib->err, i, j,0.0);
         }
     }
@@ -1134,7 +1130,7 @@ compute_fullimg_background (observation *obs, object **oblist,
  * @param interporder order of the polynomial to fit to the background
  *
  * Returns:
- * @return an allocated background structure    
+ * @return an allocated background structure
  *
  */
 background *
@@ -1146,7 +1142,7 @@ compute_backsub_mask (observation *obs, object **oblist)
   int i, j;
   object *const *obp;
   int tnbeams;
-  
+
   // make the mask image
   bck_mask = aperture_mask(obs,oblist);
 
@@ -1171,7 +1167,7 @@ compute_backsub_mask (observation *obs, object **oblist)
         }
     }
 
-  // set pixels occupied by beams 
+  // set pixels occupied by beams
   // to the value -10000000
   for (i = 0; i < fib->bck->size1; i++)
     {
@@ -1190,7 +1186,7 @@ compute_backsub_mask (observation *obs, object **oblist)
     {
       gsl_matrix_free (obs->dq);
       obs->dq=NULL;
-    } 
+    }
 
   // release memory
   gsl_matrix_free(bck_mask);
@@ -1215,7 +1211,7 @@ compute_backsub_mask (observation *obs, object **oblist)
  * @param interporder - order of the polynomial to fit to the background
  *
  * Returns:
- * @return background - an allocated background structure       
+ * @return background - an allocated background structure
  *
  */
 background *
@@ -1228,7 +1224,7 @@ compute_fullimg_global_background(observation *obs, object **oblist,
   int i, j;
   object *const *obp;
   int tnbeams;
-  
+
   // allocate memory
   fib = (fullimg_background *)malloc (sizeof (fullimg_background));
   backg = (background *)malloc (sizeof (background));
@@ -1241,9 +1237,9 @@ compute_fullimg_global_background(observation *obs, object **oblist,
   // initialize the new arrays
   gsl_matrix_set_all (fib->bck, 0.);
   gsl_matrix_set_all (fib->err, 0.);
-  
+
   /* Count beams in observation */
-  if (oblist!=NULL) 
+  if (oblist!=NULL)
     {
       tnbeams = 0;
       for (obp = oblist; *obp; obp++)
@@ -1255,7 +1251,7 @@ compute_fullimg_global_background(observation *obs, object **oblist,
             }
         }
     }
-  
+
 
   /* Now compute global background using first beam grism info */
   if (oblist != NULL) {
@@ -1269,11 +1265,11 @@ compute_fullimg_global_background(observation *obs, object **oblist,
     {
       for (j = 0; j < fib->bck->size2; j++)
         {
-          if(isnan(gsl_matrix_get (fib->bck, i, j))) 
+          if(isnan(gsl_matrix_get (fib->bck, i, j)))
             {
               gsl_matrix_set (fib->bck, i, j,0.0);
             }
-          if(isnan(gsl_matrix_get (fib->err, i, j))) 
+          if(isnan(gsl_matrix_get (fib->err, i, j)))
             {
               gsl_matrix_set (fib->err, i, j,0.0);
             }
@@ -1304,7 +1300,7 @@ void
 free_fullimg_background (background * backg)
 {
   fullimg_background *fib = backg->pars;
-  
+
   gsl_matrix_free (fib->bck);
   if (fib->err)
     {
@@ -1316,7 +1312,7 @@ free_fullimg_background (background * backg)
 
 
 
-/** 
+/**
  * Function: aperture_mask
  * This functions returns an image mask where pixels that are within
  * an aperture are set to the number of aperture they appear.
@@ -1346,18 +1342,18 @@ aperture_mask (observation * const obs, object **oblist)
   // set all values to zero
   bck = gsl_matrix_alloc(obs->grism->size1,obs->grism->size2);
   gsl_matrix_set_all(bck,0.0);
-  
+
   // Return a zero image when there is no
   // beam in the list
   if (oblist==NULL)
     return bck;
 
   // go over each object
-  while(oblist[i]!=NULL) 
+  while(oblist[i]!=NULL)
     {
       // go over each beam
       for(j=0;j<oblist[i]->nbeams;j++)
-        {         
+        {
           // continue if the beam is to be ignored
           if ((oblist[i]->beams[j]).ignore==1)
             continue;
@@ -1376,7 +1372,7 @@ aperture_mask (observation * const obs, object **oblist)
               // create the descriptor to set up the quadrangle routines
               fill_is_in_descriptor (&iid, (oblist[i]->beams[j]).corners);
             }
-          
+
           // check for the corners of the quadrangle.
           // go over each point in x and y.
           quad_to_bbox ((oblist[i]->beams[j]).corners, &ll, &ur);
@@ -1418,12 +1414,12 @@ aperture_mask (observation * const obs, object **oblist)
                 }
             }
         }
-      
+
       // enhance the object counter
       i++;
     }
 
-  // return the resulting image  
+  // return the resulting image
   return bck;
 }
 
@@ -1451,9 +1447,9 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
   int x, y;
   fullimg_background *pars;
   int hdunum,hdutype;
-  
+
   pars = (fullimg_background *) bck->pars;
-  
+
   // Open the file for creating/appending
   create_FITSimage (filename, 1);
   fits_open_file (&output, filename, READWRITE, &f_status);
@@ -1474,7 +1470,7 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
                    "gsl_to_FITSimage: Could not get"
                    " number of HDU from: %s", filename);
     }
-  
+
   // Move to last HDU
   fits_movabs_hdu (output, hdunum, &hdutype, &f_status);
   if (f_status)
@@ -1486,7 +1482,7 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
     }
   /* Get current HDU number */
   fits_get_hdu_num (output, &hdunum);
-  
+
   // Deal with the SCI part of the background
   naxes[0] = pars->bck->size1;
   naxes[1] = pars->bck->size2;
@@ -1532,7 +1528,7 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
   }
   free (storage);
   storage = NULL;
-  
+
   if (pars->err)
     {
       /* Deal with the error part of the background */
@@ -1556,11 +1552,11 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
       /* create HDU extname */
       /* Get current HDU number */
       fits_get_hdu_num (output, &hdunum);
-      
+
       fits_create_img (output, -32, 2, naxes, &f_status);
       fits_write_img (output, TFLOAT, 1, naxes[0] * naxes[1], storage,
                       &f_status);
-      
+
       /* Get current HDU number */
       fits_get_hdu_num (output, &hdunum);
       /* write the HDU EXTNAME */
@@ -1576,7 +1572,7 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
     }
 
   /* Deal with the DQ part of the background */
-  if (obs->dq != NULL) 
+  if (obs->dq != NULL)
     {
       naxes[0] = obs->dq->size1;
       naxes[1] = obs->dq->size2;
@@ -1608,8 +1604,8 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
         fits_write_key_str (output, "EXTNAME", str, comment, &f_status);
       }
       free (storage);
-      storage = NULL;    
-    } 
+      storage = NULL;
+    }
 
   /* close file */
   fits_close_file (output, &f_status);
@@ -1622,7 +1618,7 @@ background_to_FITSimage (char filename[], background * bck, observation *obs)
  * function. The smoothing is done exclusively towards the x-values.
  * The smoothing should help to reduce the noise from the limited number
  * of background pixels.
- * 
+ *
  * Parameters:
  * @param  bck_mask     - the background mask
  * @param  smoot_length - number of pixels on either side to use for smoothing
@@ -1659,7 +1655,7 @@ gsmooth_background (const gsl_matrix *bck_mask, const int smooth_length,
   // fill the weights
   for (ix=0; ix < weights->size; ix++)
     gsl_vector_set(weights, ix, compute_gvalue((double)ix - (double)smooth_length, efactor));
-  
+
 
   // go over all rows
   for (iy=0; iy < fib->bck->size2; iy++)
@@ -1682,7 +1678,7 @@ gsmooth_background (const gsl_matrix *bck_mask, const int smooth_length,
               // fill in the weighted mean
               gsl_matrix_set(new_bck, ix, iy, get_weighted_mean(pixvalues, weights, pmask));
             }
-        } 
+        }
     }
 
   // release the allocated dspace
@@ -1705,11 +1701,11 @@ gsmooth_background (const gsl_matrix *bck_mask, const int smooth_length,
  * and a weight vector. As mask vector marks values pixels not to be considered.
  * Using a separate mask vectorhas the advantage the weights can be kept
  * constant and do not have to be re-calculated in repeated runs.
- * 
+ *
  * Parameters:
  * @param pixvalues - vector with pixel values
  * @param weights   - vector with weights
- * @param pmask     - mask vector 
+ * @param pmask     - mask vector
  *
  * Returns:
  * @return sum/www  - the weighted mean
@@ -1732,7 +1728,7 @@ get_weighted_mean(const gsl_vector *pixvalues, const gsl_vector *weights,
         {
           // enhance the total sum
           sum += gsl_vector_get(pixvalues, index) * gsl_vector_get(weights, index);
-          
+
           // enhance the total weight
           www += gsl_vector_get(weights, index);
         }
@@ -1751,7 +1747,7 @@ get_weighted_mean(const gsl_vector *pixvalues, const gsl_vector *weights,
  * within the smoothing length. Not interpolated pixels are excluded.
  * A mask vector provides the information on which position is filled
  * with pixel values.
- * 
+ *
  * Parameters:
  * @param  bck_mask     - the background mask
  * @param  smoot_length - number of pixels on either side to use for smoothing
@@ -1769,8 +1765,8 @@ fill_pixvalues(const gsl_matrix *bck_mask, const int smooth_length,
 {
   int iact;
   int index;
-  
-  // initialize the pixel values 
+
+  // initialize the pixel values
   // and the mask
   gsl_vector_set_all(pixvalues, 0.0);
   gsl_vector_set_all(pmask, 0.0);
@@ -1802,7 +1798,7 @@ fill_pixvalues(const gsl_matrix *bck_mask, const int smooth_length,
  * Function: compute_gvalue
  * The function computes the values of a Gauss function
  * [exp(factor * xdiff^2)]. NO normalization factor is applied.
- * 
+ *
  * Parameters:
  * @param xdiff   - the value [x-x_0]
  * @param efactor - the factor for the exponent
@@ -1814,7 +1810,7 @@ double
 compute_gvalue(const double xdiff, const double efactor)
 {
   double value;
-    
+
   // just compose the exp-function
   value = exp(efactor * xdiff * xdiff);
 
@@ -1827,7 +1823,7 @@ compute_gvalue(const double xdiff, const double efactor)
  * The function computes the appropriate factor of the Gaussian for any
  * FWHM given as input. This speeds up any later computation of the
  * Gaussian.
- * 
+ *
  * Parameters:
  * @param fwhm - the input FWHM
  *

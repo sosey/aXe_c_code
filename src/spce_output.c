@@ -7,14 +7,14 @@
  * @version $Revision: 1.5 $
  * @date    $Date: 2010/12/16 07:25:05 $
  */
- 
+
 #include "spce_output.h"
 #include <stdio.h>
 #include <math.h>
+#include <gsl/gsl_vector.h>
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_pathlength.h"
-#include <gsl/gsl_vector.h>
 #include "spc_driz.h"
 #include "crossdisp_utils.h"
 

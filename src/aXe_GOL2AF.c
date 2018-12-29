@@ -28,9 +28,16 @@
 #include "inout_aper.h"
 #include <string.h>
 
-#define AXE_IMAGE_PATH  "AXE_IMAGE_PATH"
-#define AXE_OUTPUT_PATH "AXE_OUTPUT_PATH"
-#define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
+#ifndef AXE_IMAGE_PATH
+  #define AXE_IMAGE_PATH "AXE_IMAGE_PATH"
+#endif
+#ifndef AXE_OUTPUT_PATH
+  #define AXE_OUTPUT_PATH "AXE_OUTPUT_PATH"
+#endif
+#ifndef AXE_CONFIG_PATH
+  #define AXE_CONFIG_PATH "AXE_CONFIG_PATH"
+#endif
+
 
 observation *
 load_empty_image (const char *const fname, int hdunum)

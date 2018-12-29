@@ -8,7 +8,7 @@
 #ifndef SPC_CD_H
 #define SPC_CD_H
 
-#include <fitsio.h>
+#include "fitsio.h"
 #include <string.h>
 #include "aXe_grism.h"
 #include "wcs.h"

@@ -5,12 +5,8 @@
  * to corect both, an extracted SPC's and a list
  * of PET pixels.
  *
- * @author  Martin Kuemmel
- * @package ipixcorr_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
-#include <fitsio.h>
+#include "fitsio.h"
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_multifit_nlin.h>

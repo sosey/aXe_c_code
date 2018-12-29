@@ -12,8 +12,8 @@
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
-#include <fitsio.h>
-#include "axe_grism.h"
+#include "fitsio.h"
+#include "aXe_grism.h"
 
 
 // interpolation type used for the

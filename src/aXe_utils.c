@@ -2,14 +2,12 @@
  * File: aXe_utils.c
  *
  * Some utility functions for aXe grism image processing
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package aXe_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
-#define aXe_UTILS_C
+#ifndef aXe_UTILS_C
+  #define aXe_UTILS_C
+#endif
 
-#include <fitsio.h>
+#include "fitsio.h"
 #include <math.h>
 #include <string.h>
 #include "aXe_grism.h"
@@ -40,9 +38,9 @@ simulate_errors_t(gsl_matrix * img, const double exptime,
   double sqr_rdnoise;
 
   int i, j;
-  
+
   err = gsl_matrix_alloc(img->size1, img->size2);
-  
+
   sqr_rdnoise = rdnoise*rdnoise;
 
   for (i = 0; i < img->size1; i++) {
@@ -67,12 +65,12 @@ simulate_errors_t(gsl_matrix * img, const double exptime,
  * @param obs a pointer to an exisiting observation structure
  * @param dqmask an integer representation of a bit mask.
  */
-void 
+void
 apply_DQ(observation * obs, int dqmask)
 {
   int             i, j;
   fprintf(stdout, "DQMASK: %4i\n", dqmask);
-  
+
   if ((obs->dq->size1 != obs->grism->size1) || (obs->dq->size2 != obs->grism->size2)) {
     aXe_message(aXe_M_FATAL, __FILE__, __LINE__,
                 "DQ array and DATA arrays have different sizes!\n");
@@ -81,11 +79,11 @@ apply_DQ(observation * obs, int dqmask)
     for (i = 0; i < obs->dq->size1; i++) {
       for (j = 0; j < obs->dq->size2; j++) {
         if ((int)gsl_matrix_get(obs->dq, i, j) & dqmask) {
-          gsl_matrix_set(obs->grism, i, j, GSL_NAN);    
+          gsl_matrix_set(obs->grism, i, j, GSL_NAN);
         }
       }
     }
-    
+
   }
 }
 
@@ -112,18 +110,18 @@ load_image_t(const char *const fname, int hdunum_data, int hdunum_err,
 {
   observation    *obs;
   FILE           *infile;
-  
-  // check whether the image file 
+
+  // check whether the image file
   // exists or not.
   if (!(infile = fopen(fname, "r")))
     aXe_message(aXe_M_FATAL, __FILE__, __LINE__,
-                "Could not find %s\n", fname); 
-  else 
+                "Could not find %s\n", fname);
+  else
     fclose(infile);
 
-  // allocate memory  
+  // allocate memory
   obs = malloc(sizeof(observation));
-  
+
   // load the science extension
   fprintf(stdout,"Loading DATA from: %s...",fname);
   obs->grism = FITSimage_to_gsl(fname, hdunum_data, 1);
@@ -131,17 +129,17 @@ load_image_t(const char *const fname, int hdunum_data, int hdunum_err,
 
 
   // check whether there
-  // is a dedicated error extension 
+  // is a dedicated error extension
   if (hdunum_err != -1)
     {
       // load the error extention
       fprintf(stdout, "Loading ERR...");
       obs->pixerrs = FITSimage_to_gsl(fname, hdunum_err, 0);
       fprintf(stdout,". Done.\n");
-    } 
+    }
   else
     {
-      // simulate the error extension 
+      // simulate the error extension
       fprintf(stdout, "Simulating ERR with EXPTIME=%fs and RDNOISE= %fe ...", exptime, rdnoise);
       obs->pixerrs = simulate_errors_t(obs->grism, exptime, rdnoise);
       fprintf(stdout,". Done.\n");
@@ -157,7 +155,7 @@ load_image_t(const char *const fname, int hdunum_data, int hdunum_err,
       obs->dq = FITSimage_to_gsl(fname, hdunum_dq, 0);
 
       // apply the dq filter
-      if (dqmask>0) 
+      if (dqmask>0)
         {
           fprintf(stdout,"Applying MASK and seting DATA to NaN...");
           apply_DQ(obs, dqmask);
@@ -165,7 +163,7 @@ load_image_t(const char *const fname, int hdunum_data, int hdunum_err,
         }
     fprintf(stdout,". Done.\n");
     }
-  else 
+  else
     {
       fprintf(stdout, " Not using DQ. Done.\n");
       obs->dq = NULL;
@@ -185,7 +183,7 @@ load_image_t(const char *const fname, int hdunum_data, int hdunum_err,
     @param hdunum_data the extension number containing the data array (first=1)
     @param hdunum_err the extension number containing the err array (first=1)
     @param hdunum_dq the extension number containing the DQ array (first=1)
-    @param dqmask the bit mask (represented as an int) to apply using the DQ info to flag a pixel as 
+    @param dqmask the bit mask (represented as an int) to apply using the DQ info to flag a pixel as
         good or bad
         @param exptime exposure time (only used to determine count noise)
         @param gain gain factor (only used to determine count noise)
@@ -196,7 +194,7 @@ load_sci_image(const char *const fname, int hdunum_data)
 {
         observation    *obs;
         FILE           *infile;
-                
+
         if (!(infile = fopen(fname, "r"))) {
                 aXe_message(aXe_M_FATAL, __FILE__, __LINE__,
                             "Could not find %s\n", fname);
@@ -218,7 +216,7 @@ load_sci_image(const char *const fname, int hdunum_data)
 }
 
 /**
-    Read a FITS file header and return the value of the derired 
+    Read a FITS file header and return the value of the derired
     keyword. If the passed keyword string contains an actual number,
     then this number of converted to a float and returned.
     If keyword=None, then NULL is returned.
@@ -238,17 +236,17 @@ float get_float_from_keyword(char *filename, int hdunum, char *keyword)
 
   /* If keyword contains an actual number, convert it to a float and
      return the value */
-  //     fprintf(stdout, "opening: %s\n", filename);      
+  //     fprintf(stdout, "opening: %s\n", filename);
   if (isnum2(keyword)) {
     val =  atof(keyword);
     return val;
   }
-  
+
   /* If keyword == None return NULL */
   if (!strcmp(keyword,"None")) return GSL_NAN;
-  
+
   //  Open the file for creating/appending
-  //   fprintf(stdout, "opening: %s\n", filename);        
+  //   fprintf(stdout, "opening: %s\n", filename);
   fits_open_file (&input, filename, READONLY, &f_status);
   if (f_status)
     {
@@ -257,7 +255,7 @@ float get_float_from_keyword(char *filename, int hdunum, char *keyword)
                    "get_float_from_keyword: " " Could not open file: %s",
                    filename);
     }
-  
+
   fits_movabs_hdu (input, hdunum, &hdutype, &f_status);
   if (f_status)
     {
@@ -294,12 +292,12 @@ float get_float_from_keyword(char *filename, int hdunum, char *keyword)
                    "get_float_from_keyword: " "Error closing file: %s ",
                    filename);
     }
-  
+
   return val;
 }
 
 /**
-    Return the number of extensions in a FITS image 
+    Return the number of extensions in a FITS image
 
   @param fname File name of the FITS image
   @return the number of extensions
@@ -334,7 +332,7 @@ int FITSextnum(const char *const fname)
   an observation rather than the actual data.
 
   @param fname File name of the FITS image
-  @return a gsl_matrix (overriden in aXe_grism.h) containing the 
+  @return a gsl_matrix (overriden in aXe_grism.h) containing the
   image data or NULL
 */
 gsl_matrix *
@@ -389,7 +387,7 @@ FITSnaxes_to_gsl (const char *const fname, int hdunum)
   @param fname File name of the FITS image
   @param hdunum the number of the extension to read in (first primary = 1)
   @param fatal if non zero an error loading the data will trigger an exception
-  @return a gsl_matrix (overriden in aXe_grism.h) containing the 
+  @return a gsl_matrix (overriden in aXe_grism.h) containing the
   image data or NULL
 */
 gsl_matrix *
@@ -406,11 +404,11 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
   PIXEL_T *storage, *dp;
   int x, y;
   int hdutype;
-  
+
   fits_open_file (&input, fname, READONLY, &f_status);
   if (f_status)
     {
-      if (fatal) 
+      if (fatal)
         {
           fits_report_error (stderr, f_status);
           aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -425,7 +423,7 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
   fits_movabs_hdu (input, hdunum, &hdutype, &f_status);
   if (f_status)
     {
-      if (fatal) 
+      if (fatal)
         {
           fits_report_error (stderr, f_status);
           aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -443,7 +441,7 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
     }
   if (hdutype != 0)
     {
-      if (fatal) 
+      if (fatal)
         {
           fits_report_error (stderr, f_status);
           aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -458,10 +456,10 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
         }
     }
   ffgipr (input, 2, &bitpix, &naxis, naxes, &f_status);
-  
+
   if (naxis != 2)
     {
-      if (fatal) 
+      if (fatal)
         {
             fits_report_error (stderr, f_status);
             aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -475,19 +473,19 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
           return NULL;
         }
     }
-  
+
   if (!(storage = malloc (naxes[0] * naxes[1] * sizeof (double))))
     {
       fits_report_error (stderr, f_status);
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
                    "FITSimage_to_gsl: " "Out of memory");
     }
-  
+
   ffgpxv (input, TFLOAT, zero, naxes[0] * naxes[1], &nulval,
           storage, &anynul, &f_status);
   if (f_status)
     {
-      if (fatal) 
+      if (fatal)
         {
           fits_report_error (stderr, f_status);
           aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -506,7 +504,7 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
   fits_close_file (input, &f_status);
   if (f_status)
     {
-      if (fatal) 
+      if (fatal)
         {
           fits_report_error (stderr, f_status);
           aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -527,10 +525,10 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
       for (x = 0; x < naxes[0]; x++)
         {
           gsl_matrix_set (im, x, y, *dp++);
-          
+
         }
     }
-  
+
   free (storage);
   storage = NULL;
   return im;
@@ -541,10 +539,10 @@ FITSimage_to_gsl (const char *const fname, int hdunum, int fatal)
   @param fname File name of the FITS image
   @param hdunum the number of the extension to read in (first primary = 1)
   @param fatal if non zero an error loading the data will trigger an exception
-  @return a gsl_matrix (overriden in aXe_grism.h) containing the 
+  @return a gsl_matrix (overriden in aXe_grism.h) containing the
   image data or NULL
 */
-px_point 
+px_point
 get_npixels(const char *const fname, int hdunum)
 {
      fitsfile *input;
@@ -684,7 +682,7 @@ create_FITSimage_opened (char filename[], int overwrite)
 }
 
 /**
-    Function to create a new FITS image file with an empty first extension. 
+    Function to create a new FITS image file with an empty first extension.
     If overwrite is non zero, any existing file is deleted.
 
     @param filename a pointer to an array of character containing the filename
@@ -775,7 +773,7 @@ gsl_to_FITSimage_opened (gsl_matrix * data, fitsfile *output, int overwrite, cha
      //create_FITSimage(filename,overwrite);
 
 
-     /* Moving pixels around into a CFITSIO friendly array */
+     /* Moving pixels around into a "fitsio.h" friendly array */
      if (!(storage = malloc (naxes[0] * naxes[1] * sizeof (double))))
        {
             aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Out of memory");
@@ -843,9 +841,9 @@ gsl_to_FITSimage (gsl_matrix * data, char filename[], int overwrite, char ID[])
   }
 
   create_FITSimage(filename,overwrite);
-  
-  
-  /* Moving pixels around into a CFITSIO friendly array */
+
+
+  /* Moving pixels around into a "fitsio.h" friendly array */
   if (!(storage = malloc (naxes[0] * naxes[1] * sizeof (double))))
     {
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Out of memory");
@@ -869,7 +867,7 @@ gsl_to_FITSimage (gsl_matrix * data, char filename[], int overwrite, char ID[])
                    "gsl_to_FITSimage: " "Could not open file: %s",
                    filename);
     }
-  
+
 
   fits_get_num_hdus (output, &hdunum, &f_status);
   if (f_status)
@@ -891,9 +889,9 @@ gsl_to_FITSimage (gsl_matrix * data, char filename[], int overwrite, char ID[])
     }
   /* Get current HDU number */
   fits_get_hdu_num (output, &hdunum);
-  
+
   fits_create_img (output, -32, 2, naxes, &f_status);
-  
+
   fits_write_img (output, TFLOAT, 1, naxes[0] * naxes[1], storage,
                   &f_status);
 
@@ -907,11 +905,11 @@ gsl_to_FITSimage (gsl_matrix * data, char filename[], int overwrite, char ID[])
     fits_update_key (output, TSTRING, keyname, ID, comment, &f_status);
   }
   fits_write_date (output, &f_status);
-  
+
   fits_get_hdu_num(output,&hdunum);
-  
+
   fits_close_file (output, &f_status);
-  
+
   free (storage);
   storage = NULL;
 
@@ -952,7 +950,7 @@ gsl_to_FITSimageHDU (gsl_matrix * data, char filename[], int overwrite, char ID[
      create_FITSimage(filename,overwrite);
 
 
-     /* Moving pixels around into a CFITSIO friendly array */
+     /* Moving pixels around into a "fitsio.h" friendly array */
      if (!(storage = malloc (naxes[0] * naxes[1] * sizeof (double))))
        {
             aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Out of memory");
@@ -1147,10 +1145,10 @@ FITScards *get_FITS_cards (char filename[], int hdu)
     }
 
     // Find the number of cards in this HDU
-    n = 0;    
+    n = 0;
     do {
         fits_find_nextkey (input, inclist, ninc, exclist,
-         nexc, card, &f_status);    
+         nexc, card, &f_status);
         n++;
     }
     while (f_status==0);
@@ -1178,11 +1176,11 @@ FITScards *get_FITS_cards (char filename[], int hdu)
             hdu,filename);
     }
 
-    // Read all cards 
+    // Read all cards
     i=0;
     do {
         fits_find_nextkey (input, inclist, ninc, exclist,
-         nexc, cards->cards[i], &f_status);    
+         nexc, cards->cards[i], &f_status);
         //fprintf(stderr,"%s\n",cards->cards[i]);
         i++;
     }
@@ -1194,7 +1192,7 @@ FITScards *get_FITS_cards (char filename[], int hdu)
             hdu,filename);
     }
     f_status = 0;
-    
+
     // NULL terminate the card array
     //cards[n] = NULL;
 
@@ -1245,10 +1243,10 @@ FITScards *get_FITS_cards_opened (fitsfile *input)
             "get_FITS_cards: " "Could not move to first card in FITS extension");
     }
     // Find the number of cards in this HDU
-    n = 0;    
+    n = 0;
     do {
         fits_find_nextkey (input, inclist, ninc, exclist,
-         nexc, card, &f_status);    
+         nexc, card, &f_status);
         n++;
     }
     while (f_status==0);
@@ -1270,11 +1268,11 @@ FITScards *get_FITS_cards_opened (fitsfile *input)
             "get_FITS_cards: " "Could not move to first card in FITS extension");
     }
 
-    // Read all cards 
+    // Read all cards
     i=0;
     do {
         fits_find_nextkey (input, inclist, ninc, exclist,
-         nexc, cards->cards[i], &f_status);    
+         nexc, cards->cards[i], &f_status);
         i++;
     } while (f_status==0);
     if (f_status!= KEY_NO_EXIST) {
@@ -1327,7 +1325,7 @@ void put_FITS_cards (char filename[], int hdu, FITScards *cards)
                 "put_FITS_cards: Could not get"
                 " number of HDU from:", filename);
         }
-    } 
+    }
     fits_movabs_hdu (output, hdu, &hdutype, &f_status);
     if (f_status)
     {
@@ -1451,11 +1449,11 @@ get_filename_and_hdunum (char file[], char *filename, int *hdu)
 /**
     A helpder function which given the name of an environment variable and a string
     containing a filename, this function
-    returns the complete path to the file 
+    returns the complete path to the file
 
     @param envpathname a pointer to a cahr string containing the name of the
     environment variable to use for the path to the file
-    @param inputfile a pointer to a string containing a filename, possibly formatted as file[hdu]. 
+    @param inputfile a pointer to a string containing a filename, possibly formatted as file[hdu].
     This is replaced with the name of the file without the extension appended to it.
     @param filename a pointer to an allocated char array to receive the real file name
 */
@@ -1495,7 +1493,7 @@ build_path (char envpathname[], const char inputfile[], char filename[MAXCHAR])
  * Function: alloc_char_arr
  * The function allocates memory for a character array.
  * The dimensions of the character array are specified
- * with the number of columns per row and the number 
+ * with the number of columns per row and the number
  * of rows in the input. The pointer to the allocated
  * memory is returned.
  *
@@ -1516,7 +1514,7 @@ alloc_char_arr(int nrows, int ncols)
   char_arr = (char **) malloc(sizeof(char *)*nrows);
 
   // for each row:
-  for (i=0; i < nrows; i++) 
+  for (i=0; i < nrows; i++)
     // allocate the columns
     char_arr[i] = malloc(sizeof(char)*ncols);
 
@@ -1531,7 +1529,7 @@ alloc_char_arr(int nrows, int ncols)
  *
  * Parameters:
  * @param char_arr - pointer to the character array
- * @param nrows    - the number of rows in the character array 
+ * @param nrows    - the number of rows in the character array
  *
  */
 void
@@ -1553,9 +1551,9 @@ free_char_arr(char **char_arr, int nrows)
  * The function parses a long character string and separates
  * individual tokens along the character ",". The tokens are
  * stored in a character array. A check is performed such
- * that not more tokens are copied than there exist rows 
+ * that not more tokens are copied than there exist rows
  * in the character array.
- * 
+ *
  * Parameters:
  * @param list_file  - the character string to parse
  * @param list_files - the character array
@@ -1573,14 +1571,14 @@ build_config_files(char list_file[], char **list_files, int maxnrows)
   int i=0;
   int mod_maxrows;
 
-  // create a modified maximum number fo an easy check 
+  // create a modified maximum number fo an easy check
   mod_maxrows = maxnrows -1;
 
   // go over the input string
   for (i=0; i<strlen(list_file); i++)
     {
 
-      // check whether the actual character 
+      // check whether the actual character
       // indicates the beginning of the next token
       if (list_file[i] != ',' && list_file[i] != '\0')
         {
@@ -1589,16 +1587,16 @@ build_config_files(char list_file[], char **list_files, int maxnrows)
             // give an error in case the char array is full
             aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
                          "Too many configuration files! Maximum number: %i !\n", maxnrows);
-          else  
+          else
             // copy the actual character into the token
             list_files[nlist][ii++] = list_file[i];
-        }  
+        }
     else
       {
         // write an end to the actual token
         list_files[nlist][ii] = '\0';
 
-        // enhance the token counter 
+        // enhance the token counter
         nlist++;
 
         // reset the position within the token
@@ -1609,7 +1607,7 @@ build_config_files(char list_file[], char **list_files, int maxnrows)
   // return the number of tokens
   return ++nlist;
 }
-  
+
 
 void
 replace_file_extension (char infile[], char outfile[], char from_ext[],
@@ -1644,7 +1642,7 @@ replace_file_extension (char infile[], char outfile[], char from_ext[],
 
 }
 
-/** 
+/**
     Free a NULL terminated array of objects
 
     @param sobjs, a NULL terminated array containing pointers to objects
@@ -1658,7 +1656,7 @@ free_oblist (object ** oblist)
   /* Find the number of objects in sobjs */
   while (oblist[nobjs])
     nobjs++;
-  
+
   for (i = 0; i < nobjs; i++)
     {
       for (j=0;j < oblist[i]->nbeams; j++){
@@ -1666,7 +1664,7 @@ free_oblist (object ** oblist)
         free(oblist[i]->beams[j].spec_trace);
 
         if (oblist[i]->beams[j].flux != NULL){
-          gsl_vector_free (oblist[i]->beams[j].flux);      
+          gsl_vector_free (oblist[i]->beams[j].flux);
           //      fprintf(stderr, "FLux was freed\n");
         }
         else{
@@ -1730,7 +1728,7 @@ fprintf_object (FILE * output, object * o)
 
 /**
    Function to parse the online arguments and look for an option
-   (starting with a "-") with a certain name. If found, a pointer 
+   (starting with a "-") with a certain name. If found, a pointer
    to a string pointing to the value of the option (following a "=")
    is returned. If no "=" is found, then the name of the option
    is returned. If the names is not found, then NULL is returned.
@@ -1791,7 +1789,7 @@ get_online_option2 (char option_name[], char option_value[], int argc, char *arg
                             {
                               strcpy(option_value,parname);
                               return 1;}
-                          
+
                           strcpy(option_value,val);
                           return 1;
                      }
@@ -1801,7 +1799,7 @@ get_online_option2 (char option_name[], char option_value[], int argc, char *arg
 
 }
 
-/** 
+/**
     Function to free an observation struture
 
     @param obs an observation pointer
