@@ -75,7 +75,7 @@ main (int argc, char *argv[])
   fringe_conf   *fconf=NULL;
 
   object **oblist;
-  observation *obs;
+  observation *obs=NULL;
 
   ap_pixel *OPET=NULL;
   ap_pixel *BPET=NULL;
