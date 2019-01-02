@@ -48,7 +48,7 @@ main(int argc, char *argv[])
   char        fimage_file_path[MAXCHAR];
 
   fringe_conf  *fconf;
-  interpolator *filter_through;
+  //interpolator *filter_through;
   gsl_matrix   *fringe_image;
 
   if ((argc < 3) || (opt = get_online_option("help", argc, argv))) {
