@@ -750,7 +750,8 @@ get_magauto_col(const gsl_vector *wavelength, const gsl_vector *colnums,
   double minimum = 10E+06;
 
   // if there is only one magnitude column
-  if (wavelength->size < 2){
+  // gsl bugfix: updated to catch 0 size
+  if (wavelength->size == 1 ){
     // return the column number of the magnitude column 
     return ((int)gsl_vector_get(colnums, 0));
   }

@@ -62,7 +62,6 @@ create_SexObject(const colinfo *actinfo, char *line, const gsl_vector * waves,
   gsl_vector *wavs;
   SexObject  *o;
   int         i=0;
-
   // transform the data in the line to a vector
   lv1ws (line);
   v = string_to_gsl_array (line);
@@ -594,7 +593,7 @@ SexMags_to_beamFlux(SexObject * sobj, beam *actbeam)
         //  go over all magnidute values
         for (j=0; j < (int)sobj->magnitudes->size; j++)
           {
-            // check whether the current entry is valuied
+            // check whether the current entry is valid
             if (is_valid_entry(gsl_vector_get(sobj->magnitudes, j)))
               {
                 // get the current entry, already converted to flux
@@ -1661,14 +1660,12 @@ get_SexObject_from_catalog (char filename[], const double lambda_mark)
   px_point  backwin_cols;
   px_point  modinfo_cols;
 
-
   actcatinfo = get_sex_col_descr (filename);
   hasmags = has_magnitudes(actcatinfo);
   waves = gsl_vector_alloc (hasmags);
   cnums = gsl_vector_alloc (hasmags);
   hasmags = get_magcols(actcatinfo, waves, cnums);
   magcencol = get_magauto_col(waves, cnums, lambda_mark);
-
   backwin_cols = has_backwindow(actcatinfo);
   modinfo_cols = has_modelinfo(actcatinfo);
 
@@ -1688,7 +1685,7 @@ get_SexObject_from_catalog (char filename[], const double lambda_mark)
   sobjs = (SexObject **) malloc ((nobjs + 1) * sizeof (SexObject *));
   if (!sobjs)
     {
-      aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Out of memory.");
+      aXe_message (aXe_M_FATAL, __FILE__, __LINE__, "Out of memory. Couldn't allocate Sextractor Object");
     }
 
   i = 0;
