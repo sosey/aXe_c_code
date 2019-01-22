@@ -1,6 +1,5 @@
 /*
  *   File: aXe_SCALEBCK.c
- *   $Revision: 1.6 $ $Date: 2010-06-15 09:48:34 $
  *   ST-ECF European Coordinating Facility
  *   Martin Kuemmel
  *

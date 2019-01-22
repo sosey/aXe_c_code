@@ -1,6 +1,5 @@
 /**
  *  File: aXe_INTPIXCORR.c.
- *  $Revision: 1.4 $ $Date: 2010-06-15 09:48:34 $
  *  ST-ECF European Coordinating Facility
  *  Martin Kuemmel
  *
