@@ -1,11 +1,4 @@
 /**
- * File: drz2pet_utils.h
- * Header file for the code in "drz2pet_utils.c"
- *
- * @author  Martin Kuemmel
- * @package drz2pet
- * @version $Revision: 1.2 $
- * @date    $Date: 2009-06-18 09:50:07 $
  */
 #ifndef _DRZ2PET_UTILS_H
 #define _DRZ2PET_UTILS_H

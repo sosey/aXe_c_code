@@ -1,11 +1,6 @@
 /*
- * File: aper_conf.c
  * Subroutines that deal with the aXe configuration file.
  *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package aper_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <stdio.h>
 #include <stdlib.h>

@@ -1,11 +1,4 @@
 /**
- * File: ipixcorr_utils.h
- * Header files for ipixcorr_utils.c
- *
- * @author  Martin Kuemmel
- * @package ipixcorr_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _IPIXCORR_UTILS_H
 

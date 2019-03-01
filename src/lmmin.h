@@ -1,8 +1,4 @@
 /**
- * File: lmmin.h
- * @package lmmin
- * @version $Revision: 1.2 $
- * @date    $Date: 2010-06-15 09:48:34 $
  *
  */
 // parameters for calling the high-level interface lmfit

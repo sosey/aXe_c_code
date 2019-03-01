@@ -1,11 +1,4 @@
 /**
- * File: fringe_utils.h 
- * Header file for fringe_utils.c.
- *
- * @author  Martin Kuemmel
- * @package fringe_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _FRINGE_UTILS_H
 #define _FRINGE_UTILS_H

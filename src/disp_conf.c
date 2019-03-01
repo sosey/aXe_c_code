@@ -1,13 +1,4 @@
 /**
- *
- * File: disp_conf.c
- * Subroutines to read the dispersion coefficients and other
- * beam related keywords from the configuration file.
- *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package disp_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include "disp_conf.h"
 #include <string.h>

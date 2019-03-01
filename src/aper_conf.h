@@ -1,10 +1,4 @@
 /*
- *
- * File: aper_conf.h
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package aper_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _APER_CONF_H
 #define _APER_CONF_H

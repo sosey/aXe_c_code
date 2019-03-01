@@ -1,5 +1,4 @@
 /**
- * File: fringe_conf.c
  */
 #include <math.h>
 #include "fitsio.h"

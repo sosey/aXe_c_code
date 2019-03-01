@@ -1,11 +1,4 @@
 /**
- * File: disp_conf.h
- * Header file for the code in "disp_conf.c"
- *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package disp_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _DISP_CONF_H

@@ -1,14 +1,4 @@
 /**
- * File: fringe_model.c
- * The set of subroutines to calculate the
- * fringing amplitude from a setup or CCD
- * as defined in a fringe configuration
- * structure.
- *
- * @author  Martin Kuemmel
- * @package fringe_model
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <math.h>
 #include <gsl/gsl_matrix.h>

@@ -1,5 +1,4 @@
 /* 
- * File: aXe_utils.h
  * Interface for aXe_utils.c
  *
  */

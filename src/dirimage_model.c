@@ -1,12 +1,4 @@
 /**
- *  File: dirimage_model.c
- *  Subroutines to calculate
- *  a direct image
- *
- * @author  Martin Kuemmel
- * @package dirimage_model
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <time.h>
 #include <math.h>

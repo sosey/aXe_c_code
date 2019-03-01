@@ -1,12 +1,4 @@
 /**
- * File: fringe_utils.c
- * Some libraries to compute fringe corrections for pixels
- * in a PET.
- *
- * @author  Martin Kuemmel
- * @package fringe_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include "aXe_grism.h"
 #include <gsl/gsl_spline.h>

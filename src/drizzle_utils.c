@@ -1,14 +1,6 @@
 /**
- *
- * File: drizzle_utils.c
- * Subroutines to calculate the
- * drizzle coefficients.
- *
- * @author  Martin Kuemmel
- * @package drizzleutils
- * @version $Revision: 1.5 $
- * @date    $Date: 2010/09/30 11:59:48 $
- */
+* Drizzle utilities
+*/
 
 #include "spc_trace_functions.h"
 #include <gsl/gsl_vector.h>

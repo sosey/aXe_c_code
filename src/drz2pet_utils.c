@@ -1,11 +1,4 @@
 /**
- * File: drz2pet_utils.c
- * Subroutines used in the "aXe_DRZ2PET.c" for the task aXe_DRZ2PET
- *
- * @author  Martin Kuemmel
- * @package drz2pet_utils
- * @version $Revision: 1.4 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>

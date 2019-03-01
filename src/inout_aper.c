@@ -1,11 +1,4 @@
 /**
- * File: inout_aper.c
- * Various input/output related routines.
- *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package inout_aper
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include        "inout_aper.h"
 

@@ -1,8 +1,4 @@
 /**
- * File: aXe_DRZ2PET.c
- * @author  Martin Kuemmel - Space Telescope European Coordinating Facility
- * @version $Revision: 1.5 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include <stdio.h>
 #include <stdlib.h>

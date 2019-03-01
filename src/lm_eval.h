@@ -1,10 +1,4 @@
 /**
- * File: lm_eval.h
- *
- * @author  Martin Kuemmel
- * @package lm_eval
- * @version $Revision: 1.2 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 typedef struct {
   double* user_t;

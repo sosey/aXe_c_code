@@ -1,5 +1,4 @@
 /*
- *   File: aXe_FILET2.c
  */
 #include <stdio.h>
 #include "fitsio.h"

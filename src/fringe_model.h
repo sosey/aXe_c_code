@@ -1,11 +1,4 @@
 /**
- * File: fringe_model.h
- * Header file for fringe_model.c
- *
- * @author  Martin Kuemmel
- * @package fringe_model
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _FRINGE_MODEL_H
 #define _FRINGE_MODEL_H

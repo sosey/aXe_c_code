@@ -1,11 +1,4 @@
 /**
- * File: inima_utils.h 
- * Header file for inima_utils.c
- *
- * @author  Martin Kuemmel
- * @package inima_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _INIMA_UTILS_H
 #define _INIMA_UTILS_H

@@ -1,11 +1,4 @@
 /**
- * File: lm_eval.c
- * Subroutines for the Levenberg Marqwart Minimization
- *
- * @author  Martin Kuemmel
- * @package lm_eval
- * @version $Revision: 1.2 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #include "lmmin.h"
 #include "lm_eval.h"

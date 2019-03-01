@@ -4,10 +4,6 @@
  * Subroutines to calculate the
  * drizzle coefficients.
  *
- * @author  Martin Kuemmel
- * @package drizzleutils
- * @version $Revision: 1.4 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _DRIZZLE_UTILS_H

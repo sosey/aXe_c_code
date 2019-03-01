@@ -1,11 +1,4 @@
 /*
- * File: aXe_grism.h
- * $Revision: 1.5 $ $Date: 2010-06-15 09:48:34 $
- * Common definitions and prototypes for spectra extraction on aXe
- * grism images
- *
- * Markus Demleitner (msdemlei@fsk.uni-heidelberg.de) Feb 2001
- * Nor Pirzkal (npirzkal@mac.com) $Revision: 1.5 $ $Date: 2010-06-15 09:48:34 $
  */
 
 

@@ -1,11 +1,7 @@
 /**
- * File: aper_check.h
  * APER_CHECK - create a FITS image showing the locations of
  *               apertures.
- *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package aper_check
- */
+*/
 
 #ifndef _APER_CHECK_H
 #define _APER_CHECK_H

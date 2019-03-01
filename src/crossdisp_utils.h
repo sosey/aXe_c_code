@@ -1,10 +1,4 @@
 /**
- *
- * File: crossdisp_utils.h
- * @author  Martin Kuemmel
- * @package crossdisp_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _CROSSDISP_UTILS_H
 #define _CROSSDISP_UTILS_H

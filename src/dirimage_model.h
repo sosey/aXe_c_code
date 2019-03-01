@@ -1,11 +1,4 @@
 /**
- * File: dirimage_model.h
- * Header file for dirimage_model.c
- *
- * @author  Martin Kuemmel
- * @package dirimage_model
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _DIRIMAGE_MODEL_H
 #define _DIRIMAGE_MODEL_H

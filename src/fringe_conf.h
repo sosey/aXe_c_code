@@ -1,11 +1,4 @@
 /**
- * File: fringe_conf.h 
- * Header file for fringe_conf.c
- *
- * @author  Martin Kuemmel
- * @package fringe_conf
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _FRINGE_CONF_H
 #define _FRINGE_CONF_H

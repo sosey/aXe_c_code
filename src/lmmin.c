@@ -1,8 +1,4 @@
 /*
- * File: lmmin.c
- * @package lmmin
- * @version $Revision: 1.2 $
- * @date    $Date: 2010-06-15 09:48:34 $
  *
  * Solves or minimizes the sum of squares of m nonlinear
  * functions of n variables.
