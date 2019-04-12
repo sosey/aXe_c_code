@@ -7,11 +7,10 @@
  * @version $Revision: 1.5 $
  * @date    $Date: 2010/12/16 07:25:05 $
  */
-
-#include "spce_output.h"
 #include <stdio.h>
 #include <math.h>
 #include <gsl/gsl_vector.h>
+#include "spce_output.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_pathlength.h"
@@ -538,7 +537,7 @@ drizzled_stamp_img (const  ap_pixel * const ap_p, double width,
 
   /* Allocate the weight matrix*/
   /* Fill weight with 0.0 values */
-  weight = gsl_matrix_alloc(dimension.xsize,dimension.ysize);
+  weight = gsl_matrix_alloc(dimension.xsize, dimension.ysize);
   gsl_matrix_set_all(weight, 0.0);
 
 
@@ -557,7 +556,7 @@ drizzled_stamp_img (const  ap_pixel * const ap_p, double width,
       // get the jacobian (well, easy here)
       // the term "cos(cur_p->dxs)" must be there
       // to correct the enlargement necessary
-      // to cover the whole lambda-crossdispersion area!
+      // to cover the whole lambda-cross dispersion area!
       // NOT COMPLETELY understood
       jacob = dimension.resolution/cur_p->dlambda*cos(cur_p->dxs);
 
@@ -578,46 +577,46 @@ drizzled_stamp_img (const  ap_pixel * const ap_p, double width,
       //      totweigth = 0.0;
       // go over the extend in x
       for (ii=ilow;ii<iupp;ii++) {
-	// go over the extend in x
-	for (jj=jlow;jj<jupp;jj++) {
+      	// go over the extend in x
+      	for (jj=jlow;jj<jupp;jj++) {
 
-	  // get the coordinates of the current output pixel
-	  stpi = icen+ii;
-	  stpj = jcen+jj;
+      	  // get the coordinates of the current output pixel
+      	  stpi = icen+ii;
+      	  stpj = jcen+jj;
 
-	  // check whether the current output pixel is within
-	  // the stamp image; continue if not
-	  if ( (stpi>=dimension.xsize)||(stpi<0)||(stpj>=dimension.ysize)||(stpj<0) )
-	    continue;
+      	  // check whether the current output pixel is within
+      	  // the stamp image; continue if not
+      	  if ( (stpi>=dimension.xsize)||(stpi<0)||(stpj>=dimension.ysize)||(stpj<0) )
+      	    continue;
 
-	  // get the area which falls onto the current output pixel
-	  arr = boxer(stpi,stpj,quad.x,quad.y);
-	  if (arr > maxarr)
-	    {
-	      maxarr=arr;
-	      iim = ii;
-	      jjm = jj;
-	    }
-	  // get the already existing counts and weights
-	  stpc = gsl_matrix_get(counts,stpi,stpj);
-	  weig = gsl_matrix_get(weight,stpi,stpj);
+      	  // get the area which falls onto the current output pixel
+      	  arr = boxer(stpi,stpj,quad.x,quad.y);
+      	  if (arr > maxarr)
+      	    {
+      	      maxarr=arr;
+      	      iim = ii;
+      	      jjm = jj;
+      	    }
+      	  // get the already existing counts and weights
+      	  stpc = gsl_matrix_get(counts,stpi,stpj);
+      	  weig = gsl_matrix_get(weight,stpi,stpj);
 
-	  // initialize the counts, if necessary
-	  if (isnan(stpc) && (arr!=0.0))
-	    stpc = 0.0;
+      	  // initialize the counts, if necessary
+      	  if (isnan(stpc) && (arr!=0.0))
+      	    stpc = 0.0;
 
-	  // compute the new, total weight of the current output pixel
-	  //	  allweig = weig + jacob*arr;
-	  allweig = weig + arr;
+      	  // compute the new, total weight of the current output pixel
+      	  //	  allweig = weig + jacob*arr;
+      	  allweig = weig + arr;
 
-	  // do a weighted sum of the count value at the current output pixel
-	  value = (stpc*weig + arr*cur_p->count*jacob) / (allweig);
+      	  // do a weighted sum of the count value at the current output pixel
+      	  value = (stpc*weig + arr*cur_p->count*jacob) / (allweig);
 
-	  // store the new count value and the new weight
-	  gsl_matrix_set(counts,stpi,stpj,value);
-	  gsl_matrix_set(weight,stpi,stpj,allweig);
-	  //	  totweigth = totweigth + arr;
-	}
+      	  // store the new count value and the new weight
+      	  gsl_matrix_set(counts,stpi,stpj,value);
+      	  gsl_matrix_set(weight,stpi,stpj,allweig);
+      	  //	  totweigth = totweigth + arr;
+      	}
       }
     }
 
@@ -1136,9 +1135,9 @@ void interpolate_over_NaN (gsl_matrix *data)
     n = 0;
     for (j=0;j<(int)data->size2;j++) {
       if ( !isnan(gsl_matrix_get(data,i,j)) )  {
-	x[n] = j;
-	y[n] = gsl_matrix_get(data,i,j);
-	n++;
+	       x[n] = j;
+	       y[n] = gsl_matrix_get(data,i,j);
+	       n++;
       }
     }
     //if (n<data->size2) fprintf(stderr,"%d elements non-NaN found out of %d.\n",n,data->size2);
@@ -1152,9 +1151,9 @@ void interpolate_over_NaN (gsl_matrix *data)
 
     for (j=0;j<(int)data->size2;j++) {
       double xi = j;
-      double yi = gsl_spline_eval(spline,xi,acc);
+      double yi = gsl_spline_eval(spline, xi, acc);
       //if (n<data->size2)  fprintf(stderr,"%d %g => %d %g\n",j,gsl_matrix_get(data,i,j),j,yi);
-      gsl_matrix_set(data,i,j,yi);
+      gsl_matrix_set(data, i, j, yi);
     }
     gsl_spline_free (spline);
     gsl_interp_accel_free(acc);

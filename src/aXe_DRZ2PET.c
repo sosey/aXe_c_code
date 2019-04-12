@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_PET.h"
@@ -14,8 +16,7 @@
 #include "disp_conf.h"
 #include "spc_wl_calib.h"
 #include "drz2pet_utils.h"
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
+
 #include "fitsio.h"
 
 #define AXE_IMAGE_PATH   "AXE_IMAGE_PATH"

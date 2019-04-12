@@ -10,8 +10,6 @@
  *
  * @author  Martin Kuemmel, Nor Pirzkal
  * @package spc_resp
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 
@@ -251,13 +249,21 @@ apply_response_function(spectrum *spec, spectrum *resp, const int quant_cont)
   gsl_spline *spline2 = gsl_spline_alloc (gsl_interp_cspline, resp->spec_len);
 
   double *x1,*y1, *x2, *y2;
-  long i,j;
+  int i,j;
   double r1, r2, fr, fr1, fr2;
-
   // test
-  //  int nguess;
-  //  double tval=0.0;
+  // int nguess;
+  // double tval=0.0;
 
+  if ((int) resp->spec_len <= 0){
+    aXe_message(aXe_M_ERROR, __FILE__, __LINE__,
+                "apply_response_function: response spec length invalid: %i", resp->spec_len);
+      gsl_spline_free(spline1);
+      gsl_interp_accel_free(acc1);
+      gsl_spline_free(spline2);
+      gsl_interp_accel_free(acc2);
+      return;
+  }
   if ( spec==NULL)
     {
       aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
@@ -269,10 +275,10 @@ apply_response_function(spectrum *spec, spectrum *resp, const int quant_cont)
       return;
     }
 
-  x1 = malloc(resp->spec_len*sizeof(double));
-  y1 = malloc(resp->spec_len*sizeof(double));
-  x2 = malloc(resp->spec_len*sizeof(double));
-  y2 = malloc(resp->spec_len*sizeof(double));
+  x1 = malloc((double)(resp->spec_len) *sizeof(double));
+  y1 = malloc((double)(resp->spec_len) *sizeof(double));
+  x2 = malloc((double)(resp->spec_len) *sizeof(double));
+  y2 = malloc((double)(resp->spec_len) *sizeof(double));
 
   for (i=0;i<resp->spec_len;i++) {
     x1[i] = resp->spec[i].lambda_mean;
@@ -283,16 +289,17 @@ apply_response_function(spectrum *spec, spectrum *resp, const int quant_cont)
 
   gsl_spline_init (spline1, x1, y1, resp->spec_len);
   gsl_spline_init (spline2, x2, y2, resp->spec_len);
-
   // test
-  //  nguess = 0;
-
+  // nguess = 0;
+  // OOF, this allows the older extrapolating functionality from previous version
+  // of the gsl spline eval
   for (j=0;j<spec->spec_len;j++) {
-    r1 = gsl_spline_eval (spline1, spec->spec[j].lambda_mean, acc1);
-    r2 = gsl_spline_eval (spline2, spec->spec[j].lambda_mean, acc2);
-
+    //r1 = gsl_spline_eval (spline1, spec->spec[j].lambda_mean, acc1);
+    spline1->interp->type->eval(spline1->interp->state, spline1->x, spline1->y, spline1->interp->size, x1[j], acc1, &y1[j]);
+    spline2->interp->type->eval(spline2->interp->state, spline2->x, spline2->y, spline2->interp->size, x2[j], acc2, &y2[j]);
+    //r2 = gsl_spline_eval (spline2, spec->spec[j].lambda_mean, acc2);
     // test
-    //    tval = get_response_value_plus(resp, spec->spec[j].lambda_mean, &nguess);
+    // tval = get_response_value_plus(resp, spec->spec[j].lambda_mean, &nguess);
 
 
     /* Need to divide by the pixel width of the
@@ -301,10 +308,10 @@ apply_response_function(spectrum *spec, spectrum *resp, const int quant_cont)
     if ((r2+r1)!=0) {
 
       // test
-      //      spec->spec[j].flux = spec->spec[j].count / tval;
+      // spec->spec[j].flux = spec->spec[j].count / tval;
       spec->spec[j].flux = spec->spec[j].count / ((r2+r1)/2.);
       spec->spec[j].flux = spec->spec[j].flux/spec->spec[j].dlambda;
-      //      fprintf(stdout, "# %f %f %f\n", spec->spec[j].lambda_mean, spec->spec[j].dlambda, spec->spec[j].weight);
+      // fprintf(stdout, "# %f %f %f\n", spec->spec[j].lambda_mean, spec->spec[j].dlambda, spec->spec[j].weight);
 
 
       if (quant_cont && (int)spec->spec[j].contam != -1)
@@ -525,8 +532,8 @@ apply_smoothed_response(const calib_function *wl_calibration, const int for_gris
   weights = gsl_vector_alloc(2 * RESP_SMOOTH_LENGTH + 1);
 
   // immediately return
-  // an empty spectrum
-  if ( spec==NULL)
+  // if an empty spectrum
+  if ( (spec==NULL) || (spec->spec_len == 0))
     {
       aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
                    "apply_response_function: spectra empty.");
@@ -541,12 +548,12 @@ apply_smoothed_response(const calib_function *wl_calibration, const int for_gris
   fprintf(stdout, "aXe_PET2SPC: Gaussian smoothing in tracelength: %.2f * %.2f = %.2f pix\n", smooth_pars.x, smooth_pars.y, smooth_pars.x * smooth_pars.y);
 
   // go over all elements
+  fprintf(stdout, "spec len is %d", spec->spec_len);
   for (j=0;j<spec->spec_len;j++)
     {
       // get the smoothed sensitivity value plus error
       get_smoothed_response(spec->spec[j].lambda_mean, smooth_pars, wl_calibration,
                             for_grism, weights, resp_func, resp_vals);
-
       // make sure you can compute the flux value
       if (resp_vals[0] != 0.0)
         {
@@ -759,7 +766,7 @@ get_central_tracelength(const double wavelength, const calib_function *wl_calibr
  * Function: get_smoothed_response
  * The function determine a smoothe sensitivity value and its error.
  * Gaussian smoothing is applied, but the Gaussian weights are delivered
- * as a function paramter (for perfomrance reasons). The function detemines
+ * as a function parameter (for perfomrance reasons). The function detemines
  * the response values over the weight window and then combines these values
  * with the weights to get one weighted sensitivity value at the desired
  * wavelength.
@@ -862,7 +869,7 @@ get_smoothed_response(const double wavelength, const d_point smooth_pars,
 
 /**
  * Function: get_weighted_sensitivity
- * Combines the weihg values, the sensitivity and error at the weight point
+ * Combines the weigh values, the sensitivity and error at the weight point
  * to a single sensitivity value plus error. A mask array defines at which
  * points values do exist.
  *

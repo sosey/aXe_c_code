@@ -2,13 +2,14 @@
 * Drizzle utilities
 */
 
-#include "spc_trace_functions.h"
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_statistics.h>
+#include <math.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
-#include <math.h>
+#include "spc_trace_functions.h"
 #include "crossdisp_utils.h"
 #include "aper_conf.h"
 #include "trace_conf.h"

@@ -279,6 +279,8 @@ get_sex_col_descr (char *filename)
     }
   
   //  go through the catalog file
+  //  This is expected one column name in each line
+  //  The way source extractor writes headers
   while (NULL != fgets (Buffer, MAXCHAR, input))
     {
       // see whether the current line is part of the header
@@ -286,7 +288,6 @@ get_sex_col_descr (char *filename)
         {
           // read the column number and column name from the header line          
           sscanf (Buffer, "# %d %21s", &num, key);
-
           // store column number and column name in the header structure
           strcpy(actinfo->columns[count].name, key);
           actinfo->columns[count++].number = num;

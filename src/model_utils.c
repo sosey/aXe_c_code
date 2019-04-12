@@ -3,12 +3,13 @@
  * Subroutines to calculate the
  * various contamination models
  */
-#include "model_utils.h"
 #include <math.h>
-#include "fitsio.h"
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
+
+#include "model_utils.h"
+#include "fitsio.h"
 #include "inout_aper.h"
 #include "aXe_grism.h"
 #include "spce_PET.h"
@@ -797,7 +798,7 @@ oblist_to_dirlist2(char grism_file[], char CONF_file[], const  px_point npixels,
   drzcoeffs = get_crossdisp_matrix(grism_file, conf->science_numext);
   if (drzcoeffs->size1 < 2 || !drzcoeffs->size2)
     aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
-                 "oblist_to_dirlist:" " Could not get"
+                 "oblist_to_dirlist2:" " Could not get"
                  " the drizzle coefficients in file: %s\n", grism_file);
 
   // determine an offset from the PSF_OFFSET

@@ -1,5 +1,4 @@
 /**
- * File: spc_sex.c
  * Subroutines used mostly for working on catalogs
  * in the tasks SEX2GOL and GOL2AF.
  *
@@ -37,7 +36,7 @@
 /**
  *
  *  Function: create_SexObject
- *  Allocates and create s a SExtractor object from
+ *  Allocates and creates a SExtractor object from
  *  a line of a SExtractor catalog.
  *
  *  Parameters:
@@ -911,7 +910,6 @@ check_object_size(const aperture_conf *conf, const SexObject *sobj, const int be
         // sizes to the return
         ret.x = conf->pobjsize;
         ret.y = conf->pobjsize;
-        fprintf(stdout, "Object ID %i, %c: size set to: %f\n", sobj->number, BEAM(beamID), conf->pobjsize);
       }
 
     // return the resulting
@@ -1069,256 +1067,256 @@ object * SexObject_to_objectII(SexObject * sobj, observation * const obs,
  * @return a pointer to a newly allocated object structure
  *
  */
-object *
-SexObject_to_object (SexObject * sobj, observation * const obs,
-                     aperture_conf *conf, char conffile[], float mfwhm,
-                     float dmag,
-                     //              char conffile[], float mfwhm, float dmag,
-                     int auto_reorient, int bck_mode)
-{
-  int i, dx0, dx1;
-  beam *b;
-  object *ob = malloc (sizeof (object));
-  d_point pixel;
-  tracestruct *trace;
-  //  aperture_conf *conf;
-  float mmag_extract, mmag_mark;
-  //  conf = get_aperture_descriptor (conffile);
-  int j = 0, jj=0, nvalid=0;
-  double fval=0.0;
-  gsl_vector *flux;
-  float aposang, paposang;
-  float dya, dyb;
-  int iturn;
+// object *
+// SexObject_to_object (SexObject * sobj, observation * const obs,
+//                      aperture_conf *conf, char conffile[], float mfwhm,
+//                      float dmag,
+//                      //              char conffile[], float mfwhm, float dmag,
+//                      int auto_reorient, int bck_mode)
+// {
+//   int i, dx0, dx1;
+//   beam *b;
+//   object *ob = malloc (sizeof (object));
+//   d_point pixel;
+//   tracestruct *trace;
+//   //  aperture_conf *conf;
+//   float mmag_extract, mmag_mark;
+//   //  conf = get_aperture_descriptor (conffile);
+//   int j = 0, jj=0, nvalid=0;
+//   double fval=0.0;
+//   gsl_vector *flux;
+//   float aposang, paposang;
+//   float dya, dyb;
+//   int iturn;
 
-  ob->ID = sobj->number;
-
-
-  for (i = 0; i < conf->nbeams; i++)
-    {
-      dx0 = conf->beam[i].offset.dx0;
-      dx1 = conf->beam[i].offset.dx1;
-      mmag_extract = conf->beam[i].mmag_extract+dmag;
-      mmag_mark = conf->beam[i].mmag_mark+dmag;
-      b = &(ob->beams[i]);
-      b->ID = conf->beam[i].ID;
-
-      //---------------------------------------
-      // some code for FORS2 MXU
-      // b->backwindow.x = sobj->backwindow.x;
-      // b->backwindow.y = sobj->backwindow.y;
-
-      b->modspec  = sobj->modspec;
-      b->modimage = sobj->modimage;
-
-      /* Adjust for posibly non (0,0) ref point of the 2D field dependence */
-      pixel.x = sobj->xy_image.x-1 - conf->refx;
-      pixel.y = sobj->xy_image.y-1 - conf->refy;
-      /* get the geometrical description of the trace at position "pixel" */
-      trace =
-        get_tracestruct_at_pos (conffile, conf->beam[i].ID, pixel);
-
-      b->spec_trace = vector_to_trace_polyN ( trace->pol );
-
-      b->width   = sobj->el_image.a * mfwhm;
+//   ob->ID = sobj->number;
 
 
-      /* if flux/wavelength information exists */
-      if (sobj->magnitudes)
-        {
+//   for (i = 0; i < conf->nbeams; i++)
+//     {
+//       dx0 = conf->beam[i].offset.dx0;
+//       dx1 = conf->beam[i].offset.dx1;
+//       mmag_extract = conf->beam[i].mmag_extract+dmag;
+//       mmag_mark = conf->beam[i].mmag_mark+dmag;
+//       b = &(ob->beams[i]);
+//       b->ID = conf->beam[i].ID;
 
-          // get the number of valid entries in 'sobj->magnitudes'
-          nvalid = get_valid_entries(sobj->magnitudes);
-          if (!nvalid)
-            aXe_message (aXe_M_WARN3, __FILE__, __LINE__,
-                         "No valid magnitude for object %i !\n", sobj->number);
+//       //---------------------------------------
+//       // some code for FORS2 MXU
+//       // b->backwindow.x = sobj->backwindow.x;
+//       // b->backwindow.y = sobj->backwindow.y;
 
-          // allocate the vector for the flux
-          flux = gsl_vector_alloc (2*(nvalid));
+//       b->modspec  = sobj->modspec;
+//       b->modimage = sobj->modimage;
 
-          // fill the flux vector with values
-          jj=0;
-          for (j=0; j < (int)sobj->magnitudes->size; j++)
-            {
-              if (is_valid_entry(gsl_vector_get(sobj->magnitudes, j)))
-                {
+//       /* Adjust for posibly non (0,0) ref point of the 2D field dependence */
+//       pixel.x = sobj->xy_image.x-1 - conf->refx;
+//       pixel.y = sobj->xy_image.y-1 - conf->refy;
+//       /* get the geometrical description of the trace at position "pixel" */
+//       trace =
+//         get_tracestruct_at_pos (conffile, conf->beam[i].ID, pixel);
 
-                  fval = get_flambda_from_magab(gsl_vector_get(sobj->magnitudes, j), gsl_vector_get(sobj->lambdas, j));
+//       b->spec_trace = vector_to_trace_polyN ( trace->pol );
 
-                  gsl_vector_set(flux, 2*jj, gsl_vector_get(sobj->lambdas, j));
-                  //              gsl_vector_set(flux, 2*jj+1, gsl_vector_get(sobj->magnitudes, j));
-                  gsl_vector_set(flux, 2*jj+1, fval);
-                  jj++;
-                }
-            }
-          b->flux = flux;
-
-          /* fill the structual parameters of the object */
-          b->awidth  = sobj->el_image.a;
-          b->bwidth  = sobj->el_image.b;
-          b->aorient = sobj->el_image.theta;
-        }
-      // if flux/wavelength information does not exists
-      else
-        {
-          // set everything to dummy values
-          b->flux = NULL;
-
-          b->awidth  = -1.0;
-          b->bwidth  = -1.0;
-          b->aorient = -1.0;
-        }
-
-      /* Convert from SeXtractor angle reference point to aXe's */
-      b->orient = (180 + sobj->el_image.theta) / 180. * M_PI;
-      while (b->orient > M_PI)
-        b->orient = b->orient - M_PI;
-
-      // calculate the angle between
-      // the extraction direction and the trace
-      aposang =
-        b->orient - atan2(b->spec_trace->deriv (0, b->spec_trace->data),1.0);
-
-      // transform the angle to degrees
-      paposang = aposang / M_PI * 180.;
-
-      // give a warning for small angles
-      // between the orientation direction and
-      // the trace angle.
-      // BUGFIX comparison should be to paposang not the logical comparison MLS
-      if ( ( (fabs(paposang) < MIN_DIFFANGLE) || (fabs(paposang-180.0) < MIN_DIFFANGLE) ) && (auto_reorient == 0) )
-        aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
-                     "aXe_GOL2AF: Object ID: %i: The angle between the extraction orientation and "
-                     "the trace is less than %5.2f degrees. You may get severe problems"
-                     " down to core dumps in the 1D extraction later on!\n", ob->ID, MIN_DIFFANGLE);
+//       b->width   = sobj->el_image.a * mfwhm;
 
 
-      /* Case when the extraction angle is modified to that the extraction */
-      /* proceeds along the semi-axis which projects farther away from the
-       * trace i.e. we avoid trying to extract spectra in a direction nearly
-       * parallel the trace */
-      if (auto_reorient==1)
-        {
+//       /* if flux/wavelength information exists */
+//       if (sobj->magnitudes)
+//         {
 
-          aposang =
-            b->orient - atan2(b->spec_trace->deriv (0,
-                                                    b->spec_trace->data),1.0);
+//           // get the number of valid entries in 'sobj->magnitudes'
+//           nvalid = get_valid_entries(sobj->magnitudes);
+//           if (!nvalid)
+//             aXe_message (aXe_M_WARN3, __FILE__, __LINE__,
+//                          "No valid magnitude for object %i !\n", sobj->number);
 
-          /* February 2004 introduced to make a hardstop in the range for
-             allowed angles. */
-          if (aposang > 0.0){
-            paposang = aposang / M_PI * 180.;
-          }
-          else{
-            paposang = aposang / M_PI * 180. + 360.0;
-          }
-          if (paposang > 180.0)
-            paposang = paposang-180.0;
-          /* the hard stop is here */
-          if (paposang > 30.0 && paposang < 150.0){
-            iturn = 0;}
-          else{
-            iturn = 1;}
-          /*end introduction */
+//           // allocate the vector for the flux
+//           flux = gsl_vector_alloc (2*(nvalid));
+
+//           // fill the flux vector with values
+//           jj=0;
+//           for (j=0; j < (int)sobj->magnitudes->size; j++)
+//             {
+//               if (is_valid_entry(gsl_vector_get(sobj->magnitudes, j)))
+//                 {
+
+//                   fval = get_flambda_from_magab(gsl_vector_get(sobj->magnitudes, j), gsl_vector_get(sobj->lambdas, j));
+
+//                   gsl_vector_set(flux, 2*jj, gsl_vector_get(sobj->lambdas, j));
+//                   //              gsl_vector_set(flux, 2*jj+1, gsl_vector_get(sobj->magnitudes, j));
+//                   gsl_vector_set(flux, 2*jj+1, fval);
+//                   jj++;
+//                 }
+//             }
+//           b->flux = flux;
+
+//           /* fill the structual parameters of the object */
+//           b->awidth  = sobj->el_image.a;
+//           b->bwidth  = sobj->el_image.b;
+//           b->aorient = sobj->el_image.theta;
+//         }
+//       // if flux/wavelength information does not exists
+//       else
+//         {
+//           // set everything to dummy values
+//           b->flux = NULL;
+
+//           b->awidth  = -1.0;
+//           b->bwidth  = -1.0;
+//           b->aorient = -1.0;
+//         }
+
+//       /* Convert from SeXtractor angle reference point to aXe's */
+//       b->orient = (180 + sobj->el_image.theta) / 180. * M_PI;
+//       while (b->orient > M_PI)
+//         b->orient = b->orient - M_PI;
+
+//       // calculate the angle between
+//       // the extraction direction and the trace
+//       aposang =
+//         b->orient - atan2(b->spec_trace->deriv (0, b->spec_trace->data),1.0);
+
+//       // transform the angle to degrees
+//       paposang = aposang / M_PI * 180.;
+
+//       // give a warning for small angles
+//       // between the orientation direction and
+//       // the trace angle.
+//       // BUGFIX comparison should be to paposang not the logical comparison MLS
+//       if ( ( (fabs(paposang) < MIN_DIFFANGLE) || (fabs(paposang-180.0) < MIN_DIFFANGLE) ) && (auto_reorient == 0) )
+//         aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
+//                      "aXe_GOL2AF: Object ID: %i: The angle between the extraction orientation and "
+//                      "the trace is less than %5.2f degrees. You may get severe problems"
+//                      " down to core dumps in the 1D extraction later on!\n", ob->ID, MIN_DIFFANGLE);
 
 
-          /* Compute how far each axes extends away from the trace */
-          dya = fabs (sobj->el_image.a * sin (aposang));
-          dyb = fabs (sobj->el_image.b * sin (M_PI / 2. - aposang));
+//        Case when the extraction angle is modified to that the extraction 
+//       /* proceeds along the semi-axis which projects farther away from the
+//        * trace i.e. we avoid trying to extract spectra in a direction nearly
+//        * parallel the trace */
+//       if (auto_reorient==1)
+//         {
 
-          /* Select the broader of the two axes */
-          if (dya > dyb && iturn == 0)
-            {
-              b->width = sobj->el_image.a * mfwhm;
-            }
-          else
-            {
-              b->width = sobj->el_image.b * mfwhm;
-              b->orient = b->orient + M_PI / 2.;
-            }
-        }
+//           aposang =
+//             b->orient - atan2(b->spec_trace->deriv (0,
+//                                                     b->spec_trace->data),1.0);
 
-        /* Case when we force the extraction to be vertical,
-           the extraction width is recomputed */
-      if (auto_reorient==2) {
-        // new system for fixed extraction:
-        //    - extraction direction perpendicular
-        //      to the trace
-        //    - the mfwhm is used as a fixed extraction widt in pixels
-        b->orient =
-          atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0)+ M_PI / 2.0;
+//           /* February 2004 introduced to make a hardstop in the range for
+//              allowed angles. */
+//           if (aposang > 0.0){
+//             paposang = aposang / M_PI * 180.;
+//           }
+//           else{
+//             paposang = aposang / M_PI * 180. + 360.0;
+//           }
+//           if (paposang > 180.0)
+//             paposang = paposang-180.0;
+//           /* the hard stop is here */
+//           if (paposang > 30.0 && paposang < 150.0){
+//             iturn = 0;}
+//           else{
+//             iturn = 1;}
+//           /*end introduction */
 
-        if (mfwhm < 0.0)
-          {
-            b->orient =
-              atan2(b->spec_trace->deriv (0.0,b->spec_trace->data),1.0)+ M_PI / 2.0;
-            b->width  = -mfwhm;
 
-          }
-        else
-          {
-            aposang = b->orient
-              - atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0);
+//           /* Compute how far each axes extends away from the trace */
+//           dya = fabs (sobj->el_image.a * sin (aposang));
+//           dyb = fabs (sobj->el_image.b * sin (M_PI / 2. - aposang));
 
-            /* Compute how far each axes extends away from the trace */
-            dya = fabs (sobj->el_image.a * sin (aposang));
-            dyb = fabs (sobj->el_image.b * sin (M_PI / 2. - aposang));
-            b->width = mfwhm*MAX(dya,dyb);
-            b->orient =
-              atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0)+ M_PI / 2.0;
-          }
+//           /* Select the broader of the two axes */
+//           if (dya > dyb && iturn == 0)
+//             {
+//               b->width = sobj->el_image.a * mfwhm;
+//             }
+//           else
+//             {
+//               b->width = sobj->el_image.b * mfwhm;
+//               b->orient = b->orient + M_PI / 2.;
+//             }
+//         }
 
-      }
+//         /* Case when we force the extraction to be vertical,
+//            the extraction width is recomputed */
+//       if (auto_reorient==2) {
+//         // new system for fixed extraction:
+//         //    - extraction direction perpendicular
+//         //      to the trace
+//         //    - the mfwhm is used as a fixed extraction widt in pixels
+//         b->orient =
+//           atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0)+ M_PI / 2.0;
 
-      if (sobj->backwindow.x != -1 && bck_mode)
-        b->width = MAX(b->width, sobj->backwindow.x);
+//         if (mfwhm < 0.0)
+//           {
+//             b->orient =
+//               atan2(b->spec_trace->deriv (0.0,b->spec_trace->data),1.0)+ M_PI / 2.0;
+//             b->width  = -mfwhm;
 
-      /* On coordinate systems:
-         the sexrtractor image positions are given in the iraf system,
-         which means the value of the lower left pixel is associated
-         with the coordinate (1.0,1.0).
-         aXe works in a kind of 'matrix system', where the value of
-         the lower left pixel is stored in the matrix indices (0,0)
-         or (0.0,0.0) seen as a coordinate system.
-         To transform into this system 1.0 is subracted from
-         both sextractor coordinates.
-       */
-      b->refpoint.x = sobj->xy_image.x-1.0 + trace->offset.x;
-      b->refpoint.y = sobj->xy_image.y-1.0 + trace->offset.y;
+//           }
+//         else
+//           {
+//             aposang = b->orient
+//               - atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0);
 
-      /* magnitude cut */
-      // PROBLEM: there is a logical flaw inside
-      //          whhat happend when (mag > mag_mark) && (mag <  mmag_extract) ????
-      //          of course this has only relevance when mag_mark < mmag_extract
-      //      if ((sobj->mag_auto <= mmag_mark)&&(sobj->mag_auto <= mmag_extract))
-      // That's now an easy fix, but makes sense..
-      if (sobj->mag_auto <= mmag_extract)
-        {
-          b->ignore = 0; /* This object will be extracted */
-        }
-      if ((sobj->mag_auto <= mmag_mark)&&(sobj->mag_auto > mmag_extract))
-        {
-          b->ignore = 2; /* This object will be not be extracted */
-        }
-      if ((sobj->mag_auto > mmag_mark)&&(sobj->mag_auto > mmag_extract))
-        {
-          b->ignore = 1; /* This object will be ignored */
-        }
+//             /* Compute how far each axes extends away from the trace */
+//             dya = fabs (sobj->el_image.a * sin (aposang));
+//             dyb = fabs (sobj->el_image.b * sin (M_PI / 2. - aposang));
+//             b->width = mfwhm*MAX(dya,dyb);
+//             b->orient =
+//               atan2(b->spec_trace->deriv (0,b->spec_trace->data),1.0)+ M_PI / 2.0;
+//           }
 
-      if (!fill_object_bbox (obs, b, 2, dx0, dx1))
-        b->ignore = 1;
+//       }
 
-    b->slitgeom[0] = -1.0;
-    b->slitgeom[1] = -1.0;
-    b->slitgeom[2] = -1.0;
-    b->slitgeom[3] = -1.0;
-    }
+//       if (sobj->backwindow.x != -1 && bck_mode)
+//         b->width = MAX(b->width, sobj->backwindow.x);
 
-  ob->nbeams = conf->nbeams;
-  ob->grism_obs = obs;
+//       /* On coordinate systems:
+//          the sexrtractor image positions are given in the iraf system,
+//          which means the value of the lower left pixel is associated
+//          with the coordinate (1.0,1.0).
+//          aXe works in a kind of 'matrix system', where the value of
+//          the lower left pixel is stored in the matrix indices (0,0)
+//          or (0.0,0.0) seen as a coordinate system.
+//          To transform into this system 1.0 is subracted from
+//          both sextractor coordinates.
+//        */
+//       b->refpoint.x = sobj->xy_image.x-1.0 + trace->offset.x;
+//       b->refpoint.y = sobj->xy_image.y-1.0 + trace->offset.y;
 
-  return ob;
-}
+//       /* magnitude cut */
+//       // PROBLEM: there is a logical flaw inside
+//       //          whhat happend when (mag > mag_mark) && (mag <  mmag_extract) ????
+//       //          of course this has only relevance when mag_mark < mmag_extract
+//       //      if ((sobj->mag_auto <= mmag_mark)&&(sobj->mag_auto <= mmag_extract))
+//       // That's now an easy fix, but makes sense..
+//       if (sobj->mag_auto <= mmag_extract)
+//         {
+//           b->ignore = 0; /* This object will be extracted */
+//         }
+//       if ((sobj->mag_auto <= mmag_mark)&&(sobj->mag_auto > mmag_extract))
+//         {
+//           b->ignore = 2; /* This object will be not be extracted */
+//         }
+//       if ((sobj->mag_auto > mmag_mark)&&(sobj->mag_auto > mmag_extract))
+//         {
+//           b->ignore = 1; /* This object will be ignored */
+//         }
+
+//       if (!fill_object_bbox (obs, b, 2, dx0, dx1))
+//         b->ignore = 1;
+
+//     b->slitgeom[0] = -1.0;
+//     b->slitgeom[1] = -1.0;
+//     b->slitgeom[2] = -1.0;
+//     b->slitgeom[3] = -1.0;
+//     }
+
+//   ob->nbeams = conf->nbeams;
+//   ob->grism_obs = obs;
+
+//   return ob;
+// }
 
 /**
  * Function: SexObjects_to_oblist
@@ -1362,7 +1360,7 @@ SexObjects_to_oblist (SexObject ** sobjs, observation * const obs,
        {
          //fprintf(stdout, "Using the old routine...\n");
          oblist[i] =
-         SexObject_to_object(sobjs[i], obs, conf, conffile, mfwhm, dmag, auto_reorient, bck_mode);
+         SexObject_to_objectII(sobjs[i], obs, conf, conffile, mfwhm, dmag, auto_reorient, bck_mode);
         }
      oblist[nobjs] = NULL;
 
@@ -1399,7 +1397,7 @@ SexObjects_to_oblistII (SexObject ** sobjs, observation * const obs,
 {
      int i, nobjs = 0;
      object **oblist;
-
+     fflush(stdout);
      /* Find the number of SexObjects in sobjs */
      while (sobjs[nobjs])
           nobjs++;
@@ -1413,7 +1411,6 @@ SexObjects_to_oblistII (SexObject ** sobjs, observation * const obs,
          SexObject_to_objectII(sobjs[i], obs, conf, conffile, mfwhm, dmag, auto_reorient, bck_mode);
         }
      oblist[nobjs] = NULL;
-
      return oblist;
 }
 
@@ -1604,7 +1601,6 @@ size_of_sextractor_catalog (char filename[])
   int catsize;
   int num = 0;
   colinfo * actcatinfo;
-
   actcatinfo = get_sex_col_descr (filename);
   //  catalog_header = get_sex_col_descr (filename);
   catsize = actcatinfo->numcols;
@@ -1673,7 +1669,6 @@ get_SexObject_from_catalog (char filename[], const double lambda_mark)
   //  catsize = count_keys (catalog_header);
   catsize = actcatinfo->numcols;
   nobjs = size_of_sextractor_catalog (filename);
-
   if (!(input = fopen (filename, "r")))
        {
          aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
@@ -1704,7 +1699,6 @@ get_SexObject_from_catalog (char filename[], const double lambda_mark)
         }
     }
   sobjs[i] = NULL;
-
   return sobjs;
 }
 

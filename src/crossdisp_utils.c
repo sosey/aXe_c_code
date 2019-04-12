@@ -1,13 +1,13 @@
 /**
  */
-#include "spc_trace_functions.h"
+#include <math.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_multiroots.h>
 #include "aXe_grism.h"
 #include "aXe_utils.h"
-#include <math.h>
+#include "spc_trace_functions.h"
 #include "disp_conf.h"
 #include "trace_conf.h"
 #include "crossdisp_utils.h"

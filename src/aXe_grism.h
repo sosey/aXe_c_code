@@ -10,7 +10,7 @@
 #include "spc_trace_functions.h"
 //#include "aXe_errors.h"
 
-#define RELEASE " 2.5, March 2013"
+#define RELEASE "See github"
 
 #define gsl_matrix              gsl_matrix_float
 #define gsl_matrix_get          gsl_matrix_float_get

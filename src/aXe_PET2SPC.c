@@ -82,7 +82,7 @@ main (int argc, char *argv[])
 
   fitsfile *SPC_ptr, *SPC_opt_ptr, *WHT_ptr;
 
-  gsl_matrix *weights;
+  gsl_matrix   *weights;
   drzstamp     *modvar;
 
   int obj_aperID, obj_beamID, objindex;
@@ -519,13 +519,13 @@ main (int argc, char *argv[])
 		      if (smooth_params.x > 0.0)
 		        {
 		          // apply a smoothed flux conversion
-			  apply_smoothed_response(wl_calibration, for_grism, quant_cont, resp_func, smooth_params, sobj_spec);
-			}
+			        apply_smoothed_response(wl_calibration, for_grism, quant_cont, resp_func, smooth_params, sobj_spec);
+			       }
 		      else
-			{
-			  // apply a normal flux conversion
-			  apply_response_function(sobj_spec,resp, quant_cont);
-			}
+			   {
+			       // apply a normal flux conversion
+			       apply_response_function(sobj_spec, resp, quant_cont);
+			   }
 		    }
 		  // free the memory of the
 		  // response functions
@@ -537,7 +537,6 @@ main (int argc, char *argv[])
 	    {
 	      add_spectra_to_SPC_opened (SPC_ptr, obj_spec, bck_spec,
 					 sobj_spec, oblist[objindex]->ID, oblist[objindex]->beams[obj_beamID].ID);
-
 
 	      /* Copy header from OPET extension into this SPC extension */
 	      cards = get_FITS_cards_opened(OPET_ptr);
@@ -572,7 +571,6 @@ main (int argc, char *argv[])
 		  // to get a sampling comparable to the unweighted
 		  // extraction
 		  prepare_inv_variance(obj_PET, bck_PET, dobck, conf, exptime, sky_cps, 0.0);
-
 		  // compute the inverse variance and the profile
 		  // image in the trace distance - crossdispersion plane
 		  modvar = compute_modvar(obj_PET, oblist[objindex]->beams[obj_beamID], dimension);
@@ -644,13 +642,13 @@ main (int argc, char *argv[])
 		  {
 		    fprintf(stdout,"aXe_PET2SPC: Applying sensitivity contained in %s\n",table_path);
 		    smooth_params = get_smooth_pars_for_beam(conf, smooth_conv, oblist[objindex]->beams[obj_beamID]);
-                    if (smooth_params.x > 0.0)
-                      {
-                        apply_smoothed_response(wl_calibration, for_grism, quant_cont, resp_func, smooth_params, sobj_spec);
-                      }
+        if (smooth_params.x > 0.0)
+          {
+            apply_smoothed_response(wl_calibration, for_grism, quant_cont, resp_func, smooth_params, sobj_spec);
+          }
 		    else
 		      {
-			apply_response_function(sobj_spec,resp, quant_cont);
+			apply_response_function(sobj_spec, resp, quant_cont);
 		      }
 		  }
 		// free the memory
@@ -662,7 +660,6 @@ main (int argc, char *argv[])
 	    {
 	      add_spectra_to_SPC_opened (SPC_opt_ptr, obj_spec, bck_spec,
 					 sobj_spec, oblist[objindex]->ID, oblist[objindex]->beams[obj_beamID].ID);
-
 
 	      /* Copy header from OPET extension into this SPC extension */
 	      cards = get_FITS_cards_opened(OPET_ptr);

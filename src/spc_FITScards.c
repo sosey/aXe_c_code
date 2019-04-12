@@ -1,10 +1,3 @@
-/**
- * File: spc_FITScards.c
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_FITScards
- * @version $Revision: 1.4 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
 #include "spc_FITScards.h"
 
 /**

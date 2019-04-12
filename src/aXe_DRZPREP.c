@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
 #include "spc_FITScards.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"
@@ -12,8 +15,6 @@
 #include "trace_conf.h"
 #include "aper_conf.h"
 #include "disp_conf.h"
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
 #include "drizzle_utils.h"
 #include "crossdisp_utils.h"
 #include "spc_cfg.h"

@@ -60,8 +60,7 @@ main (int argc, char *argv[])
   if ((argc < 3) || (opt = get_online_option ("help", argc, argv)))
     {
       fprintf (stdout,
-	       "ST-ECF European Coordinating Facility\n"
-	       "aXe_PETCONT Version %s:\n"
+	       "aXe_PETCONT\n"
 	       "           Task that populates the CONTAMINATION part of a\n"
 	       "           Pixel Extraction Table (PET). Each pixel is examined\n"
 	       "           and the number of aperture minus 1 in which they\n"
@@ -74,7 +73,7 @@ main (int argc, char *argv[])
 	       "      -in_AF=[string] - overwrite the automatically generated name\n"
 	       "                        of the input aperture file\n"
 	       "      -cont_map       - write the contamination map into a FITS file"
-	       "\n",RELEASE);
+	       "\n");
       exit (1);
     }
 

@@ -65,8 +65,7 @@ main (int argc, char *argv[])
   if ((argc < 3) || (opt = get_online_option ("help", argc, argv)))
     {
       fprintf (stdout,
-               "ST-ECF European Coordinating Facility\n"
-               "aXe_GOL2AF Version %s:\n"
+               "aXe_GOL2AF:\n"
                "            aXe task to create an Object Aperture File (OAF)\n"
                "            or a Background Aperture File (BAF) (-bck option)  using an\n"
                "            input Sextractor Grism Object List (GOL).\n"
@@ -110,7 +109,7 @@ main (int argc, char *argv[])
                "                                   MMAG_MARK values.\n"
                "\n"
                "Example: ./aXe_GOL2AF slim_grism.fits -bck -dmag=2 -mfwhm=2\n"
-               "\n",RELEASE);
+               "\n");
       exit (1);
     }
 
@@ -334,13 +333,6 @@ main (int argc, char *argv[])
 
   fprintf (stdout, "aXe_GOL2AF: Generating aperture list...");
 
-  //if (!slitless_geom)
-  //use the old, aXe-1.6  code
-  //oblist = SexObjects_to_oblist(os, obs, conf, conf_file_path, mfwhm, dmag,
-  //                               auto_reorient, bck_mode);
-  // else
-
-  // use the new aXe-1.7 code
   oblist = SexObjects_to_oblistII(os, obs, conf, conf_file_path, mfwhm, dmag, auto_reorient, bck_mode);
 
   fprintf (stdout, "Done.\n");fflush(stdout);

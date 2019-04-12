@@ -5,7 +5,7 @@
  * @author  Nor Pirzkal
  * @package spc_spc
  * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
+ * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 #include "spc_spc.h"
 #include "aXe_utils.h"
@@ -26,7 +26,7 @@ allocate_spectrum (const int numbin)
 {
   spectrum *sp;
   int i;
-
+  
   sp = malloc (sizeof (spectrum));
   if (!sp)
     {
@@ -50,10 +50,10 @@ allocate_spectrum (const int numbin)
       sp->spec[i].ferror = 0.;
       sp->spec[i].contam = -1.0;
       sp->spec[i].dq = 0;
-
+      
     }
 
-
+  
   return sp;
 }
 
@@ -80,7 +80,7 @@ free_spectrum (spectrum * spec)
  * Function to display the content of a spectrum
  *
  * Parameters:
- * @param output - a pointer to a stream
+ * @param output - a pointer to a stream 
  * @param sp     - a pointer to a spectrum
  */
 void
@@ -88,7 +88,7 @@ fprintf_spectrum (FILE * output, const spectrum * const sp)
 {
   int i;
   double sum = 0;
-
+  
   fprintf(output,"# "
 	  "lambda_mean count error weight i lambda_max "
 	  "lambda_min delta_lambda flux ferror\n");
@@ -104,7 +104,7 @@ fprintf_spectrum (FILE * output, const spectrum * const sp)
 	       sp->spec[i].lambda_max, sp->spec[i].lambda_min,
 	       sp->spec[i].lambda_max - sp->spec[i].lambda_min,
 	       sp->spec[i].flux, sp->spec[i].ferror);
-
+      
       sum += sp->spec[i].count;
     }
   fprintf (output, "#Spectrum sum: %f\n", sum);
@@ -112,7 +112,7 @@ fprintf_spectrum (FILE * output, const spectrum * const sp)
 
 /**
  * Function: subtract_spectra
- * Subtract one spectrum form sa second one
+ * Subtract one spectrum form sa second one 
  *
  * Parameters:
  * @param a - the original spectrum
@@ -127,24 +127,24 @@ subtract_spectra (spectrum * a, spectrum * b)
   int i;
   spectrum *res;
   double alignement;
-
+  
   if ( (a==NULL) || (b==NULL) )
     {
       aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
 		   "subtract_spectra: spectra empty.");
       return NULL;
     }
-
+  
   if (a->spec_len != b->spec_len)
     {
       fprintf (stderr, "%d %d\n", a->spec_len, b->spec_len);
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		   "subtract_spectra: spectra not aligned.");
     }
-
+  
   /* Allocate new spectrum */
   res = allocate_spectrum (a->spec_len);
-
+  
   for (i = 0; i < a->spec_len; i++)
     {
       if (isnan (a->spec[i].lambda_mean))
@@ -165,7 +165,7 @@ subtract_spectra (spectrum * a, spectrum * b)
       // check whether the alignement is OK
       if (alignement > SPCTOL)
 	{
-	  {
+	  { 
 	    int j;
 	    for (j=0; j<a->spec_len; j++)
 	      fprintf(stderr,"%f %f\n",a->spec[j].lambda_mean,b->spec[j].lambda_mean);
@@ -180,12 +180,12 @@ subtract_spectra (spectrum * a, spectrum * b)
       res->spec[i].count = a->spec[i].count - b->spec[i].count;
       res->spec[i].error =
 	sqrt (pow (a->spec[i].error, 2) + pow (b->spec[i].error, 2));
-
+      
       res->spec[i].flux = a->spec[i].flux - b->spec[i].flux;
       res->spec[i].ferror =
 	sqrt (pow (a->spec[i].ferror, 2) +
 	      pow (b->spec[i].ferror, 2));
-
+      
       res->spec[i].weight = a->spec[i].weight;
       res->spec[i].lambda_max = a->spec[i].lambda_max;
       res->spec[i].lambda_min = a->spec[i].lambda_min;
@@ -211,12 +211,12 @@ empty_counts_spectrum_copy (spectrum * a)
 {
   int i;
   spectrum *res;
-
+  
   if (a==NULL) return NULL;
-
+  
   /* Allocate new spectrum */
   res = allocate_spectrum (a->spec_len);
-
+  
   /* All the counts and flux are set to zero, rest is */
   /* identical to the original spectrum */
   for (i = 0; i < a->spec_len; i++)
@@ -231,7 +231,7 @@ empty_counts_spectrum_copy (spectrum * a)
       res->spec[i].lambda_max = a->spec[i].lambda_max;
       res->spec[i].lambda_min = a->spec[i].lambda_min;
     }
-
+  
   return res;
 }
 
@@ -347,7 +347,7 @@ fitsfile *create_SPC_opened (char filename[], int overwrite)
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		   "create_SPC: Could not open" " file: %s", filename);
     }
-
+  
   // Create empty HDU
   {
     int naxis = 0;
@@ -392,8 +392,8 @@ find_ID_in_SPC (char filename[], char ID[])
     {
       return hdunum;
     }
-
-
+  
+  
   //  Open the file for creating/appending
   fits_open_file (&output, filename, READONLY, &f_status);
   if (f_status)
@@ -410,7 +410,7 @@ find_ID_in_SPC (char filename[], char ID[])
       fits_close_file (output, &f_status);
       return -1;
     }
-
+  
   /* Get current HDU number */
   fits_get_hdu_num (output, &hdunum);
   if (f_status)
@@ -483,14 +483,14 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
     // new for dlambda column
     {"DLAMBDA", "E1", "ANGSTROM"},
     {"DQ","I1","DQ"}};
-
-
+  
+     
   int f_status = 0;
   {
     char *ttype[SPCCOL], *tform[SPCCOL], *tunit[SPCCOL];
-
+    
     int i;
-
+    
     /* Prepare column description */
     for (i = 0; i < SPCCOL; i++)
       {
@@ -534,7 +534,7 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
 	else
 	  sprintf (tunit[i], "%s", " ");
       }
-
+    
     fits_create_tbl (output, BINARY_TBL, 0, SPCCOL, ttype, tform, tunit,
 		     ID, &f_status);
     if (f_status)
@@ -544,18 +544,18 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
 		     "intadd_ID_to_SPC_opened: Could not create"
 		     " new binary table HDU in SPC file");
       }
-
+    
     /* Clean up */
     for (i = 0; i < SPCCOL; i++)
       {
-	free (tunit[i]);
-	tunit[i] = NULL;
-	free (ttype[i]);
-	ttype[i] = NULL;
-	free (tform[i]);
-	tform[i] = NULL;
+      	free (tunit[i]);
+      	tunit[i] = NULL;
+      	free (ttype[i]);
+      	ttype[i] = NULL;
+      	free (tform[i]);
+      	tform[i] = NULL;
       }
-
+    
     {
       char **array;
       int colnum;
@@ -571,7 +571,7 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
 	  aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		       "add_net_to_SPC: Out of memory");
 	}
-      sprintf("%s %s", array[0], ID);
+      sprintf (array[0], "%s", ID);
       colnum = get_SPC_colnum (output, "ID");
       fits_write_col (output, TSTRING, colnum, 1, 1, 1, array,
 		      &f_status);
@@ -579,7 +579,7 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
       array[0] = NULL;
       free (array);
       array = NULL;
-
+      
       if (f_status)
 	{
 	  ffrprt (stderr, f_status);
@@ -587,9 +587,9 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
 		       "add_new_to_SPC: "
 		       "Could not write ID to row %d ,collumn %s (%d) in "
 		       "SPC file ", 1, "ID", colnum);
-	}
+	} 
     }
-  }
+  } 
 }
 
 
@@ -610,7 +610,7 @@ add_ID_to_SPC_opened (fitsfile *output, int N, char ID[])
  */
 int add_ID_to_SPC (char filename[], int N, char ID[])
 {
-
+ 
   fitsfile *output;
   int f_status = 0;
   int hdunum = 0, hdutype;
@@ -650,10 +650,10 @@ int add_ID_to_SPC (char filename[], int N, char ID[])
 		   "add_new_to_SPC: Could not get"
 		   " current HDU number from file: %s", filename);
     }
-
+  
   add_ID_to_SPC_opened (output, N, ID);
-
-
+  
+  
   fits_close_file (output, &f_status);
   if (f_status)
     {
@@ -724,7 +724,7 @@ add_ID_index_to_SPC (char filename[], char ID[], int hdunum)
  * Function: get_ID_index_to_SPC
  * Get the value of an HDU index keyword of the for "ID%d%c" from the first HDU
  * of an existing FITS file.
- *
+ *  
  * Parameters:
  * @param filename - a pointer to an array containing the name of an existing FITS file.
  * @param ID       - a pointer to a char array containing the beam ID in the form "ID%d%c".
@@ -738,9 +738,9 @@ get_ID_index_to_SPC (char filename[], char ID[])
   fitsfile *input;
   int f_status = 0, hdutype;
   char comment[FLEN_COMMENT];
-  long hdunum=0;
-
-  //  Open the file for reading
+  long hdunum;
+  
+  //  Open the file for reading 
   fits_open_file (&input, filename, READONLY, &f_status);
   if (f_status)
     {
@@ -758,7 +758,7 @@ get_ID_index_to_SPC (char filename[], char ID[])
 		   "Could not read extention %d from file: %s", hdunum,
 		   filename);
     }
-
+  
   fits_read_key_lng (input, ID, &hdunum, comment, &f_status);
   if (f_status)
     {
@@ -783,14 +783,14 @@ get_ID_index_to_SPC (char filename[], char ID[])
 		   "get_ID_index_to_SPC: Error closing file: %s ",
 		   filename);
     }
-
+  
   return (int) hdunum;
 }
 
 
-/**
+/** 
  * Function: get_SPC_colnum
- * A helper function which returns the collumn number of the column matching a
+ * A helper function which returns the collumn number of the column matching a 
  * given name. Function fails if collumn is not found.
  *
  * Parameters:
@@ -798,13 +798,13 @@ get_ID_index_to_SPC (char filename[], char ID[])
  * @param colname - the name of the desired column
 
  * Returns:
- * @return colnum - the number of the column.
+ * @return colnum - the number of the column. 
  */
 int
 get_SPC_colnum (fitsfile * input, char colname[])
 {
   int colnum, f_status = 0;
-
+  
   fits_get_colnum (input, CASEINSEN, colname, &colnum, &f_status);
 #ifdef SPCDEBUG
   fprintf (stderr, "get_SPC_colnum: colum of %s is %d\n", colname, colnum);
@@ -879,7 +879,7 @@ add_spectra_to_SPC (char filename[], spectrum * obj_spec, spectrum * bck_spec,
     else {
         spec_len = 0;
     }
-
+    
 #ifdef DEBUGSPC
      fprintf (stderr, "Looking for ID:%s in SPC...", ID);
 #endif
@@ -925,7 +925,7 @@ add_spectra_to_SPC (char filename[], spectrum * obj_spec, spectrum * bck_spec,
 
 /**
  * Function: add_data_to_SPC
- * Function to add a specific spectrum structure into specifically
+ * Function to add a specific spectrum structure into specifically 
  * named columns of an existing SPC FITS file. If a column name
  * is set to NULL then that particular data column is not written to the file.
  *
@@ -989,7 +989,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 	aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		     "Error closing file: %s ", filename);
       }
-    return;
+    return;	 
   }
 
   /* Writing count, error, weight, lambda, contam, dq */
@@ -999,7 +999,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
     int *array_dq;
     int i;
     spc_entry *pt = NULL;
-
+    
     array_error = malloc (N * sizeof (double));
     if (array_error == NULL)
       {
@@ -1088,7 +1088,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 		     "Could not write to row %d, collumn %s (%d) in file %s ",
 		     index, "LAMBDA", colnum, filename);
       }
-
+    
     colnum = get_SPC_colnum (input, "FLUX");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_flux,
 		    &f_status);
@@ -1100,7 +1100,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 		     "Could not write to row %d, collumn %s (%d) in file %s ",
 		     index, "FLUX", colnum, filename);
       }
-
+    
     colnum = get_SPC_colnum (input, "FERROR");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_ferror,
 		    &f_status);
@@ -1112,7 +1112,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 		     "Could not write to row %d, collumn %s (%d) in file %s ",
 		     index, "FERROR", colnum, filename);
       }
-
+    
     colnum = get_SPC_colnum (input, "CONTAM");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_contam,
 		    &f_status);
@@ -1124,7 +1124,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 		     "Could not write to row %d, collumn %s (%d) in file %s ",
 		     index, "CONTAM", colnum, filename);
       }
-
+    
     colnum = get_SPC_colnum (input, "DQ");
     fits_write_col (input, TINT, colnum, index, 1, N, array_dq,
 		    &f_status);
@@ -1170,7 +1170,7 @@ add_data_to_SPC (spectrum * spec, char countcolname[], char errorcolname[],
 			 colnum, filename);
 	  }
       }
-
+    
     /* Write the spec.weights data if the name of the column is defined */
     if (weightcolname != NULL)
       {
@@ -1240,10 +1240,10 @@ add_spectra_to_SPC_opened (fitsfile *input, spectrum * obj_spec, spectrum * bck_
 {
   char ID[60], IDindex[60];
   int spec_len;
-
+  
   sprintf (ID, "BEAM_%d%c", aperID, BEAM (beamID));
   sprintf (IDindex, "%s", ID);
-
+  
   if (bck_spec != NULL)
     {
       /* Check that it has the proper length */
@@ -1267,21 +1267,21 @@ add_spectra_to_SPC_opened (fitsfile *input, spectrum * obj_spec, spectrum * bck_
 		       obj_spec->spec_len, sobj_spec->spec_len);
 	}
     }
-
-  if (obj_spec!=NULL)
+  
+  if (obj_spec!=NULL) 
     spec_len = obj_spec->spec_len;
-  else
+  else 
     spec_len = 0;
-
+   
   add_ID_to_SPC_opened (input, spec_len, ID);
   /** NEED TO ADD KEYWORK ID%D%D IN HDU 0 WITH HDUNUM AS VALUE **/
   //  add_ID_index_to_SPC (filename, IDindex, hdunum);
-
+  
   // Write data into HDU HERE!
   add_data_to_SPC_opened (bck_spec, "BCOUNT", "BERROR", "WEIGHT", ID, input, spec_len);
-
+  
   add_data_to_SPC_opened (obj_spec, "TCOUNT", "TERROR", "WEIGHT", ID, input, spec_len);
-
+  
   /* warning, if sobj_spec does not contain a valiv lambda and
      weight values, then these still get written... */
   add_data_to_SPC_opened (sobj_spec, "COUNT", "ERROR", "WEIGHT", ID, input, spec_len);
@@ -1289,7 +1289,7 @@ add_spectra_to_SPC_opened (fitsfile *input, spectrum * obj_spec, spectrum * bck_
 
 /**
  * Function: add_data_to_SPC_opened
- * Function to add a specific spectrum structure into specifically
+ * Function to add a specific spectrum structure into specifically 
  * named columns of an existing opened SPC FITS file. If a column name
  * is set to NULL then that particular data column is not written to the file.
  *
@@ -1310,14 +1310,14 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
   int colnum;
   char colname[FLEN_KEYWORD];
   int index = -1;
-
+  
 
   /* Row number containing the desired ID */
   index = 1;
-
+  
   /* If there are no elements in the table to write then exit now */
-  if (N==0)  return;
-
+  if (N==0)  return;	 
+  
   /* Writing count, error, weight, lambda */
   {
     double *array_error, *array_count, *array_weight, *array_lambda;
@@ -1325,7 +1325,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
     int *array_dq;
     int i;
     spc_entry *pt = NULL;
-
+    
     array_error = malloc (N * sizeof (double));
     if (array_error == NULL)
       {
@@ -1380,7 +1380,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 	aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 		     "add_data_to_SPC: Out of memory");
       }
-
+    
     if (spec != NULL)
       pt = spec->spec;
     for (i = 0; i < N; i++)
@@ -1409,10 +1409,10 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 	    array_dlambda[i] = GSL_NAN;
 	    array_dq[i] = (int) 0;
 	  }
-
+	
 	pt++;
       }
-
+    
     colnum = get_SPC_colnum (input, "LAMBDA");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_lambda,
 		    &f_status);
@@ -1424,7 +1424,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "LAMBDA", colnum);
       }
-
+       
     colnum = get_SPC_colnum (input, "FLUX");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_flux,
 		    &f_status);
@@ -1436,7 +1436,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "FLUX", colnum);
       }
-
+       
     colnum = get_SPC_colnum (input, "FERROR");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_ferror,
 		    &f_status);
@@ -1448,7 +1448,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "FERROR", colnum);
       }
-
+    
     colnum = get_SPC_colnum (input, "CONTAM");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_contam,
 		    &f_status);
@@ -1460,9 +1460,9 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "CONTAM", colnum);
       }
+       
 
-
-    // NEW for dlambda column
+    // NEW for dlambda column 
     colnum = get_SPC_colnum (input, "DLAMBDA");
     fits_write_col (input, TDOUBLE, colnum, index, 1, N, array_dlambda,
 		    &f_status);
@@ -1474,7 +1474,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "DLAMBDA", colnum);
       }
-
+       
     colnum = get_SPC_colnum (input, "DQ");
     fits_write_col (input, TINT, colnum, index, 1, N, array_dq,
 		    &f_status);
@@ -1486,7 +1486,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 		     "Could not write to row %d, collumn %s (%d) in SPC file ",
 		     index, "DQ", colnum);
       }
-
+       
     /* Write the spec.counts data if the name of the column is defined */
     if (countcolname != NULL)
       {
@@ -1499,10 +1499,10 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 	    aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
 			 "add_data_to_SPC: "
 			 "Could not write to row %d, collumn %s (%d) in SPC file"
-			 " %s ", index, countcolname, colnum);
+			 " %s ", index, countcolname, colnum);				     
 	  }
       }
-
+    
     /* Write the spec.errors data if the name of the column is defined */
     if (errorcolname != NULL)
       {
@@ -1519,7 +1519,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 			 colnum);
 	  }
       }
-
+       
     /* Write the spec.weights data if the name of the column is defined */
     if (weightcolname != NULL)
       {
@@ -1553,7 +1553,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
     free (array_contam);
     array_contam = NULL;
     free (array_dlambda);
-    array_dlambda = NULL;
+    array_dlambda = NULL;    
     free (array_dq);
     array_dq = NULL;
   }
@@ -1561,7 +1561,7 @@ add_data_to_SPC_opened (spectrum * spec, char countcolname[], char errorcolname[
 
 /**
  * Function: trim_spectrum
- * A function which trims the beginning and ending INDEF values
+ * A function which trims the beginning and ending INDEF values 
  * out of a spectrum structure (left by the bin_naive routine.
  * The spectrum is replace in place.
  *
@@ -1587,7 +1587,7 @@ trim_spectrum (spectrum * spc)
 	}
     }
   //fprintf(stderr,"here2\n");
-
+  
   for (i = spc->spec_len - 1; i >= 0; i--)
     {
       if (!(isnan (spc->spec[i].lambda_mean)))
@@ -1613,11 +1613,11 @@ trim_spectrum (spectrum * spc)
       new_spc->spec[i - is].weight = spc->spec[i].weight;
       new_spc->spec[i - is].contam = spc->spec[i].contam;
       new_spc->spec[i - is].dq = spc->spec[i].dq;
-
+      
     }
   new_spc->warning = spc->warning;
 
   //fprintf(stderr,"new length: %d\n",new_spc->spec_len);
-
+  
   return new_spc;
 }

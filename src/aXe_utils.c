@@ -5,9 +5,9 @@
   #define aXe_UTILS_C
 #endif
 
-#include "fitsio.h"
 #include <math.h>
 #include <string.h>
+#include "fitsio.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spc_utils.h"
@@ -214,9 +214,9 @@ load_sci_image(const char *const fname, int hdunum_data)
 }
 
 /**
-    Read a FITS file header and return the value of the derired
+    Read a FITS file header and return the value of the derived
     keyword. If the passed keyword string contains an actual number,
-    then this number of converted to a float and returned.
+    then this number is converted to a float and returned.
     If keyword=None, then NULL is returned.
 
     @param filename a pointer to a char array containing the name of the FITS file
