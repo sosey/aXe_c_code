@@ -548,7 +548,6 @@ apply_smoothed_response(const calib_function *wl_calibration, const int for_gris
   fprintf(stdout, "aXe_PET2SPC: Gaussian smoothing in tracelength: %.2f * %.2f = %.2f pix\n", smooth_pars.x, smooth_pars.y, smooth_pars.x * smooth_pars.y);
 
   // go over all elements
-  fprintf(stdout, "spec len is %d", spec->spec_len);
   for (j=0;j<spec->spec_len;j++)
     {
       // get the smoothed sensitivity value plus error

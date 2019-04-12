@@ -614,7 +614,6 @@ comp_allweight(drzstamp *modvar)
   gsl_matrix_set_all(weight, 1000.0);
 
   //* go over all columns
-  printf("comping weights before loop, size is %d\n",(int)modvar->counts->size1 );
   for (i=0; i < (int)modvar->counts->size1; i++)
     {
       mod_sum = 0.0;

@@ -355,7 +355,6 @@ flat_multi_func (const double lambda, const int x, const int y,
 		 PIXEL_T * const val, PIXEL_T * const err,
 		 const flatfield_d * const flat)
 {
-  int i;
   double xvals[MAX_FLATS], yvals[MAX_FLATS];
   //gsl_interp_factory factory = gsl_interp_factory_cspline_natural;
   //gsl_interp_obj *interpolator;
@@ -364,12 +363,11 @@ flat_multi_func (const double lambda, const int x, const int y,
   gsl_spline *spline;
   double d_val;
   
-  for (i = 0; i < flat->data.multi->num_flats; i++)
+  for (int i = 0; i < flat->data.multi->num_flats; i++)
     {
       xvals[i] = flat->data.multi->lambdas[i];
       yvals[i] =
-	gsl_matrix_get (flat->data.multi->flatfields[i],
-			x - flat->ll_x, y - flat->ll_y);
+	    gsl_matrix_get (flat->data.multi->flatfields[i], x - flat->ll_x, y - flat->ll_y);
     }
   //interpolator = factory.create(xvals, yvals, flat->data.multi->num_flats); 
   //accelerator = gsl_interp_accel_new();
@@ -377,11 +375,10 @@ flat_multi_func (const double lambda, const int x, const int y,
   //  lambda, accelerator, &d_val);
 
   acc = gsl_interp_accel_alloc ();
-  spline =
-    gsl_spline_alloc (gsl_interp_cspline, flat->data.multi->num_flats);
+  spline = gsl_spline_alloc (gsl_interp_cspline, flat->data.multi->num_flats);
   gsl_spline_init (spline, xvals, yvals, flat->data.multi->num_flats);
-  d_val = gsl_spline_eval (spline, lambda, acc);
-  
+  //d_val = gsl_spline_eval (spline, lambda, acc);
+  d_val = spline->interp->type->eval(spline->interp->state, spline->x, spline->y, spline->interp->size, lambda, acc, yvals);
   *val = (PIXEL_T) d_val;
   *err = 0;
 }

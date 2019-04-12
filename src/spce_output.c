@@ -1151,7 +1151,9 @@ void interpolate_over_NaN (gsl_matrix *data)
 
     for (j=0;j<(int)data->size2;j++) {
       double xi = j;
-      double yi = gsl_spline_eval(spline, xi, acc);
+      //double yi = gsl_spline_eval(spline, xi, acc);
+      // revert to older extrapolation allowing functionality
+      double yi = spline->interp->type->eval(spline->interp->state, spline->x, spline->y, spline->interp->size, x[j], acc, &y[j]);
       //if (n<data->size2)  fprintf(stderr,"%d %g => %d %g\n",j,gsl_matrix_get(data,i,j),j,yi);
       gsl_matrix_set(data, i, j, yi);
     }

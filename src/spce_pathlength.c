@@ -138,7 +138,8 @@ absc_to_pathl_deriv (const trace_func * const func, gsl_vector * const data)
     {
       //gsl_interp_eval_impl(interpolator, xvals, yvals, 
       //  gsl_vector_get(data, i), accelerator, &res);
-      res = gsl_spline_eval (spline, gsl_vector_get (data, i), acc);
+      //res = gsl_spline_eval (spline, gsl_vector_get (data, i), acc);
+      res = spline->interp->type->eval(spline->interp->state, spline->x, spline->y, spline->interp->size, gsl_vector_get (data, i), acc, &yvals[i]);
       gsl_vector_set (data, i, res);
     }
 

@@ -1,5 +1,3 @@
-/*
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,7 +44,7 @@ main(int argc, char *argv[])
 
 
     //int             j, flags;
-    int i;
+    int             i;
     int             f_status=0;
     int             hdunum, hdutype;
     int             backmode=0;

@@ -131,7 +131,7 @@ subtract_spectra (spectrum * a, spectrum * b)
   if ( (a==NULL) || (b==NULL) )
     {
       aXe_message (aXe_M_WARN4, __FILE__, __LINE__,
-		   "subtract_spectra: spectra empty.");
+		   "\nsubtract_spectra: spectra empty.\n");
       return NULL;
     }
   
@@ -139,7 +139,7 @@ subtract_spectra (spectrum * a, spectrum * b)
     {
       fprintf (stderr, "%d %d\n", a->spec_len, b->spec_len);
       aXe_message (aXe_M_FATAL, __FILE__, __LINE__,
-		   "subtract_spectra: spectra not aligned.");
+		   "\nsubtract_spectra: spectra not aligned.\n");
     }
   
   /* Allocate new spectrum */
