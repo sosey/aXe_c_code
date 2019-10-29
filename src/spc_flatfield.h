@@ -1,11 +1,5 @@
 /**
- * File: spc_flatfield.h
  * Interface to flatfielding
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spc_flatfield
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 
 #ifndef _SPC_FLATFIELD_H
@@ -14,17 +8,15 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
+
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 
 
-/**
-
-
-*/
 typedef struct
 {
   int poly_order;      /* order of the polynomial */

@@ -1,11 +1,5 @@
 /**
- * File: spce_pathlength.h
  * Interface of spce_pathlength.h
- *
- * @author  Nor Pirzkal, Markus Demleitner
- * @package spce_pathlength
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _SPCE_PATHLENGTH_H

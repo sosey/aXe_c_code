@@ -1,15 +1,9 @@
-/**
- * File: spc_CD.h
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package spc_CD
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
 #ifndef SPC_CD_H
 #define SPC_CD_H
 
-#include "fitsio.h"
 #include <string.h>
+
+#include "fitsio.h"
 #include "aXe_grism.h"
 #include "wcs.h"
 #include "aXe_errors.h"

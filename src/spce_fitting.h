@@ -1,12 +1,3 @@
-/**
- *
- * File: spce_fitting.h
- * @author  Nor Pirzkal
- * @package spce_fitting
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
-
 #ifndef _SPC_FITTING_H
 #define _SPC_FITTING_H
 

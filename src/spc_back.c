@@ -1,5 +1,4 @@
 /**
- * File: spc_back.c
  * Set of functions to handle object slitless background subtraction
  *
  */
@@ -9,12 +8,14 @@
 #include <math.h>
 #include <limits.h>
 #include <unistd.h>
+
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_sort_vector.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_multifit.h>
+
 #include "fitsio.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"

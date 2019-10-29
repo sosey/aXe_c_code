@@ -1,14 +1,8 @@
 /**
- * File: spc_CD.c
  * WCS related routines
  *
- * @author  Martin Kuemmel, Markus Demleitner, Nor Pirzkal
- * @package spc_CD
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 #include "spc_CD.h"
-
 
 /**
  * Function: get_fits_header

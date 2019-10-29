@@ -1,14 +1,7 @@
 /**
- * File: spc_extract.c
  * The driver function and some auxillaries
  * to compute the spectrum from an image and
  * information on the location and distortion of the spectra.
- *
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spc_extract
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include <stdio.h>
@@ -16,8 +9,10 @@
 #include <string.h>
 #include <math.h>
 #include <limits.h>
+
 #include <gsl/gsl_roots.h>
 #include <gsl/gsl_vector.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_sect.h"

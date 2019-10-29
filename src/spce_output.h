@@ -1,11 +1,5 @@
 /**
- * File: spce_output.h
  * Interface definitions for the postscript output routines
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spce_output
- * @version $Revision: 1.4 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _SPCE_OUTPUT_H

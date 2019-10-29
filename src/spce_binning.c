@@ -1,14 +1,10 @@
 /**
- * File: spce_binning.c
- * Various binning and weighting routines for aperture pixel tables.
- *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spce_binning
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
+* Various binning and weighting routines for aperture pixel tables.
+*/
+
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
+
 #include "aXe_grism.h"
 #include "aper_conf.h"
 #include "spc_driz.h"

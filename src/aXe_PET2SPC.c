@@ -1,5 +1,3 @@
-/*
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +5,7 @@
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spce_PET.h"

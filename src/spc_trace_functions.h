@@ -1,12 +1,6 @@
 /**
- * File: spc_trace_functions.h
- * External definitions to parametrize spectrum traces
+\ * External definitions to parametrize spectrum traces
  * in aXe grism exposures
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spc_trace_functions
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #ifndef _SPC_TRACE_FUNCTIONS_H
@@ -15,13 +9,13 @@
 
 #include <stdlib.h>
 #include <math.h>
+
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_integration.h>
+
 #include "aXe_errors.h"
 
 /* public */
-
-
 
 /** A function for parametrizing spectrum traces; deriv and/or path_len
    (i.e. its derivative or the path length from parameter 0) may be

@@ -3,12 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "spc_sex.h"
 #include "spc_utils.h"
 #include "inout_aper.h"
-#include <string.h>
 
 #ifndef AXE_IMAGE_PATH
   #define AXE_IMAGE_PATH "AXE_IMAGE_PATH"

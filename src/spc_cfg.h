@@ -1,13 +1,3 @@
-/**
- *
- * File: spc_cfg.h
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_cfg
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
- */
-
-
 #ifndef _SPC_CFG_H
 #define _SPC_CFG_H
 

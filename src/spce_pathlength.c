@@ -1,5 +1,4 @@
 /**
- * File: spce_pathlength.c
  * Functions to replace an x coordinate with the path length of a given
  *   function of that x coordinate.
  *
@@ -11,10 +10,6 @@
  *  
  *  So, this is a little trivial...
  *
- * @author  Nor Pirzkal, Markus Demleitner
- * @package spce_pathlength
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include "spce_pathlength.h"

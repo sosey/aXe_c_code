@@ -1,23 +1,13 @@
 /**
- * File: spc_sex.h
  * Header files for the routines in spc_sex.c
- *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_sex
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef SPC_DEF_H
 #define SPC_DEF_H
 
 #include "spc_CD.h"
 
-
-
 #define CATBUFFERSIZE 10240
-
 #define MAX(x,y) (((x)>(y))?(x):(y))
-
 #define MIN_DIFFANGLE 3.0
 
 /**

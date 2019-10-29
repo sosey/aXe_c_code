@@ -1,11 +1,3 @@
-/**
- * File: spc_spc.h
- * @author  Nor Pirzkal
- * @package spc_spc
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
-
 #ifndef _SPC_SPC_H
 
 #define _SPC_SPC_H
@@ -15,11 +7,13 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
+
+#include <gsl/gsl_nan.h>
+#include <gsl/gsl_sys.h>
+
 #include "aXe_grism.h"
 #include "aXe_utils.h"
 #include "fitsio.h"
-#include <gsl/gsl_nan.h>
-#include <gsl/gsl_sys.h>
 
 #define SPCTOL 1.0e-5
 

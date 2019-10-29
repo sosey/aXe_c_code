@@ -1,13 +1,3 @@
-/**
- * File: spc_model.h
- * Header file for spc_model.c
- *
- * @author  Martin Kuemmel
- * @package spc_model
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
-
 #ifndef _SPC_MODEL_H
 #define _SPC_MODEL_H
 

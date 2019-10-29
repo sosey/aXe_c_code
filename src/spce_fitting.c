@@ -1,20 +1,14 @@
 /**
- *
- * File: spce_fitting.c
- * Subroutines for fitting functions to data.
+* Subroutines for fitting functions to data.
  * Most of the functions are used for the
  * background determination.
- *
- * @author  Nor Pirzkal
- * @package spce_fitting
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
 #include <gsl/gsl_fit.h>
 #include <gsl/gsl_multifit.h>
+
 #include "spce_fitting.h"
 
 

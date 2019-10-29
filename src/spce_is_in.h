@@ -1,15 +1,4 @@
-/**
- * File: spce_is_in.h
- * External definitions for spce_is_in.c
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spce_is_in
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
-
 #ifndef _SPC_IS_IN_H
-
 #define _SPC_IS_IN_H
 
 

@@ -1,11 +1,5 @@
 /**
- * File: spc_optimum.h
  * The interface to the binning and weight routines
- *
- * @author  Martin Kuemmel
- * @package spc_optimum
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _SPC_OPTIMUM_H
 #define _SPC_OPTIMUM_H 1

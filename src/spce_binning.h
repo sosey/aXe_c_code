@@ -1,17 +1,12 @@
 /**
- * File: spce_binning.h
  * The interface to the binning and weight routines
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner 
- * @package spce_binning
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 #ifndef _SPCE_BINNING_H
 #define _SPCE_BINNING_H 1
 
 #include <math.h>
 #include <gsl/gsl_vector.h>
+
 #include "spce_output.h"
 #include "spc_trace_functions.h"
 #include "aXe_grism.h"

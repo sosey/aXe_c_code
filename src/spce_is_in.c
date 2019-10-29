@@ -1,5 +1,4 @@
 /**
- * File: spce_is_in.c
  * A function to decide whether a point is in a given quadrangle
  * (and its helpers)
  *
@@ -7,11 +6,6 @@
  *   is_in_descriptor iid;
  *   fill_is_in_descriptor(&iid, corners);
  *   for (i=0; i<30; i++) if (is_in(i,i,&iid)) printf("Yes");
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spce_is_in
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
 #include <math.h>

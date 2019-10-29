@@ -1,11 +1,6 @@
 /**
- * File: spc_back.h
  * Header file for the subroutines in spc_back.c
  *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_back
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 #ifndef _SPC_BACK_H
 #define _SPC_BACK_H

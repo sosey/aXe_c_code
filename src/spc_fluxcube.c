@@ -1,15 +1,16 @@
 /**
- * File: spc_fluxcube.c
  * Subroutines to calculate the
  * various contamination models
  *
  */
 
 #include <math.h>
-#include "fitsio.h"
+
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
+
+#include "fitsio.h"
 #include "inout_aper.h"
 #include "aXe_grism.h"
 #include "spce_PET.h"

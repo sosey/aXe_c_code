@@ -1,11 +1,3 @@
-/**
- * File: spc_driz.c
- * @author  Nor Pirzkal
- * @package spc_driz
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
- */
-
 #include "spc_driz.h"
 
 #define MIN(x,y) (((x)<(y))?(x):(y))

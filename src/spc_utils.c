@@ -1,12 +1,7 @@
 /**
- * File: spc_utils.c
  * Subroutines used mostly for working on catalogs
  * in the tasks SEX2GOL and GOL2AF.  
  *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
  */
 #include "aper_conf.h"
 #include "spc_sex.h"
@@ -624,6 +619,7 @@ get_magcols(const colinfo * actcatinfo,
               // store the column number, store wavelength 0.0 to indicate
               // that it is column MAG_AUTO
               gsl_vector_set (colnums, entry, (double)actcatinfo->columns[i].number);
+              printf("column number for wave is %i\n", actcatinfo->columns[i].number);
               gsl_vector_set (wavelength, entry++, 0.0);
               // increment the number of magnitude columns
               mags++;
@@ -770,6 +766,7 @@ get_magauto_col(const gsl_vector *wavelength, const gsl_vector *colnums,
     }
   }
   // return the column number
+  printf("column number for lambda mark is %i\n", lambda_mark);
   return select;
 }
 

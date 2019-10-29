@@ -1,11 +1,3 @@
-/**
- *
- * File: spc_resp.h
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_resp
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
 #ifndef _SPC_RESP_H
 
 #define _SPC_RESP_H
@@ -14,9 +6,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_nan.h>
 #include <gsl/gsl_sys.h>
+
 #include "fitsio.h"
 #include "aXe_grism.h"
 #include "spc_cfg.h"

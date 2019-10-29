@@ -1,18 +1,14 @@
 /**
- * File: spc_wl_calib.c
  * Subroutines used in the "aXe_AF2PET.c" for the task aXe_AF2PET
- *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_wl_calib
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
  */
 
-#include "spc_wl_calib.h"
 #include <stdarg.h>
+
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_nan.h>
 #include <gsl/gsl_sys.h>
+
+#include "spc_wl_calib.h"
 #include "aXe_grism.h"
 #include "aXe_errors.h"
 #include "disp_conf.h"

@@ -1,11 +1,5 @@
 /**
- * File: spc_spc.c
- * Set of function to handle binned spectra
- *
- * @author  Nor Pirzkal
- * @package spc_spc
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
+ * Set of functions to handle binned spectra
  */
 #include "spc_spc.h"
 #include "aXe_utils.h"

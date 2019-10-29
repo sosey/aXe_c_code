@@ -1,15 +1,10 @@
 /**
- * File: spce_output.c
- * Output routines for stamped images and overlaid traces.
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spce_output
- * @version $Revision: 1.5 $
- * @date    $Date: 2010/12/16 07:25:05 $
- */
+* Output routines for stamped images and overlaid traces.
+*/
 #include <stdio.h>
 #include <math.h>
 #include <gsl/gsl_vector.h>
+
 #include "spce_output.h"
 #include "aXe_grism.h"
 #include "aXe_utils.h"

@@ -1,11 +1,3 @@
-/**
- * File: spc_driz.h
- * @author  Nor Pirzkal
- * @package spc_driz
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
- */
-
 #ifndef _SPC_DRIZ_H
 #define _SPC_DRIZ_H
 

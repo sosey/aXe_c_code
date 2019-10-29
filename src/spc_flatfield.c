@@ -1,17 +1,6 @@
-/**
- * File: spc_flatfield.c
- * Flatfielding routines
- *
- * @author  Martin Kuemmel, Nor Pirzkal, Markus Demleitner
- * @package spc_flatfield
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
- */
-
 #include "spc_flatfield.h"
 
 #define MAX_FLATS 10 /* maximal number of flatfields for xxx_multi functions */
-
 #define SQR(x) ((x)*(x))
 
 /**

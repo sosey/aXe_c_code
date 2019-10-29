@@ -1,12 +1,3 @@
-/**
- * File: spc_fluxcube.h
- * Header file for spc_fluxcube.c
- *
- * @author  Martin Kuemmel
- * @package spc_fluxcube
- * @version 1.0
- */
-
 #ifndef _SPC_FLUXCUBE_H
 #define _SPC_FLUXCUBE_H
 

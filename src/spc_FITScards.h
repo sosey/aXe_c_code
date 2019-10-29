@@ -1,17 +1,15 @@
-/**
- * File: spc_FITScards.h
- */
-
 #ifndef SPC_FITSCARDS_H
 #define SPC_FITSCARDS_H
 
 #include <stdlib.h>
+
+#include <gsl/gsl_matrix.h>
+#include <gsl/gsl_vector.h>
+
 #include "aXe_grism.h"
 #include "fitsio.h"
 #include "disp_conf.h"
 #include "aper_conf.h"
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_vector.h>
 
 typedef struct
 {

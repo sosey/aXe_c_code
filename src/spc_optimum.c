@@ -1,17 +1,13 @@
 /**
- * File: spc_optimum.c
  * Various binning and weighting routines for aperture pixel tables.
  *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc\_optimum
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $
- */
-
+*/
 
 #include <math.h>
+
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_matrix.h>
+
 #include "spc_trace_functions.h"
 #include "aXe_utils.h"
 #include "aXe_grism.h"

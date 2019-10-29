@@ -1,5 +1,4 @@
 /**
- * File: spc_resp.c
  * Set of routines to handle absolute flux calibration of a spectrum
  * structure.
  * The response curves can be in ASCII or (preferably) in FITS
@@ -7,9 +6,6 @@
  * space separated colums (WAVELENGTH, THROUGHPUT, ERROR). The FITS
  * binary table must contain three columns with names WAVELENGTH,
  * SENSITIVITY, ERROR. The throughput should be DN/s per Erg/cm^2/s/A.
- *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_resp
  */
 
 
@@ -17,6 +13,7 @@
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
 #include <gsl/gsl_roots.h>
+
 #include "aXe_grism.h"
 #include "disp_conf.h"
 #include "fringe_conf.h"
@@ -295,8 +292,8 @@ apply_response_function(spectrum *spec, spectrum *resp, const int quant_cont)
   // of the gsl spline eval
   for (j=0;j<spec->spec_len;j++) {
     //r1 = gsl_spline_eval (spline1, spec->spec[j].lambda_mean, acc1);
-    spline1->interp->type->eval(spline1->interp->state, spline1->x, spline1->y, spline1->interp->size, x1[j], acc1, &y1[j]);
-    spline2->interp->type->eval(spline2->interp->state, spline2->x, spline2->y, spline2->interp->size, x2[j], acc2, &y2[j]);
+    r1 = spline1->interp->type->eval(spline1->interp->state, spline1->x, spline1->y, spline1->interp->size, spec->spec[j].lambda_mean, acc1, &y1[j]);
+    r2 = spline2->interp->type->eval(spline2->interp->state, spline2->x, spline2->y, spline2->interp->size, spec->spec[j].lambda_mean, acc2, &y2[j]);
     //r2 = gsl_spline_eval (spline2, spec->spec[j].lambda_mean, acc2);
     // test
     // tval = get_response_value_plus(resp, spec->spec[j].lambda_mean, &nguess);

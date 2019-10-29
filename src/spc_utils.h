@@ -1,16 +1,5 @@
-/**
- * File: spc_utils.h
- * Header file for spc_utils.c 
- *
- * @author  Martin Kuemmel, Nor Pirzkal
- * @package spc_utils
- * @version $Revision: 1.3 $
- * @date    $Date: 2010-06-15 09:48:34 $ 
- */
 #ifndef SPC_UTILS_H
 #define SPC_UTILS_H
-
-
 
 void init_search (const char *string);  /* Pbmsrch.C      */
 char *strsearch (const char *string);   /* Pbmsrch.C      */
@@ -23,10 +12,12 @@ char *strsearch (const char *string);   /* Pbmsrch.C      */
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
+
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_nan.h>
 #include <gsl/gsl_sys.h>
 #include <gsl/gsl_vector.h>
+
 #include "aXe_errors.h"
 #include "aXe_grism.h"
 

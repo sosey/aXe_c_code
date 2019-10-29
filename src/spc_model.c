@@ -1,20 +1,16 @@
 /**
- *  File: spc_model.c
  *  Subroutines to calculate the
  *  various contamination models
- *
- * @author  Martin Kuemmel
- * @package spc_model
- * @version $Revision: 1.2 $
- * @date    $Date: 2009-06-18 09:50:07 $
- */
-#include "spc_model.h"
+*/
 #include <time.h>
 #include <math.h>
+
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_vector.h>
 #include <gsl/gsl_interp.h>
+
 #include "inout_aper.h"
+#include "spc_model.h"
 #include "spce_sect.h"
 #include "spc_back.h"
 #include "spce_PET.h"
